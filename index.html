@@ -472,7 +472,7 @@
 
   /* ---- Sticky tower-build canvas: dedicated 40% column ---- */
   section.light { isolation: isolate; overflow: visible; position: relative; }
-  section.light > *:not(.light-bg) { position: relative; z-index: 1; }
+  section.light > *:not(.light-bg):not(.section-logo) { position: relative; z-index: 1; }
   .light-bg {
     position: absolute; top: 0; bottom: 0;
     width: 40%;
