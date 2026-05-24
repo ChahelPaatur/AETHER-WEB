@@ -261,6 +261,28 @@
   }
   @keyframes charRise { to { transform: translateY(0); } }
 
+  /* Hero CTA button */
+  .hero-cta {
+    position: relative;
+    z-index: 4;
+    margin-top: 32px;
+    display: inline-block;
+    padding: 12px 28px;
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s var(--ease), transform 0.2s var(--ease);
+    opacity: 0;
+    animation: ctaFade 0.8s var(--ease) 1.2s forwards;
+  }
+  .hero-cta:hover { background: var(--accent-2); transform: translateY(-2px); }
+  @keyframes ctaFade { to { opacity: 1; } }
+
   /* Floating "system live" pill in the hero · bottom center */
   .live-pill {
     position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
@@ -1453,6 +1475,8 @@
       </span>
     </span>
   </div>
+
+  <a class="hero-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener">Install now</a>
 </header>
 
 <!-- ====== 01 OVERVIEW (LIGHT) ====== -->
