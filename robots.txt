@@ -1,0 +1,10 @@
+# robots.txt for AETHER
+User-agent: *
+Allow: /
+
+Disallow: /api/*
+Disallow: /admin/*
+Disallow: /_next/*
+Disallow: /.vercel/*
+
+Sitemap: https://aether-web.vercel.app/sitemap.xml
