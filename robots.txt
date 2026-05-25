@@ -7,4 +7,4 @@ Disallow: /admin/*
 Disallow: /_next/*
 Disallow: /.vercel/*
 
-Sitemap: https://aether-web.vercel.app/sitemap.xml
+Sitemap: https://aether-robotics.com/sitemap.xml
