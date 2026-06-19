@@ -1517,8 +1517,51 @@
   margin: 0 0 8px; scroll-margin-top: 88px;
 }
 .doc-content h2 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent); }
-.doc-content > section { padding: 30px 0 44px; border-bottom: 1px solid var(--line); }
-.doc-content > section:last-child { border-bottom: 0; }
+/* Each section is a floating white card on the black page — brighter,
+   more readable, with depth that reads as 3D. Code blocks stay dark inside. */
+.doc-content > section {
+  background: #ffffff;
+  color: var(--paper-ink);
+  border: 1px solid var(--paper-line);
+  border-radius: 18px;
+  padding: clamp(26px, 4vw, 44px);
+  margin: 0 0 22px;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 36px 80px -54px rgba(0,0,0,0.9);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.3s var(--ease);
+}
+.doc-content > section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 48px 100px -54px rgba(0,0,0,0.95);
+}
+/* light typography inside the white section cards */
+.doc-content > section h2 { color: var(--paper-ink); }
+.doc-content > section h3 { color: var(--paper-ink); }
+.doc-content > section p { color: var(--paper-dim); }
+.doc-content > section p em { color: var(--paper-ink); }
+.doc-content > section ul, .doc-content > section ol { color: var(--paper-dim); }
+.doc-content > section li strong, .doc-content > section p strong { color: var(--paper-ink); }
+.doc-content > section code {
+  background: rgba(0,0,0,0.05); border-color: var(--paper-line); color: var(--accent-deep);
+}
+.doc-content > section h2 code { background: rgba(0,0,0,0.05); }
+.doc-content > section th { color: #9a9a9a; border-bottom-color: var(--paper-line); }
+.doc-content > section td { color: var(--paper-dim); border-bottom-color: #ededed; }
+.doc-content > section tr:hover td { background: #faf8f7; }
+.doc-content > section .callout { background: rgba(255,77,28,0.07); border-color: rgba(255,77,28,0.30); }
+.doc-content > section .callout p { color: var(--paper-ink); }
+.doc-content > section .flow3d .step { background: #faf9f8; border-color: var(--paper-line); }
+.doc-content > section .flow3d .step:hover { border-color: var(--accent-line); }
+.doc-content > section .flow3d .step h5 { color: var(--paper-ink); }
+.doc-content > section .flow3d .step p { color: var(--paper-dim); }
+/* feature-panel becomes a soft inset tray so the white cards lift off it */
+.doc-content > section .feature-panel {
+  background: linear-gradient(180deg, #f6f6f6, #f0f0f0);
+  border: 1px solid var(--paper-line);
+  border-radius: 16px;
+  padding: clamp(14px, 2.4vw, 22px);
+  box-shadow: inset 0 1px 0 #ffffff, inset 0 0 40px -20px rgba(0,0,0,0.12);
+  margin: 16px 0 2px;
+}
 .doc-content .kicker {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
   color: var(--accent); margin-bottom: 18px;
@@ -1589,7 +1632,7 @@
   border: 1px solid var(--line-2); border-radius: 12px;
   padding: 22px 20px 24px;
   transform-style: preserve-3d;
-  transition: transform 0.4s var(--ease), border-color 0.3s var(--ease), box-shadow 0.4s var(--ease);
+  transition: transform 0.16s var(--ease), border-color 0.3s var(--ease), box-shadow 0.4s var(--ease);
   will-change: transform;
   overflow: hidden;
 }

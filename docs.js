@@ -2,6 +2,24 @@
 (function () {
   "use strict";
 
+  // ----- Cursor-driven 3D tilt on cards -----
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce && window.matchMedia && window.matchMedia("(hover: hover)").matches) {
+    document.querySelectorAll(".card3d").forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        card.style.setProperty("--mx", (px * 100) + "%");
+        card.style.setProperty("--my", (py * 100) + "%");
+        const rx = (0.5 - py) * 9;   // tilt up / down
+        const ry = (px - 0.5) * 11;  // tilt left / right
+        card.style.transform = "perspective(900px) rotateX(" + rx + "deg) rotateY(" + ry + "deg) translateY(-5px)";
+      });
+      card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+    });
+  }
+
   // ----- Copy buttons -----
   document.querySelectorAll(".copy-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
