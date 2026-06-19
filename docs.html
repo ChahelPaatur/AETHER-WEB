@@ -69,55 +69,57 @@
       <h2>Everything it does, <span class="ital">out of the box.</span></h2>
       <p>Drive motors, read sensors, move servos — all from English. No bespoke code per task. Here's the full surface area.</p>
 
-      <div class="card3d-grid">
-        <article class="card3d">
-          <span class="tag">F.01</span>
-          <span class="glyph">🤖</span>
-          <h4>Plain-English <span class="ital">control.</span></h4>
-          <p>The LLM planner translates objectives like <em>"drive forward and stop 10 cm before the wall"</em> into coordinated tool calls.</p>
-        </article>
-        <article class="card3d">
-          <span class="tag">F.02</span>
-          <span class="glyph">🔍</span>
-          <h4>Auto-discovery.</h4>
-          <p>Scans I²C, GPIO, serial, camera, audio, and network at boot, matches detected hardware to known adapters, and registers the right tool vocabulary automatically.</p>
-        </article>
-        <article class="card3d">
-          <span class="tag">F.03</span>
-          <span class="glyph">⚡</span>
-          <h4>True parallel <span class="ital">skills.</span></h4>
-          <p>A single objective can spawn coordinated threads. <code>drive_until_obstacle</code> runs a motor thread and an ultrasonic-polling thread concurrently with a shared safety event.</p>
-        </article>
-        <article class="card3d">
-          <span class="tag">F.04</span>
-          <span class="glyph">🛡️</span>
-          <h4>Five-layer <span class="ital">safety chain.</span></h4>
-          <p>Ctrl-C, SIGTERM, crash, segfault — every path leads to motors stopped, pins released. There is no path that leaves the robot running.</p>
-        </article>
-        <article class="card3d">
-          <span class="tag">F.05</span>
-          <span class="glyph">🔄</span>
-          <h4>Self-correcting.</h4>
-          <p>The CorrectionAgent catches LLM hallucinations, reroutes via a fallback chain, and verifies outcomes — skipping verification on clean success to keep latency low.</p>
-        </article>
-        <article class="card3d">
-          <span class="tag">F.06</span>
-          <span class="glyph">📡</span>
-          <h4>Drone + ground <span class="ital">robots.</span></h4>
-          <p>MAVLink flight controllers auto-discovered on serial. Differential-drive cars, Mecanum platforms, pan-tilt rigs — all through one tool vocabulary.</p>
-        </article>
-        <article class="card3d">
-          <span class="tag">F.07</span>
-          <span class="glyph">🪶</span>
-          <h4>Lightweight.</h4>
-          <p>Runs on a Raspberry Pi 4. No GPU required. Inference happens via the Anthropic API; the Pi only orchestrates.</p>
-        </article>
-        <article class="card3d">
-          <span class="tag">F.08</span>
-          <span class="glyph">🧩</span>
-          <h4>Universal <span class="ital">adapters.</span></h4>
-          <p>If your robot has a Python library, AETHER can drive it — via built-in adapters, offline-generated adapters, or a guided REPL.</p>
-        </article>
+      <div class="feature-panel">
+        <div class="card3d-grid">
+          <article class="card3d light">
+            <span class="tag">F.01</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7" width="16" height="11" rx="2.5"/><path d="M12 7V4"/><circle cx="12" cy="3" r="1.2"/><circle cx="9" cy="12.5" r="1.1"/><circle cx="15" cy="12.5" r="1.1"/><path d="M9.5 15.5h5"/></svg></span>
+            <h4>Plain-English <span class="ital">control.</span></h4>
+            <p>The LLM planner translates objectives like <em>"drive forward and stop 10 cm before the wall"</em> into coordinated tool calls.</p>
+          </article>
+          <article class="card3d light">
+            <span class="tag">F.02</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-3.6-3.6"/><path d="M11 8v6M8 11h6"/></svg></span>
+            <h4>Auto-discovery.</h4>
+            <p>Scans I²C, GPIO, serial, camera, audio, and network at boot, matches detected hardware to known adapters, and registers the right tool vocabulary automatically.</p>
+          </article>
+          <article class="card3d light">
+            <span class="tag">F.03</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></span>
+            <h4>True parallel <span class="ital">skills.</span></h4>
+            <p>A single objective can spawn coordinated threads. <code>drive_until_obstacle</code> runs a motor thread and an ultrasonic-polling thread concurrently with a shared safety event.</p>
+          </article>
+          <article class="card3d light">
+            <span class="tag">F.04</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.4 3 8.3 7 9.5 4-1.2 7-5.1 7-9.5V6l-7-3z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <h4>Five-layer <span class="ital">safety chain.</span></h4>
+            <p>Ctrl-C, SIGTERM, crash, segfault — every path leads to motors stopped, pins released. There is no path that leaves the robot running.</p>
+          </article>
+          <article class="card3d light">
+            <span class="tag">F.05</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 4.5l2-1.5"/><path d="M20 20v-4h-4"/></svg></span>
+            <h4>Self-correcting.</h4>
+            <p>The CorrectionAgent catches LLM hallucinations, reroutes via a fallback chain, and verifies outcomes — skipping verification on clean success to keep latency low.</p>
+          </article>
+          <article class="card3d light">
+            <span class="tag">F.06</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7"/><path d="M6 6a8 8 0 0 0 0 12M18 6a8 8 0 0 1 0 12"/></svg></span>
+            <h4>Drone + ground <span class="ital">robots.</span></h4>
+            <p>MAVLink flight controllers auto-discovered on serial. Differential-drive cars, Mecanum platforms, pan-tilt rigs — all through one tool vocabulary.</p>
+          </article>
+          <article class="card3d light">
+            <span class="tag">F.07</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5c-3.5 0-9 1.5-12 8.5L4 20"/><path d="M19 5c0 6-3 11-9 12"/><path d="M8 14h6"/></svg></span>
+            <h4>Lightweight.</h4>
+            <p>Runs on a Raspberry Pi 4. No GPU required. Inference happens via the Anthropic API; the Pi only orchestrates.</p>
+          </article>
+          <article class="card3d light">
+            <span class="tag">F.08</span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6v3a1.6 1.6 0 0 0 3 0V4h0a2 2 0 0 1 2 2v3h-3a1.6 1.6 0 0 0 0 3h3v3a2 2 0 0 1-2 2h-3v-3a1.6 1.6 0 0 0-3 0v3H6a2 2 0 0 1-2-2v-3h3a1.6 1.6 0 0 0 0-3H4V6a2 2 0 0 1 2-2h3z"/></svg></span>
+            <h4>Universal <span class="ital">adapters.</span></h4>
+            <p>If your robot has a Python library, AETHER can drive it — via built-in adapters, offline-generated adapters, or a guided REPL.</p>
+          </article>
+        </div>
       </div>
     </section>
 

@@ -1601,9 +1601,13 @@
 .card3d:hover { border-color: var(--accent-line); box-shadow: 0 40px 80px -40px rgba(255,77,28,0.35), 0 20px 50px -30px rgba(0,0,0,0.9); }
 .card3d:hover::after { opacity: 1; }
 .card3d .glyph {
-  font-family: var(--mono); font-size: 22px; line-height: 1;
-  transform: translateZ(40px); display: inline-block; margin-bottom: 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border-radius: 13px;
+  background: var(--accent-soft); color: var(--accent);
+  border: 1px solid var(--accent-line);
+  transform: translateZ(40px); margin-bottom: 16px;
 }
+.card3d .glyph svg { width: 23px; height: 23px; display: block; }
 .card3d h4 {
   font-family: var(--sans); font-weight: 600; font-size: 16px; letter-spacing: -0.01em;
   margin: 0 0 8px; transform: translateZ(26px);
@@ -1613,6 +1617,38 @@
 .card3d .tag {
   font-family: var(--mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--ink-mute); position: absolute; top: 18px; right: 18px;
+}
+
+/* ---- Light "paper" panel + light cards (a touch of white, easier on the eyes) ---- */
+.feature-panel {
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  border-radius: 20px;
+  padding: clamp(18px, 3.4vw, 34px);
+  margin: 18px 0 6px;
+  box-shadow: 0 40px 90px -50px rgba(0,0,0,0.8);
+}
+.feature-panel .card3d-grid { margin: 0; }
+.card3d.light {
+  background: #ffffff;
+  border: 1px solid var(--paper-line);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 36px -26px rgba(20,20,20,0.45);
+}
+.card3d.light h4 { color: var(--paper-ink); }
+.card3d.light p { color: var(--paper-dim); }
+.card3d.light p em { color: var(--paper-ink); }
+.card3d.light .tag { color: #b4b4b4; }
+.card3d.light .glyph { background: rgba(255,77,28,0.10); border-color: rgba(255,77,28,0.28); }
+.card3d.light code {
+  background: rgba(0,0,0,0.055); border: 1px solid var(--paper-line);
+  color: var(--accent-deep);
+}
+.card3d.light::after {
+  background: radial-gradient(420px circle at var(--mx,50%) var(--my,0%), rgba(255,77,28,0.10), transparent 45%);
+}
+.card3d.light:hover {
+  border-color: var(--accent-line);
+  box-shadow: 0 30px 60px -34px rgba(255,77,28,0.30), 0 20px 44px -30px rgba(20,20,20,0.4);
 }
 
 /* numbered flow steps with 3D layered look */
