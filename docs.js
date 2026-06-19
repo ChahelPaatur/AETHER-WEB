@@ -20,6 +20,21 @@
     });
   }
 
+  // ----- 3D scroll reveal -----
+  const revealables = document.querySelectorAll(".reveal3d");
+  if (revealables.length) {
+    if ("IntersectionObserver" in window) {
+      const ro = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add("in"); ro.unobserve(e.target); }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+      revealables.forEach((el) => ro.observe(el));
+    } else {
+      revealables.forEach((el) => el.classList.add("in"));
+    }
+  }
+
   // ----- Copy buttons -----
   document.querySelectorAll(".copy-btn").forEach((btn) => {
     btn.addEventListener("click", () => {

@@ -36,7 +36,7 @@
   <div class="doc-hero-inner">
     <div class="doc-eyebrow">Documentation · v3.3</div>
     <h1>The OS layer between<br />LLMs &amp; <span class="ital">commodity robots.</span></h1>
-    <p class="lede">Talk to any robot in plain English. AETHER auto-discovers your hardware, generates kit-specific adapters when it sees something new, and runs your objectives with true parallel execution and a five-layer safety chain.</p>
+    <p class="lede">Talk to any robot in plain English. AETHER finds your hardware, writes the adapters, and runs your objectives — safely.</p>
     <div class="install-line">
       <span><span class="pr">$</span> pip install aether-robotics</span>
       <button class="copy-btn" data-copy="pip install aether-robotics">Copy</button>
@@ -64,10 +64,10 @@
   <main class="doc-content">
 
     <!-- FEATURES -->
-    <section id="features">
+    <section id="features" class="reveal3d">
       <div class="kicker">Features</div>
       <h2>Everything it does, <span class="ital">out of the box.</span></h2>
-      <p>Drive motors, read sensors, move servos — all from English. No bespoke code per task. Here's the full surface area.</p>
+      <p class="lead">Eight things AETHER handles so you don't have to.</p>
 
       <div class="feature-panel">
         <div class="card3d-grid">
@@ -75,92 +75,93 @@
             <span class="tag">F.01</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7" width="16" height="11" rx="2.5"/><path d="M12 7V4"/><circle cx="12" cy="3" r="1.2"/><circle cx="9" cy="12.5" r="1.1"/><circle cx="15" cy="12.5" r="1.1"/><path d="M9.5 15.5h5"/></svg></span>
             <h4>Plain-English <span class="ital">control.</span></h4>
-            <p>The LLM planner translates objectives like <em>"drive forward and stop 10 cm before the wall"</em> into coordinated tool calls.</p>
+            <p>Type an objective. The planner turns it into tool calls — no per-task code.</p>
           </article>
           <article class="card3d light">
             <span class="tag">F.02</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-3.6-3.6"/><path d="M11 8v6M8 11h6"/></svg></span>
             <h4>Auto-discovery.</h4>
-            <p>Scans I²C, GPIO, serial, camera, audio, and network at boot, matches detected hardware to known adapters, and registers the right tool vocabulary automatically.</p>
+            <p>Scans I²C, GPIO, serial, camera and network at boot, then registers the right tools.</p>
           </article>
           <article class="card3d light">
             <span class="tag">F.03</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></span>
             <h4>True parallel <span class="ital">skills.</span></h4>
-            <p>A single objective can spawn coordinated threads. <code>drive_until_obstacle</code> runs a motor thread and an ultrasonic-polling thread concurrently with a shared safety event.</p>
+            <p>One objective, many threads. Motors and sensors run at once behind a shared safety event.</p>
           </article>
           <article class="card3d light">
             <span class="tag">F.04</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.4 3 8.3 7 9.5 4-1.2 7-5.1 7-9.5V6l-7-3z"/><path d="m9 12 2 2 4-4"/></svg></span>
-            <h4>Five-layer <span class="ital">safety chain.</span></h4>
-            <p>Ctrl-C, SIGTERM, crash, segfault — every path leads to motors stopped, pins released. There is no path that leaves the robot running.</p>
+            <h4>Five-layer <span class="ital">safety.</span></h4>
+            <p>Ctrl-C, crash or segfault — every path ends with motors stopped and pins freed.</p>
           </article>
           <article class="card3d light">
             <span class="tag">F.05</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 4.5l2-1.5"/><path d="M20 20v-4h-4"/></svg></span>
             <h4>Self-correcting.</h4>
-            <p>The CorrectionAgent catches LLM hallucinations, reroutes via a fallback chain, and verifies outcomes — skipping verification on clean success to keep latency low.</p>
+            <p>Catches bad tool calls, retries down a fallback chain, verifies the result.</p>
           </article>
           <article class="card3d light">
             <span class="tag">F.06</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7"/><path d="M6 6a8 8 0 0 0 0 12M18 6a8 8 0 0 1 0 12"/></svg></span>
-            <h4>Drone + ground <span class="ital">robots.</span></h4>
-            <p>MAVLink flight controllers auto-discovered on serial. Differential-drive cars, Mecanum platforms, pan-tilt rigs — all through one tool vocabulary.</p>
+            <h4>Drone + <span class="ital">ground.</span></h4>
+            <p>Cars, Mecanum rigs, pan-tilt heads, MAVLink drones — one vocabulary.</p>
           </article>
           <article class="card3d light">
             <span class="tag">F.07</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5c-3.5 0-9 1.5-12 8.5L4 20"/><path d="M19 5c0 6-3 11-9 12"/><path d="M8 14h6"/></svg></span>
             <h4>Lightweight.</h4>
-            <p>Runs on a Raspberry Pi 4. No GPU required. Inference happens via the Anthropic API; the Pi only orchestrates.</p>
+            <p>Runs on a Raspberry Pi 4. No GPU — the Pi just orchestrates.</p>
           </article>
           <article class="card3d light">
             <span class="tag">F.08</span>
             <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6v3a1.6 1.6 0 0 0 3 0V4h0a2 2 0 0 1 2 2v3h-3a1.6 1.6 0 0 0 0 3h3v3a2 2 0 0 1-2 2h-3v-3a1.6 1.6 0 0 0-3 0v3H6a2 2 0 0 1-2-2v-3h3a1.6 1.6 0 0 0 0-3H4V6a2 2 0 0 1 2-2h3z"/></svg></span>
             <h4>Universal <span class="ital">adapters.</span></h4>
-            <p>If your robot has a Python library, AETHER can drive it — via built-in adapters, offline-generated adapters, or a guided REPL.</p>
+            <p>Has a Python library? AETHER can drive it.</p>
           </article>
         </div>
       </div>
     </section>
 
     <!-- TIERS -->
-    <section id="tiers">
+    <section id="tiers" class="reveal3d">
       <div class="kicker">The moat</div>
-      <h2>Three-tier <span class="ital">universality.</span></h2>
+      <h2>Three tiers of <span class="ital">universality.</span></h2>
+      <p class="lead">However custom your robot is, there's a path in.</p>
       <div class="flow3d">
         <div class="step">
           <span class="n">1</span>
           <div>
-            <h5>Built-in adapters for known kits</h5>
-            <p>SunFounder PiCar-X, Freenove, Adeept, PCA9685, L298N, Waveshare — supported out of the box, zero configuration.</p>
+            <h5>Known kits — built in</h5>
+            <p>PiCar-X, Freenove, Adeept, PCA9685, L298N, Waveshare. Zero config.</p>
           </div>
         </div>
         <div class="step">
           <span class="n">2</span>
           <div>
-            <h5>Generated adapters for new kits</h5>
-            <p>Claude reads your kit's vendor Python library, generates a new adapter offline, validates it through a static safety check, and registers it. No vendor integration needed.</p>
+            <h5>New kits — auto-generated</h5>
+            <p>Claude reads the vendor library, writes an adapter offline, safety-checks it, registers it.</p>
           </div>
         </div>
         <div class="step">
           <span class="n">3</span>
           <div>
-            <h5>Guided REPL for custom hardware</h5>
-            <p>Fully custom rigs are wired up interactively through a guided REPL that maps your hardware onto the standard vocabulary.</p>
+            <h5>Custom rigs — guided REPL</h5>
+            <p>A guided REPL maps your hardware onto the standard vocabulary.</p>
           </div>
         </div>
       </div>
       <div class="callout">
         <span class="mark">⌁</span>
-        <p>If your robot has a Python library, AETHER can drive it. Tier&nbsp;2 generated adapters that try to register tools outside the standard vocabulary fail static validation and are rejected.</p>
+        <p>Generated adapters that reach for tools outside the standard vocabulary fail validation and are rejected.</p>
       </div>
     </section>
 
     <!-- VOCAB -->
-    <section id="vocab">
+    <section id="vocab" class="reveal3d">
       <div class="kicker">Interface</div>
-      <h2>Standard tool <span class="ital">vocabulary.</span></h2>
-      <p>Every adapter — Tier 1 or Tier 2 — registers a subset of these. The LLM only ever picks from these names.</p>
+      <h2>The tool <span class="ital">vocabulary.</span></h2>
+      <p class="lead">Every adapter registers a subset. The planner only picks from these names.</p>
       <table>
         <thead><tr><th>Group</th><th>Tools</th></tr></thead>
         <tbody>
@@ -173,17 +174,24 @@
     </section>
 
     <!-- HOW IT WORKS -->
-    <section id="how">
+    <section id="how" class="reveal3d">
       <div class="kicker">Architecture</div>
       <h2>How it <span class="ital">works.</span></h2>
-      <p>You type an English objective. The LLM planner picks tools from a registered vocabulary. Tools come from three sources: built-in primitives (cross-platform), kit adapters (Tier&nbsp;1 or Tier&nbsp;2 generated), and parallel skills (multi-thread coordinated capabilities).</p>
-      <p>Every tool call goes through the tool registry, executes against the hardware, and returns a result. The <strong>CorrectionAgent</strong> inspects each result — clean success advances to the next step; failure triggers a fallback chain. When the objective is done, the safety chain ensures motors are stopped and pins are released.</p>
+      <p class="lead">Five steps, every objective:</p>
+      <div class="flow3d">
+        <div class="step"><span class="n">1</span><div><h5>You type</h5><p>An objective, in plain English.</p></div></div>
+        <div class="step"><span class="n">2</span><div><h5>Planner picks tools</h5><p>From the registry — built-in primitives, kit adapters, and parallel skills.</p></div></div>
+        <div class="step"><span class="n">3</span><div><h5>Hardware runs it</h5><p>Each call executes on the device and returns a result.</p></div></div>
+        <div class="step"><span class="n">4</span><div><h5>CorrectionAgent checks</h5><p>Pass advances to the next step; failure triggers a fallback chain.</p></div></div>
+        <div class="step"><span class="n">5</span><div><h5>Safety chain closes</h5><p>On finish, motors stop and every pin is released.</p></div></div>
+      </div>
     </section>
 
     <!-- FLOW -->
-    <section id="flow">
-      <div class="kicker">The flow</div>
-      <h2><code>drive forward and stop 10&nbsp;cm before the wall</code></h2>
+    <section id="flow" class="reveal3d">
+      <div class="kicker">Worked example</div>
+      <h2>One objective, <span class="ital">end to end.</span></h2>
+      <p class="lead"><code>drive forward and stop 10&nbsp;cm before the wall</code></p>
       <div class="codewrap">
         <button class="copy-btn" data-copy="">Copy</button>
         <pre><code>You: "drive forward and stop 10 cm before the wall"
@@ -216,36 +224,29 @@
     </section>
 
     <!-- WHY -->
-    <section id="why">
+    <section id="why" class="reveal3d">
       <div class="kicker">Design rationale</div>
       <h2>Why it's built <span class="ital">this way.</span></h2>
 
-      <h3>Why parallel threads, <span class="em">not a serial loop.</span></h3>
-      <p>A serial loop ("motor for 100&nbsp;ms, read sensor, motor for 100&nbsp;ms…") causes physical jitter — the motor accelerates and decelerates 10 times a second. True parallel threads run the motor continuously while a separate thread polls the sensor. Smooth motion, accurate stops, faster response.</p>
+      <h3>Parallel, <span class="em">not serial.</span></h3>
+      <p>A serial loop jitters — the motor stutters ten times a second. Parallel threads keep the motor smooth while a separate thread watches the sensor. Cleaner motion, accurate stops.</p>
 
-      <h3>Why a five-layer <span class="em">safety chain.</span></h3>
-      <p>Robotics failures are unforgiving. A crashed process that left motors running could damage the robot, the environment, or a person. Each layer catches a different failure class:</p>
+      <h3>Five layers, <span class="em">five failure classes.</span></h3>
+      <p>A crashed process with live motors is dangerous. Each layer catches a different way things break:</p>
       <table>
         <thead><tr><th>Failure</th><th>Caught by</th></tr></thead>
         <tbody>
-          <tr><td>Tool exception</td><td>Layer 1 — tool <code>try/finally</code></td></tr>
-          <tr><td>Skill mid-thread exception</td><td>Layer 2 — skill <code>try/finally</code></td></tr>
-          <tr><td>Ctrl-C in the main thread</td><td>Layer 3 — <code>_GLOBAL_STOP</code> event</td></tr>
-          <tr><td><code>os._exit()</code> or segfault</td><td>Layer 4 — <code>atexit</code></td></tr>
-          <tr><td>Next process can't claim pins</td><td>Layer 5 — GPIO cleanup</td></tr>
+          <tr><td>Tool exception</td><td>1 · tool <code>try/finally</code></td></tr>
+          <tr><td>Mid-thread exception</td><td>2 · skill <code>try/finally</code></td></tr>
+          <tr><td>Ctrl-C</td><td>3 · <code>_GLOBAL_STOP</code></td></tr>
+          <tr><td><code>os._exit()</code> / segfault</td><td>4 · <code>atexit</code></td></tr>
+          <tr><td>Pins left claimed</td><td>5 · GPIO cleanup</td></tr>
         </tbody>
       </table>
-      <ol>
-        <li>Every motion tool wraps in <code>try/finally</code> with <code>stop()</code> in finally.</li>
-        <li>Every skill wraps its threads in <code>try/finally</code> with cleanup.</li>
-        <li>A global <code>threading.Event</code> halts all skills on exit signal.</li>
-        <li><code>atexit</code> fires the adapter's authoritative <code>emergency_stop</code>.</li>
-        <li>GPIO cleanup releases all pins.</li>
-      </ol>
 
       <div class="callout">
         <span class="mark">→</span>
-        <p>Ready to run it? Head to <a class="inline" href="usage.html">Usage &amp; Quick start</a> for install, configuration, the Raspberry Pi walkthrough, and the Python / HTTP APIs.</p>
+        <p>Ready to run it? <a class="inline" href="usage.html">Usage &amp; Quick start</a> covers install, config, the Pi walkthrough, and the APIs.</p>
       </div>
     </section>
 

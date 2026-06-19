@@ -1527,7 +1527,7 @@
   padding: clamp(26px, 4vw, 44px);
   margin: 0 0 22px;
   box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 36px 80px -54px rgba(0,0,0,0.9);
-  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease), border-color 0.3s var(--ease);
+  transition: transform 0.6s var(--ease), box-shadow 0.5s var(--ease), border-color 0.3s var(--ease), opacity 0.6s var(--ease);
 }
 .doc-content > section:hover {
   transform: translateY(-3px);
@@ -1632,7 +1632,7 @@
   border: 1px solid var(--line-2); border-radius: 12px;
   padding: 22px 20px 24px;
   transform-style: preserve-3d;
-  transition: transform 0.16s var(--ease), border-color 0.3s var(--ease), box-shadow 0.4s var(--ease);
+  transition: transform 0.16s var(--ease), border-color 0.3s var(--ease), box-shadow 0.4s var(--ease), opacity 0.55s var(--ease) var(--fd, 0s);
   will-change: transform;
   overflow: hidden;
 }
@@ -1727,3 +1727,61 @@
 .doc-foot a { color: var(--ink-dim); }
 .doc-foot a:hover { color: var(--accent); }
 .doc-foot .links { display: flex; gap: 20px; flex-wrap: wrap; }
+
+/* ============================================================
+   SUBPAGE MOTION — light intro lines + 3D scroll reveals
+   ============================================================ */
+
+/* lighter, scannable intro line under a section heading */
+.doc-content .lead {
+  font-size: 16.5px; line-height: 1.6; color: var(--paper-dim);
+  margin: 2px 0 22px; max-width: 60ch;
+}
+.doc-content > section .lead { color: var(--paper-dim); }
+.doc-content .lead code { font-size: 0.9em; }
+
+/* gentle continuous 3D float on the feature icons (always-on, subtle) */
+@media (prefers-reduced-motion: no-preference) {
+  .card3d .glyph { animation: glyphFloat 5s ease-in-out infinite; }
+  .card3d:nth-child(2n) .glyph { animation-duration: 6.2s; }
+  .card3d:nth-child(3n) .glyph { animation-duration: 4.4s; }
+  @keyframes glyphFloat {
+    0%, 100% { transform: translateZ(40px) translateY(0) rotate(0deg); }
+    50%      { transform: translateZ(40px) translateY(-5px) rotate(-3deg); }
+  }
+}
+
+/* 3D scroll reveal for the white section cards */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal3d {
+    opacity: 0;
+    transform: perspective(1300px) rotateX(7deg) translateY(46px);
+    transform-origin: 50% 100%;
+  }
+  .reveal3d.in { opacity: 1; transform: none; }
+
+  /* staggered fade of the cards inside a landing section
+     (opacity only — transform stays free for the hover tilt) */
+  .reveal3d .card3d { opacity: 0; }
+  .reveal3d.in .card3d { opacity: 1; }
+  .reveal3d.in .card3d:nth-child(1) { --fd: 0.04s; }
+  .reveal3d.in .card3d:nth-child(2) { --fd: 0.09s; }
+  .reveal3d.in .card3d:nth-child(3) { --fd: 0.14s; }
+  .reveal3d.in .card3d:nth-child(4) { --fd: 0.19s; }
+  .reveal3d.in .card3d:nth-child(5) { --fd: 0.24s; }
+  .reveal3d.in .card3d:nth-child(6) { --fd: 0.29s; }
+  .reveal3d.in .card3d:nth-child(7) { --fd: 0.34s; }
+  .reveal3d.in .card3d:nth-child(8) { --fd: 0.39s; }
+
+  /* steps fade + slide in with a light stagger */
+  .reveal3d .flow3d .step {
+    opacity: 0; transform: translateX(-14px);
+    transition: opacity 0.5s var(--ease) var(--fd, 0s), transform 0.5s var(--ease) var(--fd, 0s), border-color 0.3s var(--ease);
+  }
+  .reveal3d.in .flow3d .step { opacity: 1; transform: none; }
+  .reveal3d.in .flow3d .step:nth-child(1) { --fd: 0.06s; }
+  .reveal3d.in .flow3d .step:nth-child(2) { --fd: 0.13s; }
+  .reveal3d.in .flow3d .step:nth-child(3) { --fd: 0.20s; }
+  .reveal3d.in .flow3d .step:nth-child(4) { --fd: 0.27s; }
+  .reveal3d.in .flow3d .step:nth-child(5) { --fd: 0.34s; }
+}
