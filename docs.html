@@ -14,7 +14,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="aether.css?v=3.9.5" />
 </head>
-<body>
+<body class="docpage">
+<div class="side-fx left" aria-hidden="true"><span class="rail"></span><span class="pulse"></span><span class="pulse d2"></span><span class="tick t1">+</span><span class="tick t2">+</span><span class="tick t3">+</span></div>
+<div class="side-fx right" aria-hidden="true"><span class="rail"></span><span class="pulse"></span><span class="pulse d2"></span><span class="tick t1">+</span><span class="tick t2">+</span><span class="tick t3">+</span></div>
 
 <!-- ====== SUBPAGE TOP BAR ====== -->
 <header class="docbar">
@@ -81,7 +83,7 @@
         <div class="card3d-grid">
           <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Plain-English control" data-tag="F.01" data-more="Describe the goal, not the procedure. The planner reads your live hardware manifest, chooses tools from the registered vocabulary, and sequences them. No per-task scripting, no hard-coded pin numbers." data-code="<span class=&quot;pr&quot;>objective&gt;</span> drive forward and stop 10 cm before the wall">
             <span class="tag">F.01</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="7" width="16" height="11" rx="2.5"/><path d="M12 7V4"/><circle cx="12" cy="3" r="1.2"/><circle cx="9" cy="12.5" r="1.1"/><circle cx="15" cy="12.5" r="1.1"/><path d="M9.5 15.5h5"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 4h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-3.6 3.2A.6.6 0 0 1 4.5 17.7V5a1 1 0 0 1 0-1z"/><path d="m8.5 8.5 2.2 2.2-2.2 2.2"/><path d="M12.5 12.7h4"/></svg></span>
             <h4>Plain-English <span class="ital">control.</span></h4>
             <p>Type an objective. The planner turns it into tool calls — no per-task code.</p>
                     <span class="more">Details +</span>
@@ -91,14 +93,14 @@
 + motors gpio 17,18,22,23
 + imu  i²c 0x68">
             <span class="tag">F.02</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-3.6-3.6"/><path d="M11 8v6M8 11h6"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12 18.4 5.6"/><circle cx="12" cy="12" r="1.4"/><path d="M5.6 12a6.4 6.4 0 1 0 6.4-6.4"/><path d="M8.6 12a3.4 3.4 0 1 0 3.4-3.4"/></svg></span>
             <h4>Auto-discovery.</h4>
             <p>Scans I²C, GPIO, serial, camera and network at boot, then registers the right tools.</p>
                     <span class="more">Details +</span>
         </article>
           <article class="card3d light card-clickable" role="button" tabindex="0" data-title="True parallel skills" data-tag="F.03" data-more="Skills run real threads, not a serial poll loop. drive_until_obstacle drives the motors continuously while a second thread watches the rangefinder — they meet at a shared stop event, so motion stays smooth and stops stay accurate." data-code="result = drive_until_obstacle(target_cm=10, max_speed=25)">
             <span class="tag">F.03</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5h12"/><path d="m12 5.5 3 3-3 3"/><path d="M21 15.5H9"/><path d="m12 12.5-3 3 3 3"/></svg></span>
             <h4>True parallel <span class="ital">skills.</span></h4>
             <p>One objective, many threads. Motors and sensors run at once behind a shared safety event.</p>
                     <span class="more">Details +</span>
@@ -107,7 +109,7 @@
 3 _GLOBAL_STOP       4 atexit
 5 GPIO cleanup">
             <span class="tag">F.04</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.4 3 8.3 7 9.5 4-1.2 7-5.1 7-9.5V6l-7-3z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.4 7 9.5 4-1.1 7-5 7-9.5V6l-7-3z"/><path d="m9 12 2 2 4-4"/></svg></span>
             <h4>Five-layer <span class="ital">safety.</span></h4>
             <p>Ctrl-C, crash or segfault — every path ends with motors stopped and pins freed.</p>
                     <span class="more">Details +</span>
@@ -115,7 +117,7 @@
           <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Self-correcting" data-tag="F.05" data-more="The CorrectionAgent inspects every result. A bad tool name or bad argument is rerouted down a fallback chain and the outcome is verified; clean successes skip verification so multi-step objectives stay fast." data-code="<span class=&quot;c&quot;># bad call → reroute → verify</span>
 move_fwd  ✗  →  move_forward  ✓">
             <span class="tag">F.05</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4.5L4 8"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 4.5l2-1.5"/><path d="M20 20v-4h-4"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M20.5 4v4.5H16"/><path d="m9 12 2 2 4-4"/></svg></span>
             <h4>Self-correcting.</h4>
             <p>Catches bad tool calls, retries down a fallback chain, verifies the result.</p>
                     <span class="more">Details +</span>
@@ -123,14 +125,14 @@ move_fwd  ✗  →  move_forward  ✓">
           <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Drone + ground" data-tag="F.06" data-more="One vocabulary spans the fleet: differential-drive cars, Mecanum platforms, pan-tilt heads, and MAVLink flight controllers auto-discovered on serial. Swap the robot, keep the objectives." data-code="<span class=&quot;c&quot;># same tools, any chassis</span>
 move_forward  turn_left  look_up">
             <span class="tag">F.06</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8.5 8.5a5 5 0 0 0 0 7M15.5 8.5a5 5 0 0 1 0 7"/><path d="M6 6a8 8 0 0 0 0 12M18 6a8 8 0 0 1 0 12"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1.3"/><path d="M7.4 7.4 9.5 9.5M16.6 7.4 14.5 9.5M7.4 16.6 9.5 14.5M16.6 16.6 14.5 14.5"/></svg></span>
             <h4>Drone + <span class="ital">ground.</span></h4>
             <p>Cars, Mecanum rigs, pan-tilt heads, MAVLink drones — one vocabulary.</p>
                     <span class="more">Details +</span>
         </article>
           <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Lightweight" data-tag="F.07" data-more="Runs comfortably on a Raspberry Pi 4 with no GPU. Inference happens in the Claude API; the Pi only orchestrates tool calls and runs the safety loop." data-code="<span class=&quot;pr&quot;>$</span> aether --mode agent   <span class=&quot;c&quot;># on a Pi 4</span>">
             <span class="tag">F.07</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 5c-3.5 0-9 1.5-12 8.5L4 20"/><path d="M19 5c0 6-3 11-9 12"/><path d="M8 14h6"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5a6 6 0 0 0-8.5 0L4 12.5V20h7.5L19 12.5A6 6 0 0 0 20 5z"/><path d="M16 8 5.5 18.5"/><path d="M14 10H9"/></svg></span>
             <h4>Lightweight.</h4>
             <p>Runs on a Raspberry Pi 4. No GPU — the Pi just orchestrates.</p>
                     <span class="more">Details +</span>
@@ -138,7 +140,7 @@ move_forward  turn_left  look_up">
           <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Universal adapters" data-tag="F.08" data-more="Three tiers cover everything: built-in adapters for known kits, Claude-generated adapters for any kit with a vendor library, and a guided REPL for fully custom rigs. If it has a Python library, AETHER can drive it." data-code="<span class=&quot;c&quot;># tier 2: generated offline, safety-checked</span>
 [ADAPTER] generated: my_kit — 11 tools">
             <span class="tag">F.08</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4h6v3a1.6 1.6 0 0 0 3 0V4h0a2 2 0 0 1 2 2v3h-3a1.6 1.6 0 0 0 0 3h3v3a2 2 0 0 1-2 2h-3v-3a1.6 1.6 0 0 0-3 0v3H6a2 2 0 0 1-2-2v-3h3a1.6 1.6 0 0 0 0-3H4V6a2 2 0 0 1 2-2h3z"/></svg></span>
+            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4.5a2 2 0 1 0-4 0V6H6a1 1 0 0 0-1 1v4h1.5a2 2 0 1 1 0 4H5v4a1 1 0 0 0 1 1h4v-1.5a2 2 0 1 1 4 0V20h4a1 1 0 0 0 1-1v-4h-1.5a2 2 0 1 1 0-4H19V7a1 1 0 0 0-1-1h-4V4.5z"/></svg></span>
             <h4>Universal <span class="ital">adapters.</span></h4>
             <p>Has a Python library? AETHER can drive it.</p>
                     <span class="more">Details +</span>

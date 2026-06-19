@@ -1926,3 +1926,109 @@ code, pre,
   .modal { transition: opacity 0.2s; transform: none; }
   .modal-overlay.open .modal { transform: none; }
 }
+
+/* ============================================================
+   GRANITE SUBPAGE THEME — softer than pure black, gentler contrast
+   ============================================================ */
+body.docpage { background: #24262b; }
+body.docpage .doc-hero {
+  background:
+    radial-gradient(120% 90% at 50% -20%, #30333a 0%, #26282e 55%, #202228 100%);
+  border-bottom: 1px solid #33363d;
+}
+body.docpage .docbar {
+  background: rgba(32,34,40,0.74);
+  border-bottom: 1px solid #33363d;
+}
+/* warm paper cards on granite — readable, not glaring */
+body.docpage .doc-content > section {
+  background: #f6f5f3;
+  border-color: #e4e2dd;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset, 0 26px 56px -44px rgba(0,0,0,0.55);
+}
+body.docpage .doc-content > section:hover {
+  box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset, 0 38px 78px -44px rgba(0,0,0,0.65);
+}
+body.docpage .feature-panel {
+  background: linear-gradient(180deg, #efedea, #e9e7e2);
+  border-color: #e1dfda;
+}
+body.docpage .card3d.light { background: #ffffff; border-color: #e7e5e1; }
+body.docpage .flow3d .step { background: #fbfbfa; border-color: #e7e5e1; }
+body.docpage .doc-foot { border-top-color: #33363d; }
+/* sidebar on granite */
+body.docpage .doc-side h6 { color: #6c7079; }
+body.docpage .doc-side nav { border-left-color: #3a3d44; }
+body.docpage .doc-side nav a { color: #9aa0a9; }
+body.docpage .doc-side nav a:hover { color: #ecedef; }
+/* hero spec strip tiles → granite, not near-black */
+body.docpage .spec-strip.dark { background: #34373d; border-color: #34373d; }
+body.docpage .spec-strip.dark .stat { background: #1d1f24; }
+/* the film-grain overlay is too heavy on granite — calm it on subpages */
+body.docpage::before { opacity: 0.10; }
+
+/* ============================================================
+   SIDE FX — animated rails that fill the empty gutters
+   ============================================================ */
+.side-fx { position: fixed; top: 0; bottom: 0; width: 90px; z-index: 1; pointer-events: none; }
+.side-fx.left  { left: 0; }
+.side-fx.right { right: 0; }
+.side-fx .rail {
+  position: absolute; top: 8%; bottom: 8%; left: 50%; width: 1px;
+  background: linear-gradient(180deg, transparent, #3c3f46 14%, #3c3f46 86%, transparent);
+}
+.side-fx .pulse {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 14px 3px rgba(255,77,28,0.55);
+  opacity: 0;
+}
+.side-fx .tick {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 12px; color: #41444b;
+}
+.side-fx .t1 { top: 20%; }
+.side-fx .t2 { top: 52%; }
+.side-fx .t3 { top: 80%; }
+@media (prefers-reduced-motion: no-preference) {
+  .side-fx .pulse { animation: railPulse 7s cubic-bezier(.45,0,.55,1) infinite; }
+  .side-fx .pulse.d2 { animation-delay: 3.5s; }
+  .side-fx.right .pulse { animation-direction: reverse; }
+  @keyframes railPulse {
+    0%   { top: 6%;  opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 94%; opacity: 0; }
+  }
+  .side-fx .tick { animation: tickPulse 4s ease-in-out infinite; }
+  .side-fx .t2 { animation-delay: 1.3s; }
+  .side-fx .t3 { animation-delay: 2.6s; }
+  @keyframes tickPulse {
+    0%, 100% { color: #34373d; }
+    50%      { color: var(--accent); }
+  }
+}
+/* only show the rails when there's real gutter space */
+@media (max-width: 1320px) { .side-fx { display: none; } }
+
+/* richer side motion: a glowing segment that travels the rail + soft breath */
+.side-fx .rail { overflow: visible; }
+.side-fx .rail::after {
+  content: ""; position: absolute; left: -1px; width: 3px; height: 140px; top: -140px;
+  background: linear-gradient(180deg, transparent, rgba(255,77,28,0.55), transparent);
+  filter: blur(1px); border-radius: 3px;
+}
+.side-fx::before {
+  content: ""; position: absolute; left: 50%; top: 50%;
+  width: 180px; height: 380px; transform: translate(-50%,-50%);
+  background: radial-gradient(closest-side, rgba(255,77,28,0.06), transparent 70%);
+  opacity: 0.6;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .side-fx .rail::after { animation: railGlow 7s linear infinite; }
+  .side-fx.right .rail::after { animation-delay: 3.5s; }
+  @keyframes railGlow { 0% { top: -140px; } 100% { top: 100%; } }
+  .side-fx::before { animation: breathe 6s ease-in-out infinite; }
+  @keyframes breathe { 0%,100% { opacity: 0.35; } 50% { opacity: 0.8; } }
+}
