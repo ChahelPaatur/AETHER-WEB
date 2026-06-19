@@ -2,6 +2,52 @@
 (function () {
   "use strict";
 
+  // ----- Modern modal: feature cards open a detail sheet -----
+  const modal = document.getElementById("modal");
+  if (modal) {
+    const mTitle = document.getElementById("modalTitle");
+    const mTag   = document.getElementById("modalTag");
+    const mBody  = document.getElementById("modalBody");
+    const mIco   = document.getElementById("modalIco");
+    const mCode  = modal.querySelector("#modalCode code");
+    const mClose = document.getElementById("modalClose");
+    let lastFocus = null;
+
+    const openModal = (card) => {
+      const t = card.querySelector("h4");
+      mTitle.innerHTML = t ? t.innerHTML : (card.dataset.title || "");
+      mTag.textContent = card.dataset.tag || "";
+      mBody.textContent = card.dataset.more || "";
+      mCode.innerHTML = card.dataset.code || "";
+      const g = card.querySelector(".glyph svg");
+      mIco.innerHTML = g ? g.outerHTML : "";
+      modal.querySelector("#modalCode").style.display = card.dataset.code ? "" : "none";
+      lastFocus = document.activeElement;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      mClose.focus();
+    };
+    const closeModal = () => {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    };
+
+    document.querySelectorAll(".card-clickable").forEach((card) => {
+      card.addEventListener("click", () => openModal(card));
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openModal(card); }
+      });
+    });
+    mClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+    });
+  }
+
   // ----- Cursor-driven 3D tilt on cards -----
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduce && window.matchMedia && window.matchMedia("(hover: hover)").matches) {
