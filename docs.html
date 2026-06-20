@@ -4,25 +4,21 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — the OS layer between LLMs and commodity robots. Plain-English robot control, auto-discovery, three-tier universality, parallel skills, and a five-layer safety chain." />
+<meta name="description" content="AETHER documentation — the OS layer between LLMs and commodity robots. Features, three-tier adapters, the tool vocabulary, how it works, and the safety chain." />
 <link rel="canonical" href="https://aether-robotics.com/docs.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Docs — the OS layer between LLMs and commodity robots</title>
+<title>AETHER · Docs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="aether.css?v=3.9.5" />
+<link rel="stylesheet" href="aether.css?v=3.9.6" />
 </head>
 <body class="docpage">
-<div class="side-fx left" aria-hidden="true"><span class="rail"></span><span class="ticks"></span><span class="scan"></span><i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i></div>
-<div class="side-fx right" aria-hidden="true"><span class="rail"></span><span class="ticks"></span><span class="scan"></span><i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i></div>
 
-<!-- ====== SUBPAGE TOP BAR ====== -->
 <header class="docbar">
   <a class="docbar-brand" href="index.html" aria-label="AETHER home">
-    <img src="logo-orange.png" alt="" />
-    <span class="wm">AETHER</span>
+    <img src="logo-orange.png" alt="" /><span class="wm">AETHER</span>
   </a>
   <nav class="doctabs">
     <a href="index.html">Home</a>
@@ -32,162 +28,79 @@
   <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
 </header>
 
-<!-- ====== DOC HERO ====== -->
-<section class="doc-hero">
-  <div id="three-doc" aria-hidden="true"></div>
-  <div class="doc-hero-inner">
-    <div class="doc-eyebrow">Documentation · v3.9.5</div>
-    <h1>The OS layer between<br />LLMs &amp; <span class="ital">commodity robots.</span></h1>
-    <p class="lede">Talk to any robot in plain English. AETHER finds your hardware, writes the adapters, and runs your objectives — safely.</p>
-    <div class="install-line">
-      <span><span class="pr">$</span> pip install aether-robotics</span>
-      <button class="copy-btn" data-copy="pip install aether-robotics">Copy</button>
-    </div>
+<div class="docwrap">
 
-    <div class="spec-strip dark">
-      <div class="stat"><span class="v">5</span><span class="k">Safety layers</span></div>
-      <div class="stat"><span class="v">1,280<sup>Hz</sup></span><span class="k">FDIR loop</span></div>
-      <div class="stat"><span class="v">100<sup>%</sup></span><span class="k">Detection rate</span></div>
-      <div class="stat"><span class="v">3</span><span class="k">Adapter tiers</span></div>
-      <div class="stat"><span class="v">Pi&nbsp;4</span><span class="k">Min hardware</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== DOC SHELL ====== -->
-<div class="doc-shell">
-  <aside class="doc-side">
-    <div class="doc-side-sticky">
-      <h6>On this page</h6>
-      <nav id="docNav">
-        <a href="#features">Features</a>
-        <a href="#tiers">Three-tier universality</a>
-        <a href="#vocab">Tool vocabulary</a>
-        <a href="#how">How it works</a>
-        <a href="#flow">The flow</a>
-        <a href="#why">Design rationale</a>
-        <a href="usage.html">Usage &amp; install ↗</a>
-      </nav>
+  <!-- LEFT NAV -->
+  <aside class="docnav">
+    <div class="docnav-sticky">
+      <div class="group">
+        <h6>Get started</h6>
+        <a href="docs.html#overview">Overview</a>
+        <a href="usage.html#install">Install</a>
+        <a href="usage.html#quickstart">Quickstart</a>
+      </div>
+      <div class="group">
+        <h6>Concepts</h6>
+        <a href="docs.html#features">Features</a>
+        <a href="docs.html#tiers">Three-tier adapters</a>
+        <a href="docs.html#vocab">Tool vocabulary</a>
+        <a href="docs.html#how">How it works</a>
+        <a href="docs.html#flow">The flow</a>
+        <a href="docs.html#safety">Safety chain</a>
+      </div>
+      <div class="group">
+        <h6>Reference</h6>
+        <a href="usage.html#python">Python API</a>
+        <a href="usage.html#http">HTTP API</a>
+        <a href="usage.html#troubleshooting">Troubleshooting</a>
+      </div>
     </div>
   </aside>
 
-  <main class="doc-content">
+  <!-- CONTENT -->
+  <main class="doccontent">
+    <div class="eyebrow">Documentation</div>
+    <h1>AETHER</h1>
+    <p class="intro">The OS layer between LLMs and commodity robots. Talk to any robot in plain English — AETHER finds your hardware, writes the adapters, and runs your objectives safely.</p>
+    <div class="code">
+      <button class="copy-btn" data-copy="pip install aether-robotics">Copy</button>
+      <pre><code><span class="pr">$</span> pip install aether-robotics</code></pre>
+    </div>
 
-    <!-- FEATURES -->
-    <section id="features" class="reveal3d">
-      <div class="kicker">Features</div>
-      <h2>Everything it does, <span class="ital">out of the box.</span></h2>
-      <p class="lead">Eight things AETHER handles so you don't have to.</p>
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>You type an objective in plain English. The planner picks tools from a registered vocabulary, runs them on your hardware, checks each result, and closes a safety chain when it's done. There's no per-task code to write.</p>
+      <p>Tools come from three sources: built-in cross-platform primitives, kit adapters (built-in or generated), and parallel skills that coordinate multiple threads.</p>
+    </section>
 
-      <div class="feature-panel">
-        <div class="card3d-grid">
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Plain-English control" data-tag="F.01" data-more="Describe the goal, not the procedure. The planner reads your live hardware manifest, chooses tools from the registered vocabulary, and sequences them. No per-task scripting, no hard-coded pin numbers." data-code="<span class=&quot;pr&quot;>objective&gt;</span> drive forward and stop 10 cm before the wall">
-            <span class="tag">F.01</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 4h15a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-3.6 3.2A.6.6 0 0 1 4.5 17.7V5a1 1 0 0 1 0-1z"/><path d="m8.5 8.5 2.2 2.2-2.2 2.2"/><path d="M12.5 12.7h4"/></svg></span>
-            <h4>Plain-English <span class="ital">control.</span></h4>
-            <p>Type an objective. The planner turns it into tool calls — no per-task code.</p>
-                    <span class="more">Details +</span>
-        </article>
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Auto-discovery" data-tag="F.02" data-more="At boot AETHER probes I²C, GPIO, serial, camera, audio and the network, fingerprints what it finds, and maps each device to an adapter — then registers only the tools that device actually supports." data-code="<span class=&quot;c&quot;># detected at boot</span>
-+ camera /dev/video0
-+ motors gpio 17,18,22,23
-+ imu  i²c 0x68">
-            <span class="tag">F.02</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12 18.4 5.6"/><circle cx="12" cy="12" r="1.4"/><path d="M5.6 12a6.4 6.4 0 1 0 6.4-6.4"/><path d="M8.6 12a3.4 3.4 0 1 0 3.4-3.4"/></svg></span>
-            <h4>Auto-discovery.</h4>
-            <p>Scans I²C, GPIO, serial, camera and network at boot, then registers the right tools.</p>
-                    <span class="more">Details +</span>
-        </article>
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="True parallel skills" data-tag="F.03" data-more="Skills run real threads, not a serial poll loop. drive_until_obstacle drives the motors continuously while a second thread watches the rangefinder — they meet at a shared stop event, so motion stays smooth and stops stay accurate." data-code="result = drive_until_obstacle(target_cm=10, max_speed=25)">
-            <span class="tag">F.03</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5h12"/><path d="m12 5.5 3 3-3 3"/><path d="M21 15.5H9"/><path d="m12 12.5-3 3 3 3"/></svg></span>
-            <h4>True parallel <span class="ital">skills.</span></h4>
-            <p>One objective, many threads. Motors and sensors run at once behind a shared safety event.</p>
-                    <span class="more">Details +</span>
-        </article>
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Five-layer safety" data-tag="F.04" data-more="Five independent layers each catch a different failure class — tool exceptions, mid-thread crashes, Ctrl-C, hard exits, and unreleased pins. Whatever happens, motors stop and GPIO is freed." data-code="1 tool try/finally   2 skill try/finally
-3 _GLOBAL_STOP       4 atexit
-5 GPIO cleanup">
-            <span class="tag">F.04</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.4 7 9.5 4-1.1 7-5 7-9.5V6l-7-3z"/><path d="m9 12 2 2 4-4"/></svg></span>
-            <h4>Five-layer <span class="ital">safety.</span></h4>
-            <p>Ctrl-C, crash or segfault — every path ends with motors stopped and pins freed.</p>
-                    <span class="more">Details +</span>
-        </article>
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Self-correcting" data-tag="F.05" data-more="The CorrectionAgent inspects every result. A bad tool name or bad argument is rerouted down a fallback chain and the outcome is verified; clean successes skip verification so multi-step objectives stay fast." data-code="<span class=&quot;c&quot;># bad call → reroute → verify</span>
-move_fwd  ✗  →  move_forward  ✓">
-            <span class="tag">F.05</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 12a8.5 8.5 0 1 1-2.5-6"/><path d="M20.5 4v4.5H16"/><path d="m9 12 2 2 4-4"/></svg></span>
-            <h4>Self-correcting.</h4>
-            <p>Catches bad tool calls, retries down a fallback chain, verifies the result.</p>
-                    <span class="more">Details +</span>
-        </article>
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Drone + ground" data-tag="F.06" data-more="One vocabulary spans the fleet: differential-drive cars, Mecanum platforms, pan-tilt heads, and MAVLink flight controllers auto-discovered on serial. Swap the robot, keep the objectives." data-code="<span class=&quot;c&quot;># same tools, any chassis</span>
-move_forward  turn_left  look_up">
-            <span class="tag">F.06</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1.3"/><path d="M7.4 7.4 9.5 9.5M16.6 7.4 14.5 9.5M7.4 16.6 9.5 14.5M16.6 16.6 14.5 14.5"/></svg></span>
-            <h4>Drone + <span class="ital">ground.</span></h4>
-            <p>Cars, Mecanum rigs, pan-tilt heads, MAVLink drones — one vocabulary.</p>
-                    <span class="more">Details +</span>
-        </article>
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Lightweight" data-tag="F.07" data-more="Runs comfortably on a Raspberry Pi 4 with no GPU. Inference happens in the Claude API; the Pi only orchestrates tool calls and runs the safety loop." data-code="<span class=&quot;pr&quot;>$</span> aether --mode agent   <span class=&quot;c&quot;># on a Pi 4</span>">
-            <span class="tag">F.07</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5a6 6 0 0 0-8.5 0L4 12.5V20h7.5L19 12.5A6 6 0 0 0 20 5z"/><path d="M16 8 5.5 18.5"/><path d="M14 10H9"/></svg></span>
-            <h4>Lightweight.</h4>
-            <p>Runs on a Raspberry Pi 4. No GPU — the Pi just orchestrates.</p>
-                    <span class="more">Details +</span>
-        </article>
-          <article class="card3d light card-clickable" role="button" tabindex="0" data-title="Universal adapters" data-tag="F.08" data-more="Three tiers cover everything: built-in adapters for known kits, Claude-generated adapters for any kit with a vendor library, and a guided REPL for fully custom rigs. If it has a Python library, AETHER can drive it." data-code="<span class=&quot;c&quot;># tier 2: generated offline, safety-checked</span>
-[ADAPTER] generated: my_kit — 11 tools">
-            <span class="tag">F.08</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4.5a2 2 0 1 0-4 0V6H6a1 1 0 0 0-1 1v4h1.5a2 2 0 1 1 0 4H5v4a1 1 0 0 0 1 1h4v-1.5a2 2 0 1 1 4 0V20h4a1 1 0 0 0 1-1v-4h-1.5a2 2 0 1 1 0-4H19V7a1 1 0 0 0-1-1h-4V4.5z"/></svg></span>
-            <h4>Universal <span class="ital">adapters.</span></h4>
-            <p>Has a Python library? AETHER can drive it.</p>
-                    <span class="more">Details +</span>
-        </article>
-        </div>
+    <section id="features">
+      <h2>Features</h2>
+      <div class="grid2">
+        <div class="gcard"><h4>Plain-English <b>control</b></h4><p>Type an objective; the planner turns it into tool calls.</p></div>
+        <div class="gcard"><h4>Auto-discovery</h4><p>Scans I²C, GPIO, serial, camera and network at boot.</p></div>
+        <div class="gcard"><h4>Parallel <b>skills</b></h4><p>Motors and sensors run at once behind a shared safety event.</p></div>
+        <div class="gcard"><h4>Five-layer <b>safety</b></h4><p>Every exit path stops motors and releases pins.</p></div>
+        <div class="gcard"><h4>Self-correcting</h4><p>Catches bad tool calls, retries, and verifies results.</p></div>
+        <div class="gcard"><h4>Drone + <b>ground</b></h4><p>Cars, Mecanum rigs, pan-tilt heads, MAVLink drones.</p></div>
+        <div class="gcard"><h4>Lightweight</h4><p>Runs on a Raspberry Pi 4 — no GPU required.</p></div>
+        <div class="gcard"><h4>Universal <b>adapters</b></h4><p>Has a Python library? AETHER can drive it.</p></div>
       </div>
     </section>
 
-    <!-- TIERS -->
-    <section id="tiers" class="reveal3d">
-      <div class="kicker">The moat</div>
-      <h2>Three tiers of <span class="ital">universality.</span></h2>
-      <p class="lead">However custom your robot is, there's a path in.</p>
-      <div class="flow3d">
-        <div class="step">
-          <span class="n">1</span>
-          <div>
-            <h5>Known kits — built in</h5>
-            <p>PiCar-X, Freenove, Adeept, PCA9685, L298N, Waveshare. Zero config.</p>
-          </div>
-        </div>
-        <div class="step">
-          <span class="n">2</span>
-          <div>
-            <h5>New kits — auto-generated</h5>
-            <p>Claude reads the vendor library, writes an adapter offline, safety-checks it, registers it.</p>
-          </div>
-        </div>
-        <div class="step">
-          <span class="n">3</span>
-          <div>
-            <h5>Custom rigs — guided REPL</h5>
-            <p>A guided REPL maps your hardware onto the standard vocabulary.</p>
-          </div>
-        </div>
-      </div>
-      <div class="callout">
-        <span class="mark">⌁</span>
-        <p>Generated adapters that reach for tools outside the standard vocabulary fail validation and are rejected.</p>
-      </div>
+    <section id="tiers">
+      <h2>Three-tier adapters</h2>
+      <p>However custom your robot is, there's a path in.</p>
+      <ol>
+        <li><strong>Known kits — built in.</strong> PiCar-X, Freenove, Adeept, PCA9685, L298N, Waveshare. Zero config.</li>
+        <li><strong>New kits — auto-generated.</strong> Claude reads the vendor library, writes an adapter offline, safety-checks it, and registers it.</li>
+        <li><strong>Custom rigs — guided REPL.</strong> A guided REPL maps your hardware onto the standard vocabulary.</li>
+      </ol>
+      <div class="note"><span class="m">&rsaquo;</span><p>Generated adapters that reach for tools outside the standard vocabulary fail validation and are rejected.</p></div>
     </section>
 
-    <!-- VOCAB -->
-    <section id="vocab" class="reveal3d">
-      <div class="kicker">Interface</div>
-      <h2>The tool <span class="ital">vocabulary.</span></h2>
-      <p class="lead">Every adapter registers a subset. The planner only picks from these names.</p>
+    <section id="vocab">
+      <h2>Tool vocabulary</h2>
+      <p>Every adapter registers a subset of these. The planner only picks from these names.</p>
       <table>
         <thead><tr><th>Group</th><th>Tools</th></tr></thead>
         <tbody>
@@ -199,99 +112,64 @@ move_forward  turn_left  look_up">
       </table>
     </section>
 
-    <!-- HOW IT WORKS -->
-    <section id="how" class="reveal3d">
-      <div class="kicker">Architecture</div>
-      <h2>How it <span class="ital">works.</span></h2>
-      <p class="lead">Five steps, every objective:</p>
-      <div class="flow3d">
-        <div class="step"><span class="n">1</span><div><h5>You type</h5><p>An objective, in plain English.</p></div></div>
-        <div class="step"><span class="n">2</span><div><h5>Planner picks tools</h5><p>From the registry — built-in primitives, kit adapters, and parallel skills.</p></div></div>
-        <div class="step"><span class="n">3</span><div><h5>Hardware runs it</h5><p>Each call executes on the device and returns a result.</p></div></div>
-        <div class="step"><span class="n">4</span><div><h5>CorrectionAgent checks</h5><p>Pass advances to the next step; failure triggers a fallback chain.</p></div></div>
-        <div class="step"><span class="n">5</span><div><h5>Safety chain closes</h5><p>On finish, motors stop and every pin is released.</p></div></div>
+    <section id="how">
+      <h2>How it works</h2>
+      <ol>
+        <li>You type an objective, in plain English.</li>
+        <li>The planner picks tools from the registry.</li>
+        <li>Each call runs on the hardware and returns a result.</li>
+        <li>The CorrectionAgent checks it — pass advances, failure triggers a fallback chain.</li>
+        <li>On finish, the safety chain stops motors and releases every pin.</li>
+      </ol>
+    </section>
+
+    <section id="flow">
+      <h2>The flow</h2>
+      <p>A single objective, end to end:</p>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre><code>You: "drive forward and stop 10 cm before the wall"
+  <span class="c">&rarr;</span> <span class="k">LLM Planner</span>        picks drive_until_obstacle(target_cm=10)
+  <span class="c">&rarr;</span> <span class="k">ParallelExecutor</span>   spawns a motor thread + a sensor thread
+  <span class="c">&rarr;</span> shared should_stop   either thread can fire the stop
+  <span class="c">&rarr;</span> <span class="ok">stop confirmed</span>        CorrectionAgent OK &middot; result returned</code></pre>
       </div>
     </section>
 
-    <!-- FLOW -->
-    <section id="flow" class="reveal3d">
-      <div class="kicker">Worked example</div>
-      <h2>One objective, <span class="ital">end to end.</span></h2>
-      <p class="lead"><code>drive forward and stop 10&nbsp;cm before the wall</code></p>
-      <div class="codewrap">
-        <button class="copy-btn" data-copy="">Copy</button>
-        <pre><code>You: "drive forward and stop 10 cm before the wall"
-         │
-         ▼
-┌─────────────────────┐
-│   <span class="k">LLM Planner</span>       │  picks: drive_until_obstacle(target_cm=10)
-└──────────┬──────────┘
-           ▼
-┌─────────────────────┐
-│  <span class="k">ParallelExecutor</span>   │  spawns 2 threads
-└─┬─────────────────┬─┘
-  ▼                 ▼
-<span class="pr">Motor Thread</span>     <span class="pr">Sensor Thread</span>
-(continuous       (polls every 50ms)
- forward at        ─ thresh? signal stop
- approach speed)   ─ noise tolerance
-  │                 ─ hard timeout
-  ▼                 ▼
-┌─────────────────────┐
-│  <span class="k">Shared should_stop</span> │  either thread can fire
-└──────────┬──────────┘
-           ▼
-┌─────────────────────┐
-│  <span class="ok">Stop confirmed</span>     │
-│  CorrectionAgent OK │
-│  Result returned    │
-└─────────────────────┘</code></pre>
-      </div>
-    </section>
-
-    <!-- WHY -->
-    <section id="why" class="reveal3d">
-      <div class="kicker">Design rationale</div>
-      <h2>Why it's built <span class="ital">this way.</span></h2>
-
-      <h3>Parallel, <span class="em">not serial.</span></h3>
-      <p>A serial loop jitters — the motor stutters ten times a second. Parallel threads keep the motor smooth while a separate thread watches the sensor. Cleaner motion, accurate stops.</p>
-
-      <h3>Five layers, <span class="em">five failure classes.</span></h3>
-      <p>A crashed process with live motors is dangerous. Each layer catches a different way things break:</p>
+    <section id="safety">
+      <h2>Safety chain</h2>
+      <p>A crashed process with live motors is dangerous. Five independent layers each catch a different failure class:</p>
       <table>
         <thead><tr><th>Failure</th><th>Caught by</th></tr></thead>
         <tbody>
-          <tr><td>Tool exception</td><td>1 · tool <code>try/finally</code></td></tr>
-          <tr><td>Mid-thread exception</td><td>2 · skill <code>try/finally</code></td></tr>
-          <tr><td>Ctrl-C</td><td>3 · <code>_GLOBAL_STOP</code></td></tr>
-          <tr><td><code>os._exit()</code> / segfault</td><td>4 · <code>atexit</code></td></tr>
-          <tr><td>Pins left claimed</td><td>5 · GPIO cleanup</td></tr>
+          <tr><td>Tool exception</td><td>1 &middot; tool <code>try/finally</code></td></tr>
+          <tr><td>Mid-thread exception</td><td>2 &middot; skill <code>try/finally</code></td></tr>
+          <tr><td>Ctrl-C</td><td>3 &middot; <code>_GLOBAL_STOP</code></td></tr>
+          <tr><td><code>os._exit()</code> / segfault</td><td>4 &middot; <code>atexit</code></td></tr>
+          <tr><td>Pins left claimed</td><td>5 &middot; GPIO cleanup</td></tr>
         </tbody>
       </table>
-
-      <div class="callout">
-        <span class="mark">→</span>
-        <p>Ready to run it? <a class="inline" href="usage.html">Usage &amp; Quick start</a> covers install, config, the Pi walkthrough, and the APIs.</p>
-      </div>
+      <div class="note"><span class="m">&rsaquo;</span><p>Ready to run it? <a class="lnk" href="usage.html">Usage &amp; Quickstart</a> covers install, config, the Pi walkthrough, and the APIs.</p></div>
     </section>
-
   </main>
+
+  <!-- RIGHT TOC -->
+  <aside class="doctoc">
+    <div class="doctoc-sticky">
+      <h6>On this page</h6>
+      <nav id="tocNav">
+        <a href="#overview">Overview</a>
+        <a href="#features">Features</a>
+        <a href="#tiers">Three-tier adapters</a>
+        <a href="#vocab">Tool vocabulary</a>
+        <a href="#how">How it works</a>
+        <a href="#flow">The flow</a>
+        <a href="#safety">Safety chain</a>
+      </nav>
+    </div>
+  </aside>
 </div>
 
-<!-- ====== MODAL (populated from the clicked feature card) ====== -->
-<div class="modal-overlay" id="modal" aria-hidden="true">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <button class="modal-close" id="modalClose" aria-label="Close">×</button>
-    <span class="modal-tag" id="modalTag"></span>
-    <span class="modal-ico" id="modalIco" aria-hidden="true"></span>
-    <h3 id="modalTitle"></h3>
-    <p id="modalBody"></p>
-    <pre id="modalCode"><code></code></pre>
-  </div>
-</div>
-
-<!-- ====== SUBPAGE FOOTER ====== -->
 <footer class="doc-foot">
   <div>Ⓒ 2026 · Chahel Paatur · aether-robotics.com</div>
   <div class="links">
@@ -302,11 +180,6 @@ move_forward  turn_left  look_up">
   </div>
 </footer>
 
-<!-- shared subpage behaviour -->
-<script src="docs.js?v=3.9.5" defer></script>
-<!-- three.js for the decorative doc-hero scene -->
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js" integrity="sha384-qOkzR5Ke/XkQxuGVJ9hpFEpDlcoLtWwVYhnJf06cLIZa2vaIptSqaubivErzmD5O" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="docs-three.js?v=3.9.5" defer></script>
-
+<script src="docs.js?v=3.9.6" defer></script>
 </body>
 </html>

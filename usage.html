@@ -4,25 +4,21 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER usage — install, configure, and run. Requirements, the Raspberry Pi + SunFounder PiCar-X quick start, the Python and HTTP APIs, and troubleshooting." />
+<meta name="description" content="AETHER usage — install, configure, run. Requirements, the Raspberry Pi quick start, the Python and HTTP APIs, and troubleshooting." />
 <link rel="canonical" href="https://aether-robotics.com/usage.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Usage — install, configure, run</title>
+<title>AETHER · Usage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="aether.css?v=3.9.5" />
+<link rel="stylesheet" href="aether.css?v=3.9.6" />
 </head>
 <body class="docpage">
-<div class="side-fx left" aria-hidden="true"><span class="rail"></span><span class="ticks"></span><span class="scan"></span><i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i></div>
-<div class="side-fx right" aria-hidden="true"><span class="rail"></span><span class="ticks"></span><span class="scan"></span><i class="p p1"></i><i class="p p2"></i><i class="p p3"></i><i class="p p4"></i></div>
 
-<!-- ====== SUBPAGE TOP BAR ====== -->
 <header class="docbar">
   <a class="docbar-brand" href="index.html" aria-label="AETHER home">
-    <img src="logo-orange.png" alt="" />
-    <span class="wm">AETHER</span>
+    <img src="logo-orange.png" alt="" /><span class="wm">AETHER</span>
   </a>
   <nav class="doctabs">
     <a href="index.html">Home</a>
@@ -32,187 +28,135 @@
   <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
 </header>
 
-<!-- ====== DOC HERO ====== -->
-<section class="doc-hero">
-  <div id="three-doc" aria-hidden="true"></div>
-  <div class="doc-hero-inner">
-    <div class="doc-eyebrow">Usage · v3.9.5</div>
-    <h1>From fresh OS to<br />running in <span class="ital">three commands.</span></h1>
-    <p class="lede">Pip install, drop in an API key, run. Then type plain English at the <code>objective&gt;</code> prompt.</p>
-    <div class="install-line">
-      <span><span class="pr">$</span> aether --mode agent</span>
-      <button class="copy-btn" data-copy="aether --mode agent">Copy</button>
-    </div>
-  </div>
-</section>
+<div class="docwrap">
 
-<!-- ====== DOC SHELL ====== -->
-<div class="doc-shell">
-  <aside class="doc-side">
-    <div class="doc-side-sticky">
-      <h6>On this page</h6>
-      <nav id="docNav">
-        <a href="#requirements">Requirements</a>
-        <a href="#install">Install</a>
-        <a href="#configure">Configure</a>
-        <a href="#run">Run</a>
-        <a href="#quickstart">Quick start · Pi</a>
-        <a href="#python">Python API</a>
-        <a href="#http">HTTP API</a>
-        <a href="#troubleshooting">Troubleshooting</a>
-        <a href="docs.html">Features &amp; architecture ↗</a>
-      </nav>
+  <!-- LEFT NAV -->
+  <aside class="docnav">
+    <div class="docnav-sticky">
+      <div class="group">
+        <h6>Get started</h6>
+        <a href="usage.html#requirements">Requirements</a>
+        <a href="usage.html#install">Install</a>
+        <a href="usage.html#configure">Configure</a>
+        <a href="usage.html#run">Run</a>
+        <a href="usage.html#quickstart">Quickstart · Pi</a>
+      </div>
+      <div class="group">
+        <h6>Reference</h6>
+        <a href="usage.html#python">Python API</a>
+        <a href="usage.html#http">HTTP API</a>
+        <a href="usage.html#troubleshooting">Troubleshooting</a>
+      </div>
+      <div class="group">
+        <h6>Concepts</h6>
+        <a href="docs.html#features">Features</a>
+        <a href="docs.html#how">How it works</a>
+        <a href="docs.html#safety">Safety chain</a>
+      </div>
     </div>
   </aside>
 
-  <main class="doc-content">
+  <!-- CONTENT -->
+  <main class="doccontent">
+    <div class="eyebrow">Usage</div>
+    <h1>Install &amp; run</h1>
+    <p class="intro">Pip install, drop in an API key, and run. You'll see auto-discovery scroll past, then type plain English at the <code>objective&gt;</code> prompt.</p>
 
-    <!-- REQUIREMENTS -->
-    <section id="requirements" class="reveal3d">
-      <div class="kicker">Before you start</div>
-      <h2>Requirements.</h2>
-      <p>Four things to have on hand. Everything else AETHER discovers for you.</p>
-      <div class="feature-panel">
-        <div class="card3d-grid req-grid">
-          <article class="card3d light">
-            <span class="tag">Req</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 8-4 4 4 4"/><path d="m15 8 4 4-4 4"/><path d="m13 6-2 12"/></svg></span>
-            <h4>Python <span class="ital">3.9+</span></h4>
-            <p>Any modern CPython interpreter on Linux, macOS, or Raspberry Pi OS.</p>
-          </article>
-          <article class="card3d light">
-            <span class="tag">Req</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="8" width="14" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="12" cy="3.6" r="1.4"/><circle cx="9.5" cy="13" r="1.2"/><circle cx="14.5" cy="13" r="1.2"/><path d="M10 16.5h4"/><path d="M3 12v3M21 12v3"/></svg></span>
-            <h4>A robot <span class="ital">kit.</span></h4>
-            <p>Any supported kit — or any kit that ships a Python library.</p>
-          </article>
-          <article class="card3d light">
-            <span class="tag">Req</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4.5"/><path d="m11.2 11.8 8.3-8.3"/><path d="m16 5 2.5 2.5"/><path d="m13.5 7.5 2.2 2.2"/></svg></span>
-            <h4>Anthropic <span class="ital">API key.</span></h4>
-            <p>Inference runs through the Claude API; the device only orchestrates.</p>
-          </article>
-          <article class="card3d light">
-            <span class="tag">Optional</span>
-            <span class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx="1"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg></span>
-            <h4>Raspberry Pi <span class="ital">4 / 5.</span></h4>
-            <p>Optional. Runs comfortably on a Pi 4 — no GPU required.</p>
-          </article>
-        </div>
-      </div>
+    <section id="requirements">
+      <h2>Requirements</h2>
+      <ul>
+        <li><strong>Python 3.9+</strong> on Linux, macOS, or Raspberry Pi OS.</li>
+        <li><strong>A robot kit</strong> — any supported kit, or any kit that ships a Python library.</li>
+        <li><strong>An Anthropic API key</strong> — inference runs through the Claude API.</li>
+        <li><strong>Optional:</strong> a Raspberry Pi 4 or 5. No GPU required.</li>
+      </ul>
     </section>
 
-    <!-- INSTALL -->
-    <section id="install" class="reveal3d">
-      <div class="kicker">Step 01</div>
-      <h2>Install.</h2>
-      <div class="codewrap">
+    <section id="install">
+      <h2>Install</h2>
+      <div class="code">
         <button class="copy-btn">Copy</button>
         <pre><code><span class="pr">$</span> pip install aether-robotics</code></pre>
       </div>
       <p>On Raspberry Pi OS Bookworm:</p>
-      <div class="codewrap">
+      <div class="code">
         <button class="copy-btn">Copy</button>
-        <pre><code><span class="pr">$</span> pip install aether-robotics --break-system-packages
+<pre><code><span class="pr">$</span> pip install aether-robotics --break-system-packages
 <span class="pr">$</span> export PATH="$HOME/.local/bin:$PATH"</code></pre>
       </div>
     </section>
 
-    <!-- CONFIGURE -->
-    <section id="configure" class="reveal3d">
-      <div class="kicker">Step 02</div>
-      <h2>Configure.</h2>
-      <div class="codewrap">
+    <section id="configure">
+      <h2>Configure</h2>
+      <div class="code">
         <button class="copy-btn">Copy</button>
         <pre><code><span class="pr">$</span> export ANTHROPIC_API_KEY="your-key-here"</code></pre>
       </div>
       <p>For persistence, add the line to <code>~/.bashrc</code>.</p>
     </section>
 
-    <!-- RUN -->
-    <section id="run" class="reveal3d">
-      <div class="kicker">Step 03</div>
-      <h2>Run.</h2>
-      <div class="codewrap">
+    <section id="run">
+      <h2>Run</h2>
+      <div class="code">
         <button class="copy-btn">Copy</button>
         <pre><code><span class="pr">$</span> aether --mode agent</code></pre>
       </div>
       <p>You'll see auto-discovery scroll past, then an <code>objective&gt;</code> prompt. Type plain English:</p>
-      <div class="codewrap">
+      <div class="code">
         <button class="copy-btn">Copy</button>
 <pre><code>objective&gt; look up
-objective&gt; look down
 objective&gt; drive forward and stop 10 centimeters before the wall</code></pre>
       </div>
-      <div class="callout">
-        <span class="mark">⌁</span>
-        <p>Ctrl-C fires the full emergency-stop chain — try it mid-skill. Every path leads to motors stopped and pins released.</p>
-      </div>
+      <div class="note"><span class="m">&rsaquo;</span><p>Ctrl-C fires the full emergency-stop chain — every path ends with motors stopped and pins freed.</p></div>
     </section>
 
-    <!-- QUICK START -->
-    <section id="quickstart" class="reveal3d">
-      <div class="kicker">End to end</div>
-      <h2>Quick start — Raspberry Pi <span class="ital">+ PiCar-X.</span></h2>
+    <section id="quickstart">
+      <h2>Quickstart · Raspberry Pi + PiCar-X</h2>
       <p>The full sequence from a fresh OS to running AETHER:</p>
-      <div class="codewrap">
+      <div class="code">
         <button class="copy-btn">Copy</button>
-<pre><code><span class="c"># Enable I2C, SPI, Serial (interactive)</span>
+<pre><code><span class="c"># enable I2C, SPI, Serial</span>
 <span class="pr">$</span> sudo raspi-config
 
-<span class="c"># System packages</span>
+<span class="c"># system packages</span>
 <span class="pr">$</span> sudo apt update &amp;&amp; sudo apt install -y python3-pip git i2c-tools
 
 <span class="c"># SunFounder libraries</span>
-<span class="pr">$</span> cd ~
 <span class="pr">$</span> git clone https://github.com/sunfounder/robot-hat.git
 <span class="pr">$</span> git clone https://github.com/sunfounder/picar-x.git
 <span class="pr">$</span> cd robot-hat &amp;&amp; sudo python3 install.py
 <span class="pr">$</span> cd ../picar-x &amp;&amp; sudo python3 setup.py install
 
-<span class="c"># Permissions (prevents sudo prompts at runtime)</span>
-<span class="pr">$</span> sudo mkdir -p /opt/picar-x /opt/robot-hat
-<span class="pr">$</span> sudo chown -R pi:pi /opt/picar-x /opt/robot-hat
-
 <span class="c"># AETHER</span>
 <span class="pr">$</span> pip install aether-robotics --break-system-packages
 <span class="pr">$</span> export PATH="$HOME/.local/bin:$PATH"
 <span class="pr">$</span> export ANTHROPIC_API_KEY="your-key"
-
-<span class="c"># Run</span>
 <span class="pr">$</span> aether --mode agent</code></pre>
       </div>
-      <p>You'll see <code>[ADAPTER] Tier 1: sunfounder_picarx — 12 tools registered</code> and <code>[SKILLS] Registered 1 parallel skill(s): drive_until_obstacle</code> in the boot log. Then go.</p>
+      <p>You'll see <code>[ADAPTER] Tier 1: sunfounder_picarx</code> and <code>[SKILLS] drive_until_obstacle</code> in the boot log. Then go.</p>
     </section>
 
-    <!-- PYTHON API -->
-    <section id="python" class="reveal3d">
-      <div class="kicker">Programmatic</div>
-      <h2>Python API.</h2>
-      <div class="codewrap">
+    <section id="python">
+      <h2>Python API</h2>
+      <div class="code">
         <button class="copy-btn">Copy</button>
 <pre><code><span class="k">from</span> aether.core.tool_registry <span class="k">import</span> get_global_registry
 <span class="k">from</span> aether.skills.drive_until_obstacle <span class="k">import</span> drive_until_obstacle
 
 registry = get_global_registry()
-
-<span class="c"># Direct tool call</span>
 registry.execute(<span class="s">"move_forward"</span>, {<span class="s">"speed"</span>: 30, <span class="s">"duration"</span>: 2.0})
 
-<span class="c"># Skill call</span>
 result = drive_until_obstacle(target_cm=10, max_speed=25, timeout_s=15)</code></pre>
       </div>
     </section>
 
-    <!-- HTTP API -->
-    <section id="http" class="reveal3d">
-      <div class="kicker">Over the wire</div>
-      <h2>HTTP API.</h2>
-      <div class="codewrap">
+    <section id="http">
+      <h2>HTTP API</h2>
+      <div class="code">
         <button class="copy-btn">Copy</button>
         <pre><code><span class="pr">$</span> aether --mode server  <span class="c"># starts on port 8000</span></code></pre>
       </div>
-      <div class="codewrap">
+      <div class="code">
         <button class="copy-btn">Copy</button>
 <pre><code><span class="pr">$</span> curl -X POST http://localhost:8000/objective \
   -H <span class="s">"Content-Type: application/json"</span> \
@@ -220,33 +164,39 @@ result = drive_until_obstacle(target_cm=10, max_speed=25, timeout_s=15)</code></
       </div>
     </section>
 
-    <!-- TROUBLESHOOTING -->
-    <section id="troubleshooting" class="reveal3d">
-      <div class="kicker">When things go sideways</div>
-      <h2>Troubleshooting.</h2>
+    <section id="troubleshooting">
+      <h2>Troubleshooting</h2>
       <table>
         <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
         <tbody>
           <tr><td><code>aether: command not found</code></td><td><code>export PATH="$HOME/.local/bin:$PATH"</code></td></tr>
-          <tr><td>Ultrasonic returns -1</td><td>Wiring. Check TRIG=D2, ECHO=D3, power red=3V3/5V, black=GND.</td></tr>
-          <tr><td><code>GPIO busy</code></td><td>Another process holds pins. Reboot, or <code>sudo pkill -f python</code>.</td></tr>
-          <tr><td><code>[sudo] password for pi:</code> during boot</td><td>Old AETHER. Upgrade to 3.7.10+.</td></tr>
-          <tr><td>Sensor noise during driving</td><td>Solved in v3.9.5 (consecutive bad-read counter tolerates motor EMI).</td></tr>
+          <tr><td>Ultrasonic returns -1</td><td>Check wiring: TRIG=D2, ECHO=D3, power, GND.</td></tr>
+          <tr><td><code>GPIO busy</code></td><td>Reboot, or <code>sudo pkill -f python</code>.</td></tr>
+          <tr><td>Sensor noise while driving</td><td>Fixed in v3.9.5 (bad-read counter tolerates motor EMI).</td></tr>
         </tbody>
       </table>
-
-      <h3>Links</h3>
-      <ul>
-        <li><strong>Install:</strong> <code>pip install aether-robotics</code></li>
-        <li><strong>Source:</strong> GitHub (open to design partners)</li>
-        <li><strong>Domain:</strong> <a class="inline" href="index.html">aether-robotics.com</a></li>
-      </ul>
+      <div class="note"><span class="m">&rsaquo;</span><p>New to AETHER? Start with <a class="lnk" href="docs.html">the docs</a> for features, architecture, and the safety chain.</p></div>
     </section>
-
   </main>
+
+  <!-- RIGHT TOC -->
+  <aside class="doctoc">
+    <div class="doctoc-sticky">
+      <h6>On this page</h6>
+      <nav id="tocNav">
+        <a href="#requirements">Requirements</a>
+        <a href="#install">Install</a>
+        <a href="#configure">Configure</a>
+        <a href="#run">Run</a>
+        <a href="#quickstart">Quickstart</a>
+        <a href="#python">Python API</a>
+        <a href="#http">HTTP API</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+      </nav>
+    </div>
+  </aside>
 </div>
 
-<!-- ====== SUBPAGE FOOTER ====== -->
 <footer class="doc-foot">
   <div>Ⓒ 2026 · Chahel Paatur · aether-robotics.com</div>
   <div class="links">
@@ -257,9 +207,6 @@ result = drive_until_obstacle(target_cm=10, max_speed=25, timeout_s=15)</code></
   </div>
 </footer>
 
-<script src="docs.js?v=3.9.5" defer></script>
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js" integrity="sha384-qOkzR5Ke/XkQxuGVJ9hpFEpDlcoLtWwVYhnJf06cLIZa2vaIptSqaubivErzmD5O" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="docs-three.js?v=3.9.5" defer></script>
-
+<script src="docs.js?v=3.9.6" defer></script>
 </body>
 </html>
