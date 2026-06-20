@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER usage — install, configure, run. Requirements, the Raspberry Pi quick start, the Python and HTTP APIs, and troubleshooting." />
+<meta name="description" content="AETHER usage — install, the CLI reference, operating modes, configuration and paths, the Python API, development, and troubleshooting." />
 <link rel="canonical" href="https://aether-robotics.com/usage.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -30,138 +30,268 @@
 
 <div class="docwrap">
 
-  <!-- LEFT NAV -->
+  <!-- LEFT NAV (shared with docs.html) -->
   <aside class="docnav">
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
-        <a href="usage.html#requirements">Requirements</a>
+        <a href="docs.html#overview">Overview</a>
         <a href="usage.html#install">Install</a>
-        <a href="usage.html#configure">Configure</a>
-        <a href="usage.html#run">Run</a>
-        <a href="usage.html#quickstart">Quickstart · Pi</a>
-      </div>
-      <div class="group">
-        <h6>Reference</h6>
-        <a href="usage.html#python">Python API</a>
-        <a href="usage.html#http">HTTP API</a>
-        <a href="usage.html#troubleshooting">Troubleshooting</a>
+        <a href="usage.html#quickstart">Quick start</a>
       </div>
       <div class="group">
         <h6>Concepts</h6>
-        <a href="docs.html#features">Features</a>
-        <a href="docs.html#how">How it works</a>
-        <a href="docs.html#safety">Safety chain</a>
+        <a href="docs.html#concepts">Key concepts</a>
+        <a href="docs.html#genome">Calibration &amp; Genome</a>
+        <a href="docs.html#adapters">Auto-adapters</a>
+        <a href="docs.html#planning">NL planning</a>
+        <a href="docs.html#skills">Skills</a>
+        <a href="docs.html#parallel">Parallel execution</a>
+        <a href="docs.html#fdir">FDIR</a>
+        <a href="docs.html#mavlink">MAVLink</a>
+      </div>
+      <div class="group">
+        <h6>Reference</h6>
+        <a href="docs.html#architecture">Architecture</a>
+        <a href="docs.html#vocab">Tool vocabulary</a>
+        <a href="docs.html#safety">Safety model</a>
+        <a href="docs.html#benchmarks">Benchmarks</a>
+        <a href="docs.html#versions">Version history</a>
+      </div>
+      <div class="group">
+        <h6>Usage</h6>
+        <a href="usage.html#requirements">Requirements</a>
+        <a href="usage.html#cli">CLI reference</a>
+        <a href="usage.html#modes">Operating modes</a>
+        <a href="usage.html#config">Config &amp; paths</a>
+        <a href="usage.html#python">Python API</a>
+        <a href="usage.html#dev">Development</a>
+        <a href="usage.html#troubleshooting">Troubleshooting</a>
       </div>
     </div>
   </aside>
 
   <!-- CONTENT -->
   <main class="doccontent">
-    <div class="eyebrow">Usage</div>
+    <div class="eyebrow">Usage · v3.9.5</div>
     <h1>Install &amp; run</h1>
-    <p class="intro">Pip install, drop in an API key, and run. You'll see auto-discovery scroll past, then type plain English at the <code>objective&gt;</code> prompt.</p>
+    <p class="intro">Pip install, calibrate once, then control the robot in plain English. You'll see auto-discovery scroll past, then type objectives at the <code>objective&gt;</code> prompt.</p>
 
     <section id="requirements">
       <h2>Requirements</h2>
       <ul>
         <li><strong>Python 3.9+</strong> on Linux, macOS, or Raspberry Pi OS.</li>
-        <li><strong>A robot kit</strong> — any supported kit, or any kit that ships a Python library.</li>
-        <li><strong>An Anthropic API key</strong> — inference runs through the Claude API.</li>
-        <li><strong>Optional:</strong> a Raspberry Pi 4 or 5. No GPU required.</li>
+        <li><strong>Platform:</strong> Raspberry Pi 4 (primary target); also runs on a dev machine in <code>--mode sim</code>.</li>
+        <li><strong>A robot kit</strong> — any supported HAT, or any kit that ships a Python library.</li>
+        <li><strong>An Anthropic API key</strong> for the planner + vision (<code>agent</code>, <code>server</code>). <code>sim</code> and <code>realworld</code> run without it.</li>
       </ul>
+      <p>Core dependencies auto-install: <code>numpy&gt;=1.24</code>, <code>psutil&gt;=5.9</code>, <code>requests&gt;=2.32</code>.</p>
     </section>
 
     <section id="install">
       <h2>Install</h2>
       <div class="code">
-        <button class="copy-btn">Copy</button>
+        <button class="copy-btn" data-copy="pip install aether-robotics">Copy</button>
         <pre><code><span class="pr">$</span> pip install aether-robotics</code></pre>
       </div>
-      <p>On Raspberry Pi OS Bookworm:</p>
+      <h3>Optional dependency groups</h3>
       <div class="code">
         <button class="copy-btn">Copy</button>
-<pre><code><span class="pr">$</span> pip install aether-robotics --break-system-packages
-<span class="pr">$</span> export PATH="$HOME/.local/bin:$PATH"</code></pre>
+<pre><code><span class="pr">$</span> pip install "aether-robotics[full]"   <span class="c"># planner + vision, server, CV, plots</span>
+<span class="pr">$</span> pip install "aether-robotics[pi]"     <span class="c"># Raspberry Pi GPIO + camera</span>
+<span class="pr">$</span> pip install "aether-robotics[drone]"  <span class="c"># MAVLink flight controllers</span>
+<span class="pr">$</span> pip install "aether-robotics[ml]"     <span class="c"># YOLO detection + ML utils</span></code></pre>
       </div>
-    </section>
-
-    <section id="configure">
-      <h2>Configure</h2>
+      <table>
+        <thead><tr><th>Group</th><th>Enables</th></tr></thead>
+        <tbody>
+          <tr><td><code>full</code></td><td>LLM planner + vision (<code>anthropic</code>), HTTP server (<code>flask</code>), camera CV, plots</td></tr>
+          <tr><td><code>pi</code></td><td>Raspberry Pi GPIO + camera stack</td></tr>
+          <tr><td><code>drone</code></td><td>MAVLink flight-controller support</td></tr>
+          <tr><td><code>ml</code></td><td>YOLO object detection and extra ML utilities</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span class="m">&rsaquo;</span><p>On <strong>Raspberry Pi 5</strong>, substitute <code>rpi-lgpio</code> for <code>RPi.GPIO</code>.</p></div>
+      <h3>API key</h3>
       <div class="code">
-        <button class="copy-btn">Copy</button>
-        <pre><code><span class="pr">$</span> export ANTHROPIC_API_KEY="your-key-here"</code></pre>
+        <button class="copy-btn" data-copy="export ANTHROPIC_API_KEY=&quot;sk-ant-...&quot;">Copy</button>
+        <pre><code><span class="pr">$</span> export ANTHROPIC_API_KEY="sk-ant-..."</code></pre>
       </div>
-      <p>For persistence, add the line to <code>~/.bashrc</code>.</p>
-    </section>
-
-    <section id="run">
-      <h2>Run</h2>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-        <pre><code><span class="pr">$</span> aether --mode agent</code></pre>
-      </div>
-      <p>You'll see auto-discovery scroll past, then an <code>objective&gt;</code> prompt. Type plain English:</p>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre><code>objective&gt; look up
-objective&gt; drive forward and stop 10 centimeters before the wall</code></pre>
-      </div>
-      <div class="note"><span class="m">&rsaquo;</span><p>Ctrl-C fires the full emergency-stop chain — every path ends with motors stopped and pins freed.</p></div>
     </section>
 
     <section id="quickstart">
-      <h2>Quickstart · Raspberry Pi + PiCar-X</h2>
-      <p>The full sequence from a fresh OS to running AETHER:</p>
+      <h2>Quick start</h2>
       <div class="code">
         <button class="copy-btn">Copy</button>
-<pre><code><span class="c"># enable I2C, SPI, Serial</span>
-<span class="pr">$</span> sudo raspi-config
-
-<span class="c"># system packages</span>
+<pre><code><span class="pr">$</span> pip install aether-robotics
+<span class="pr">$</span> aether --calibrate          <span class="c"># walk GPIO pins, label actuators</span>
+<span class="pr">$</span> aether --mode agent         <span class="c"># natural-language control on live hardware</span></code></pre>
+      </div>
+      <p>A typical agent session:</p>
+      <div class="code">
+<pre><code>objective&gt; move forward and stop about 5 cm before the wall
+<span class="c">[PLAN]</span>  [LLM]  drive_until_obstacle
+<span class="c">[EXEC]</span>  drive_until_obstacle(target_cm=5, max_speed=25)
+<span class="ok">[OK]</span>    success=True  stop_reason="obstacle at 5.2 cm"</code></pre>
+      </div>
+      <p>No hardware? Try the simulator:</p>
+      <div class="code">
+        <button class="copy-btn" data-copy="aether --mode sim --scenario obstacles --render">Copy</button>
+        <pre><code><span class="pr">$</span> aether --mode sim --scenario obstacles --render</code></pre>
+      </div>
+      <h3>Raspberry Pi + PiCar-X</h3>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre><code><span class="pr">$</span> sudo raspi-config                          <span class="c"># enable I2C, SPI, Serial</span>
 <span class="pr">$</span> sudo apt update &amp;&amp; sudo apt install -y python3-pip git i2c-tools
-
-<span class="c"># SunFounder libraries</span>
 <span class="pr">$</span> git clone https://github.com/sunfounder/robot-hat.git
 <span class="pr">$</span> git clone https://github.com/sunfounder/picar-x.git
 <span class="pr">$</span> cd robot-hat &amp;&amp; sudo python3 install.py
 <span class="pr">$</span> cd ../picar-x &amp;&amp; sudo python3 setup.py install
-
-<span class="c"># AETHER</span>
 <span class="pr">$</span> pip install aether-robotics --break-system-packages
 <span class="pr">$</span> export PATH="$HOME/.local/bin:$PATH"
 <span class="pr">$</span> export ANTHROPIC_API_KEY="your-key"
 <span class="pr">$</span> aether --mode agent</code></pre>
       </div>
-      <p>You'll see <code>[ADAPTER] Tier 1: sunfounder_picarx</code> and <code>[SKILLS] drive_until_obstacle</code> in the boot log. Then go.</p>
+    </section>
+
+    <section id="cli">
+      <h2>CLI reference</h2>
+      <p>Invoke as <code>aether ...</code> or <code>python -m aether ...</code>.</p>
+      <h3>Modes</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--mode sim</code></td><td>Simulation with fault injection (default)</td></tr>
+          <tr><td><code>--mode agent</code></td><td>Interactive LLM-planned objectives on live hardware</td></tr>
+          <tr><td><code>--mode realworld</code></td><td>Continuous live-hardware FDIR loop — no planner</td></tr>
+          <tr><td><code>--mode server</code></td><td>HTTP API on <code>--port</code>; <code>POST /objective</code>, <code>GET /health</code></td></tr>
+        </tbody>
+      </table>
+      <h3>General flags</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Default</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>--task "..."</code></td><td>navigate to target</td><td>Task description for sim</td></tr>
+          <tr><td><code>--robot</code></td><td>rover_v1</td><td><code>rover_v1</code> / <code>drone_v1</code> for sim</td></tr>
+          <tr><td><code>--faults</code></td><td>disabled</td><td><code>disabled</code>/<code>enabled</code>/<code>heavy</code> injection</td></tr>
+          <tr><td><code>--scenario</code></td><td>simple</td><td><code>obstacles</code>, <code>imu_fault</code>, <code>battery</code>, <code>compound</code>, <code>fault_heavy</code></td></tr>
+          <tr><td><code>--max-steps</code></td><td>300</td><td>Max steps per sim episode</td></tr>
+          <tr><td><code>--seed</code></td><td>42</td><td>Reproducible sim runs</td></tr>
+          <tr><td><code>--render</code></td><td>off</td><td>ASCII state render each step</td></tr>
+          <tr><td><code>--plots</code></td><td>off</td><td>SFRI / metrics plots after a run</td></tr>
+          <tr><td><code>--no-learning</code></td><td>off</td><td>Freeze PPO weights for benchmarking</td></tr>
+          <tr><td><code>--continuous</code></td><td>off</td><td>Run <code>realworld</code> until Ctrl-C</td></tr>
+          <tr><td><code>--schedule "..."</code></td><td>—</td><td><code>"every 30s: scan"</code>, <code>"until 22:00: obj"</code></td></tr>
+          <tr><td><code>--port</code></td><td>8080</td><td>Port for <code>server</code></td></tr>
+          <tr><td><code>--verbose</code></td><td>off</td><td>Debug logging</td></tr>
+        </tbody>
+      </table>
+      <h3>Calibration &amp; genome</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>--calibrate</code></td><td>First-time setup — walk pins, label actuators, load adapters</td></tr>
+          <tr><td><code>--recalibrate</code></td><td>Re-run the full pin walk (preserves <code>robot_id</code>)</td></tr>
+          <tr><td><code>--auto-calibrate</code></td><td>Headless calibration, no prompts</td></tr>
+          <tr><td><code>--genome show</code></td><td>Print the loaded genome and exit</td></tr>
+        </tbody>
+      </table>
+      <h3>Adapters, install &amp; MAVLink</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td><code>--generate-adapter-from PATH</code></td><td>Offline: read vendor lib, generate + validate an adapter</td></tr>
+          <tr><td><code>--save-to PATH</code></td><td>Save the generated adapter to PATH</td></tr>
+          <tr><td><code>--no-auto-adapter</code></td><td>Disable Tier 2/3 generation (Tier 1 still loads)</td></tr>
+          <tr><td><code>--auto-install</code> / <code>--no-install</code></td><td>Install missing packages without prompting / skip</td></tr>
+          <tr><td><code>--auto-update</code> / <code>--no-update</code></td><td>Pull latest without prompting / skip check</td></tr>
+          <tr><td><code>--arm-permitted</code></td><td>Enable arming + flight for MAVLink — required before any motor spins</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="modes">
+      <h2>Operating modes</h2>
+      <h3>sim <span style="color:var(--ink-mute);font-weight:400">(default)</span></h3>
+      <p>FDIR loop against a simulated robot with optional fault injection. No hardware or API key. Use <code>--scenario</code>, <code>--faults</code>, <code>--render</code>, <code>--plots</code>, <code>--no-learning</code>. Good for benchmarking.</p>
+      <h3>agent</h3>
+      <p>Interactive REPL on live hardware. You type objectives; the planner resolves them against the genome and dispatches tools. Requires a calibrated robot and <code>ANTHROPIC_API_KEY</code>.</p>
+      <h3>realworld</h3>
+      <p>Continuous FDIR loop on live hardware using camera + system sensors — no planner. Pair with <code>--continuous</code> and <code>--faults</code> for soak tests.</p>
+      <h3>server</h3>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre><code><span class="pr">$</span> aether --mode server --port 8080
+<span class="pr">$</span> curl -X POST localhost:8080/objective -H 'content-type: application/json' \
+       -d '{"objective": "move forward for 2 seconds"}'
+<span class="pr">$</span> curl localhost:8080/health</code></pre>
+      </div>
+    </section>
+
+    <section id="config">
+      <h2>Configuration, files &amp; paths</h2>
+      <table>
+        <thead><tr><th>Path</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>configs/robot.json</code></td><td>The Robot Genome (v1.0) — locomotion, actuators, sensors, capabilities, hash</td></tr>
+          <tr><td><code>~/.aether/adapters/</code></td><td>Persisted Tier 2/3 adapters (auto-loaded on startup)</td></tr>
+          <tr><td><code>logs/</code></td><td>Run logs, scheduled tasks, correction traces, benchmark JSON/CSV</td></tr>
+          <tr><td><code>/opt/picar-x/</code>, <code>/opt/robot-hat/</code></td><td>robot_hat vendor config (pre-created to avoid runtime <code>sudo</code>)</td></tr>
+        </tbody>
+      </table>
+      <h3>Environment variables</h3>
+      <table>
+        <thead><tr><th>Variable</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Required for planner + vision</td></tr>
+          <tr><td><code>AETHER_PICARX_DIRECTION_INVERT</code></td><td><code>1</code> (default) inverts PiCar-X direction to <code>[-1,-1]</code> for natural fwd/back; <code>0</code> to opt out</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="python">
       <h2>Python API</h2>
+      <p>AETHER is primarily a CLI, but components are importable. Run a skill against a registry directly:</p>
       <div class="code">
         <button class="copy-btn">Copy</button>
-<pre><code><span class="k">from</span> aether.core.tool_registry <span class="k">import</span> get_global_registry
-<span class="k">from</span> aether.skills.drive_until_obstacle <span class="k">import</span> drive_until_obstacle
+<pre><code><span class="k">from</span> aether.skills.drive_until_obstacle <span class="k">import</span> drive_until_obstacle
 
-registry = get_global_registry()
-registry.execute(<span class="s">"move_forward"</span>, {<span class="s">"speed"</span>: 30, <span class="s">"duration"</span>: 2.0})
-
-result = drive_until_obstacle(target_cm=10, max_speed=25, timeout_s=15)</code></pre>
+<span class="c"># `registry` exposes move_forward + get_distance</span>
+result = drive_until_obstacle(
+    target_cm=5.0, max_speed=25.0, timeout_s=15.0, registry=registry,
+)
+print(result[<span class="s">"stop_reason"</span>], result[<span class="s">"final_distance_cm"</span>])</code></pre>
       </div>
+      <p>Register skills (auto-checks prerequisites) and use the parallel primitives:</p>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre><code><span class="k">from</span> aether.skills <span class="k">import</span> register_skills
+registered = register_skills(registry)   <span class="c"># -> ["drive_until_obstacle"]</span>
+
+<span class="k">from</span> aether.parallel.executor <span class="k">import</span> ParallelExecutor
+ex = ParallelExecutor(name=<span class="s">"my_skill"</span>, timeout_s=10.0)
+ex.add_task(<span class="s">"motor"</span>, motor_task)
+ex.add_task(<span class="s">"sensor"</span>, sensor_task)
+result = ex.run()
+
+<span class="k">import</span> aether
+print(aether.__version__)   <span class="c"># "3.9.5"</span></code></pre>
+      </div>
+      <div class="note"><span class="m">&rsaquo;</span><p><code>aether/skills/__init__.py</code> re-exports the <code>drive_until_obstacle</code> <em>function</em>. To reach module-level constants use <code>importlib.import_module("aether.skills.drive_until_obstacle")</code>.</p></div>
     </section>
 
-    <section id="http">
-      <h2>HTTP API</h2>
+    <section id="dev">
+      <h2>Development &amp; testing</h2>
+      <p>The test suite is hardware-free (vendor libraries are faked) — currently <strong>435 tests</strong>.</p>
       <div class="code">
         <button class="copy-btn">Copy</button>
-        <pre><code><span class="pr">$</span> aether --mode server  <span class="c"># starts on port 8000</span></code></pre>
+<pre><code><span class="pr">$</span> python -m pytest -q
+<span class="pr">$</span> python -m build           <span class="c"># dist/*.whl + dist/*.tar.gz</span>
+<span class="pr">$</span> python -m twine check dist/*</code></pre>
       </div>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre><code><span class="pr">$</span> curl -X POST http://localhost:8000/objective \
-  -H <span class="s">"Content-Type: application/json"</span> \
-  -d <span class="s">'{"objective": "drive forward and stop 10 cm before the wall"}'</span></code></pre>
-      </div>
+      <p>Release flow: bump the version in <strong>both</strong> <code>pyproject.toml</code> and <code>aether/__init__.py</code>, commit, clean-build, <code>twine check</code>, verify in a throwaway venv, then upload.</p>
+      <div class="note"><span class="m">&rsaquo;</span><p>Keep credentials out of source. Use <code>~/.pypirc</code> or a <code>TWINE_PASSWORD</code> env var, and rotate any token that's been exposed.</p></div>
     </section>
 
     <section id="troubleshooting">
@@ -169,13 +299,14 @@ result = drive_until_obstacle(target_cm=10, max_speed=25, timeout_s=15)</code></
       <table>
         <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
         <tbody>
-          <tr><td><code>aether: command not found</code></td><td><code>export PATH="$HOME/.local/bin:$PATH"</code></td></tr>
-          <tr><td>Ultrasonic returns -1</td><td>Check wiring: TRIG=D2, ECHO=D3, power, GND.</td></tr>
-          <tr><td><code>GPIO busy</code></td><td>Reboot, or <code>sudo pkill -f python</code>.</td></tr>
-          <tr><td>Sensor noise while driving</td><td>Fixed in v3.9.5 (bad-read counter tolerates motor EMI).</td></tr>
+          <tr><td>Ultrasonic returns <code>-1</code> / "sensor failing"</td><td>Reseat the 4-pin cable. TRIG → D2, ECHO → D3. Power red = 3V3/5V, black = GND. Test: <code>python3 -c 'from picarx import Picarx; print(Picarx().ultrasonic.read())'</code>. Intermittent bad reads under motor EMI are expected and tolerated since v3.9.5.</td></tr>
+          <tr><td>Turns are too slight</td><td>Default turn duration is 2.0 s (v3.9.4). Override per-call with <code>duration</code>, or increase the steering angle.</td></tr>
+          <tr><td><code>GPIO busy</code> on startup</td><td>The adapter releases all claims and retries <code>Picarx()</code>. If it persists: <code>sudo killall python3</code> or reboot.</td></tr>
+          <tr><td>A <code>sudo</code> prompt appears</td><td>The adapter pre-creates config and blocks runtime <code>sudo</code>. If a config dir exists but isn't writable, fix permissions per the setup guide.</td></tr>
+          <tr><td>LLM planner errors</td><td>Ensure <code>ANTHROPIC_API_KEY</code> is set and <code>aether-robotics[full]</code> (or <code>anthropic</code>) is installed.</td></tr>
         </tbody>
       </table>
-      <div class="note"><span class="m">&rsaquo;</span><p>New to AETHER? Start with <a class="lnk" href="docs.html">the docs</a> for features, architecture, and the safety chain.</p></div>
+      <div class="note"><span class="m">&rsaquo;</span><p>New to AETHER? Start with <a class="lnk" href="docs.html">the docs</a> for concepts, architecture, and the safety model.</p></div>
     </section>
   </main>
 
@@ -186,11 +317,12 @@ result = drive_until_obstacle(target_cm=10, max_speed=25, timeout_s=15)</code></
       <nav id="tocNav">
         <a href="#requirements">Requirements</a>
         <a href="#install">Install</a>
-        <a href="#configure">Configure</a>
-        <a href="#run">Run</a>
-        <a href="#quickstart">Quickstart</a>
+        <a href="#quickstart">Quick start</a>
+        <a href="#cli">CLI reference</a>
+        <a href="#modes">Operating modes</a>
+        <a href="#config">Config &amp; paths</a>
         <a href="#python">Python API</a>
-        <a href="#http">HTTP API</a>
+        <a href="#dev">Development</a>
         <a href="#troubleshooting">Troubleshooting</a>
       </nav>
     </div>
@@ -203,7 +335,7 @@ result = drive_until_obstacle(target_cm=10, max_speed=25, timeout_s=15)</code></
     <a href="index.html">Home</a>
     <a href="docs.html">Docs</a>
     <a href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">PyPI</a>
-    <a href="https://www.linkedin.com/in/chahel-paatur-88a9b4229/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://github.com/ChahelPaatur/AETHER" target="_blank" rel="noopener noreferrer">GitHub</a>
   </div>
 </footer>
 

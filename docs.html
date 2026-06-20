@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — the OS layer between LLMs and commodity robots. Features, three-tier adapters, the tool vocabulary, how it works, and the safety chain." />
+<meta name="description" content="AETHER documentation — an autonomous OS for robots. Calibration, the Robot Genome, auto-adapters, natural-language planning, parallel skills, FDIR, MAVLink, architecture, and the safety model." />
 <link rel="canonical" href="https://aether-robotics.com/docs.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -30,28 +30,40 @@
 
 <div class="docwrap">
 
-  <!-- LEFT NAV -->
+  <!-- LEFT NAV (shared with usage.html) -->
   <aside class="docnav">
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
         <a href="docs.html#overview">Overview</a>
         <a href="usage.html#install">Install</a>
-        <a href="usage.html#quickstart">Quickstart</a>
+        <a href="usage.html#quickstart">Quick start</a>
       </div>
       <div class="group">
         <h6>Concepts</h6>
-        <a href="docs.html#features">Features</a>
-        <a href="docs.html#tiers">Three-tier adapters</a>
-        <a href="docs.html#vocab">Tool vocabulary</a>
-        <a href="docs.html#how">How it works</a>
-        <a href="docs.html#flow">The flow</a>
-        <a href="docs.html#safety">Safety chain</a>
+        <a href="docs.html#concepts">Key concepts</a>
+        <a href="docs.html#genome">Calibration &amp; Genome</a>
+        <a href="docs.html#adapters">Auto-adapters</a>
+        <a href="docs.html#planning">NL planning</a>
+        <a href="docs.html#skills">Skills</a>
+        <a href="docs.html#parallel">Parallel execution</a>
+        <a href="docs.html#fdir">FDIR</a>
+        <a href="docs.html#mavlink">MAVLink</a>
       </div>
       <div class="group">
         <h6>Reference</h6>
+        <a href="docs.html#architecture">Architecture</a>
+        <a href="docs.html#vocab">Tool vocabulary</a>
+        <a href="docs.html#safety">Safety model</a>
+        <a href="docs.html#benchmarks">Benchmarks</a>
+        <a href="docs.html#versions">Version history</a>
+      </div>
+      <div class="group">
+        <h6>Usage</h6>
+        <a href="usage.html#cli">CLI reference</a>
+        <a href="usage.html#modes">Operating modes</a>
+        <a href="usage.html#config">Config &amp; paths</a>
         <a href="usage.html#python">Python API</a>
-        <a href="usage.html#http">HTTP API</a>
         <a href="usage.html#troubleshooting">Troubleshooting</a>
       </div>
     </div>
@@ -59,43 +71,222 @@
 
   <!-- CONTENT -->
   <main class="doccontent">
-    <div class="eyebrow">Documentation</div>
+    <div class="eyebrow">Documentation · v3.9.5</div>
     <h1>AETHER</h1>
-    <p class="intro">The OS layer between LLMs and commodity robots. Talk to any robot in plain English — AETHER finds your hardware, writes the adapters, and runs your objectives safely.</p>
+    <p class="intro">An autonomous operating system for robots. Connect hardware, calibrate once, and control the robot in plain English — AETHER discovers actuators, builds a portable <strong>Robot Genome</strong>, translates objectives into hardware actions via an LLM planner, and runs a PPO fault-detection network concurrently for real-time recovery. All on a Raspberry Pi, with no cloud dependency except the Anthropic API.</p>
     <div class="code">
       <button class="copy-btn" data-copy="pip install aether-robotics">Copy</button>
       <pre><code><span class="pr">$</span> pip install aether-robotics</code></pre>
     </div>
+    <div class="note"><span class="m">&rsaquo;</span><p>Package <code>aether-robotics</code> &middot; version <code>3.9.5</code> &middot; proprietary early access &middot; © 2026 Chahel Paatur.</p></div>
 
     <section id="overview">
       <h2>Overview</h2>
-      <p>You type an objective in plain English. The planner picks tools from a registered vocabulary, runs them on your hardware, checks each result, and closes a safety chain when it's done. There's no per-task code to write.</p>
-      <p>Tools come from three sources: built-in cross-platform primitives, kit adapters (built-in or generated), and parallel skills that coordinate multiple threads.</p>
+      <p>AETHER turns an arbitrary GPIO / HAT / MAVLink robot into a natural-language-controllable system in three steps.</p>
+      <div class="grid2">
+        <div class="gcard"><h4>1 · <b>Discover</b></h4><p>A calibration walk pulses each safe GPIO pin; you label what moved, producing a <code>physical_map</code> keyed by BCM pin. Known HAT boards are auto-detected.</p></div>
+        <div class="gcard"><h4>2 · <b>Describe</b></h4><p>The map is distilled into a versioned Robot Genome (<code>configs/robot.json</code>): locomotion class, actuators, sensors, and a deterministic capability set.</p></div>
+        <div class="gcard"><h4>3 · <b>Drive</b></h4><p>The LLM planner resolves plain-English objectives against the genome and dispatches the right tool, while a PPO fault detector runs concurrently.</p></div>
+      </div>
+      <p>Everything runs locally on a Raspberry Pi; the only network dependency is the Anthropic API, used for the planner and vision.</p>
+    </section>
+
+    <section id="concepts">
+      <h2>Key concepts</h2>
+      <table>
+        <thead><tr><th>Concept</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>physical_map</code></td><td>Every discovered actuator by BCM pin: pin → device type (positional / continuous servo / motor) + a human label of what it moves. Built during calibration.</td></tr>
+          <tr><td>Robot Genome</td><td>A versioned <code>robot.json</code> identity card derived from the map: locomotion class, actuators, sensors, content hash. Portable across identical hardware.</td></tr>
+          <tr><td>Capabilities</td><td>A deterministic set derived from the genome — same hardware ⇒ same capabilities. Skills declare <code>SKILL_REQUIRES</code>; AETHER rejects skills the genome can't satisfy <em>before</em> any hardware moves.</td></tr>
+          <tr><td>Tool</td><td>A callable unit of hardware action in the <code>ToolRegistry</code> (e.g. <code>move_forward</code>). The planner selects tools by name.</td></tr>
+          <tr><td>Adapter</td><td>A module that registers a HAT board's tools. Tier 1 pre-built · Tier 2 LLM-generated · Tier 3 guided wizard.</td></tr>
+          <tr><td>Skill</td><td>A higher-level composite behavior built on tools (e.g. <code>drive_until_obstacle</code>), optionally running tasks in parallel.</td></tr>
+          <tr><td>FDIR</td><td>Fault Detection, Isolation &amp; Recovery — the PPO network + recovery logic on the sensor observation vector.</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="features">
       <h2>Features</h2>
       <div class="grid2">
         <div class="gcard"><h4>Plain-English <b>control</b></h4><p>Type an objective; the planner turns it into tool calls.</p></div>
-        <div class="gcard"><h4>Auto-discovery</h4><p>Scans I²C, GPIO, serial, camera and network at boot.</p></div>
-        <div class="gcard"><h4>Parallel <b>skills</b></h4><p>Motors and sensors run at once behind a shared safety event.</p></div>
-        <div class="gcard"><h4>Five-layer <b>safety</b></h4><p>Every exit path stops motors and releases pins.</p></div>
-        <div class="gcard"><h4>Self-correcting</h4><p>Catches bad tool calls, retries, and verifies results.</p></div>
-        <div class="gcard"><h4>Drone + <b>ground</b></h4><p>Cars, Mecanum rigs, pan-tilt heads, MAVLink drones.</p></div>
+        <div class="gcard"><h4>Auto-discovery</h4><p>A GPIO calibration walk maps every actuator by pin.</p></div>
+        <div class="gcard"><h4>Portable <b>genome</b></h4><p>One <code>robot.json</code> runs on every matching robot.</p></div>
+        <div class="gcard"><h4>Auto-<b>adapters</b></h4><p>Tier 1/2/3 — has a Python library? AETHER can drive it.</p></div>
+        <div class="gcard"><h4>Parallel <b>skills</b></h4><p>Drive and sense at once behind a shared stop event.</p></div>
+        <div class="gcard"><h4>DRL-first <b>FDIR</b></h4><p>A PPO net classifies faults and recovers in real time.</p></div>
+        <div class="gcard"><h4>Drone + <b>ground</b></h4><p>MAVLink flight controllers through the same interface.</p></div>
         <div class="gcard"><h4>Lightweight</h4><p>Runs on a Raspberry Pi 4 — no GPU required.</p></div>
-        <div class="gcard"><h4>Universal <b>adapters</b></h4><p>Has a Python library? AETHER can drive it.</p></div>
       </div>
     </section>
 
-    <section id="tiers">
-      <h2>Three-tier adapters</h2>
-      <p>However custom your robot is, there's a path in.</p>
+    <section id="genome">
+      <h2>Calibration &amp; the Robot Genome</h2>
+      <p><code>aether --calibrate</code> walks every safe GPIO pin (BCM 4–27, excluding I2C/SPI/UART), pulses each with a positional servo sweep, and prompts you to label what moved. The result is a <code>physical_map</code> saved in your profile and loaded automatically next startup.</p>
+      <ul>
+        <li><code>--recalibrate</code> re-runs the full walk (preserves <code>robot_id</code>).</li>
+        <li><code>--auto-calibrate</code> runs headless with no prompts.</li>
+        <li>If a known HAT is detected, its Tier 1 adapter loads and registers capabilities automatically.</li>
+      </ul>
+      <p>The map is distilled into a versioned <code>configs/robot.json</code>. Inspect it with:</p>
+      <div class="code">
+        <button class="copy-btn" data-copy="aether --genome show">Copy</button>
+<pre><code><span class="pr">$</span> aether --genome show
+
+Robot Genome
+  ID:         f47ac10b-...
+  Locomotion: differential_drive
+  Hash:       a3f1d92e...
+
+Capabilities (6)
+  drive_backward  drive_forward  emergency_stop
+  stop  turn_left  turn_right</code></pre>
+      </div>
+      <p>Capabilities are derived <strong>deterministically</strong>, so a skill written for a <code>differential_drive</code> genome runs on every matching robot. Skills declare <code>SKILL_REQUIRES</code> and AETHER refuses to run any it can't satisfy — before any hardware moves.</p>
+    </section>
+
+    <section id="adapters">
+      <h2>Auto-adapter system</h2>
+      <p>When AETHER meets a board it doesn't already drive, it resolves an adapter in three tiers.</p>
+      <h3>Tier 1 — pre-built</h3>
+      <p>Hand-written, tested adapters that load automatically when their signature matches.</p>
+      <table>
+        <thead><tr><th>Board</th><th>Detection</th><th>Tools</th></tr></thead>
+        <tbody>
+          <tr><td>SunFounder PiCar-X</td><td><code>picarx</code> or I2C <code>0x14</code></td><td>fwd · back · turn L/R · pan/tilt · distance</td></tr>
+          <tr><td>Freenove 4WD</td><td><code>Motor</code> importable</td><td>6 motion tools</td></tr>
+          <tr><td>Freenove Mecanum</td><td>I2C <code>0x40</code> + <code>Motor</code></td><td>8 tools incl. strafe</td></tr>
+          <tr><td>Adeept HAT v3</td><td><code>adeept</code> importable</td><td>6 motion tools</td></tr>
+          <tr><td>PCA9685 generic</td><td>I2C <code>0x40</code> + lib</td><td>6 motion tools</td></tr>
+          <tr><td>L298N direct GPIO</td><td>GPIO, no I2C</td><td>6 motion tools</td></tr>
+          <tr><td>Waveshare driver</td><td><code>waveshare_motor</code> or I2C <code>0x47</code></td><td>6 motion tools</td></tr>
+        </tbody>
+      </table>
+      <h3>Tier 2 — LLM-generated</h3>
+      <p>For an unknown board with a vendor Python library, AETHER reads the library, calls Claude to generate an adapter, then gates it behind 6 static-validation rules, a sandboxed dry-run of <code>register()</code>, and a mandatory live hardware test. Generate offline (no hardware):</p>
+      <div class="code">
+        <button class="copy-btn" data-copy="aether --generate-adapter-from /path/to/vendor_lib --save-to ./my_adapter.py">Copy</button>
+<pre><code><span class="pr">$</span> aether --generate-adapter-from /path/to/vendor_lib \
+        --save-to ./my_adapter.py</code></pre>
+      </div>
+      <h3>Tier 3 — guided wizard</h3>
+      <p>When no library is available, an interactive wizard collects control snippets and builds a guided adapter. Generated adapters persist at <code>~/.aether/adapters/</code> and load automatically. <code>--no-auto-adapter</code> disables Tier 2/3 (Tier 1 still loads).</p>
+    </section>
+
+    <section id="planning">
+      <h2>Natural-language planning</h2>
+      <p>In <code>agent</code> and <code>server</code> modes, the LLM planner translates objectives into tool calls.</p>
+      <ul>
+        <li><strong>Model:</strong> <code>claude-sonnet-4-6</code> (Anthropic), configurable.</li>
+        <li><strong>Context:</strong> the genome's capabilities and the registered tool vocabulary are injected into the prompt, so the model only proposes actions the robot can perform.</li>
+        <li><strong>Dispatch:</strong> the planner emits a tool name + arguments; the <code>NavigationEngine</code> routes it to the right layer (camera / GPIO / MAVLink) with the BCM pin pre-filled and direction inferred.</li>
+        <li><strong>Vision:</strong> scene description uses the Anthropic vision API.</li>
+      </ul>
+      <div class="note"><span class="m">&rsaquo;</span><p><strong>Latency (v3.9.1):</strong> on a clean multi-step objective, AETHER skips the per-step verification call when a step succeeds unambiguously, removing inter-step pauses.</p></div>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <p>Skills are higher-level behaviors built on tools, registered when their prerequisites are present. The flagship is <code>drive_until_obstacle</code> — it drives forward while a second thread polls the ultrasonic sensor, stopping when an obstacle is within <code>target_cm</code>. Drive and sensing run on <strong>separate threads</strong> sharing a stop event.</p>
+      <div class="code">
+        <button class="copy-btn" data-copy="drive_until_obstacle(target_cm=5.0, max_speed=25.0, timeout_s=15.0)">Copy</button>
+<pre><code>drive_until_obstacle(target_cm=5.0, max_speed=25.0, timeout_s=15.0)</code></pre>
+      </div>
+      <table>
+        <thead><tr><th>Param</th><th>Default</th><th>Range</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>target_cm</code></td><td>5.0</td><td>2.0–100.0</td><td>Stop when an obstacle is this close</td></tr>
+          <tr><td><code>max_speed</code></td><td>25.0</td><td>10.0–60.0</td><td>Top speed; eased down on approach</td></tr>
+          <tr><td><code>timeout_s</code></td><td>15.0</td><td>0.5–30.0</td><td>Hard wall-clock cap on the run</td></tr>
+        </tbody>
+      </table>
+      <h3>Behavior</h3>
+      <ul>
+        <li><strong>Approach-speed curve (v3.9.1):</strong> full speed when far, ~60% between 1.5× and 3× target, ~35% below 1.5× (floored at 10). Decel starts early so overshoot stays small.</li>
+        <li><strong>Continuous motion (v3.9.3):</strong> with the live SunFounder adapter the motor runs continuously, re-issuing only when the speed band changes — no start/stop jitter. Falls back to a pulsed path otherwise.</li>
+        <li><strong>Obstacle confirmation:</strong> requires 2 consecutive sub-threshold reads, with a <code>target_cm + 2 cm</code> trigger margin.</li>
+        <li><strong>Sensor-noise tolerance (v3.9.5):</strong> halts on <strong>consecutive</strong> bad reads (<code>_MAX_CONSECUTIVE_BAD_READS = 20</code> ≈ 1.0 s), not a lifetime count — tolerating motor-EMI bursts while still catching sustained faults.</li>
+      </ul>
+      <table>
+        <thead><tr><th>Result field</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>success</code></td><td><code>True</code> unless a prerequisite tool was unavailable</td></tr>
+          <tr><td><code>stop_reason</code></td><td><code>"obstacle at X cm"</code>, <code>"sensor failing"</code>, <code>"timeout"</code>, or <code>"stopped"</code></td></tr>
+          <tr><td><code>final_distance_cm</code></td><td>Last sensor reading</td></tr>
+          <tr><td><code>stop_distance_cm</code></td><td>Distance at which the obstacle was confirmed</td></tr>
+          <tr><td><code>sensor_failures</code></td><td>Cumulative bad-read count (diagnostics)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="parallel">
+      <h2>Parallel execution layer</h2>
+      <p><code>aether/parallel/executor.py</code> (v3.9.0) gives skills true threading-based concurrency — drive while polling a sensor. Its safety model:</p>
+      <ul>
+        <li><strong>Daemon workers</strong> — killed at interpreter exit without running their <code>finally</code> blocks, so the authoritative motor kill is the adapter <code>emergency_stop</code> from the app's exit handler.</li>
+        <li><strong><code>_GLOBAL_STOP</code></strong> — every worker checks a process-wide stop, so Ctrl-C halts all daemons even if <code>run()</code> was unwound.</li>
+        <li><strong><code>_MOTOR_LOCK</code></strong> — serializes motor commands so a drive and a stop never interleave at the I2C layer.</li>
+        <li><strong>Hard timeout</strong> — a wall-clock cap; workers are joined on exit.</li>
+      </ul>
+    </section>
+
+    <section id="fdir">
+      <h2>Fault detection &amp; recovery</h2>
+      <p>AETHER runs <strong>DRL-first hybrid FDIR</strong>: a PPO network consumes a 15-dimensional sensor observation vector and classifies faults in real time, with recovery logic that returns the robot to a safe state. It runs concurrently with motion in <code>realworld</code> mode and the sim loop.</p>
+      <ul>
+        <li><strong>Fault injection</strong> for testing: <code>--faults {disabled,enabled,heavy}</code> and sim scenarios <code>imu_fault</code>, <code>battery</code>, <code>compound</code>, <code>fault_heavy</code>.</li>
+        <li><strong>Learning:</strong> PPO weights update online by default; freeze with <code>--no-learning</code> for controlled benchmarking.</li>
+      </ul>
+    </section>
+
+    <section id="mavlink">
+      <h2>MAVLink / drone support</h2>
+      <p>AETHER drives MAVLink flight controllers (INAV / ArduPilot / PX4) through the same natural-language interface as GPIO robots (v3.6.0). The same genome that maps rover wheels maps quadcopter rotors. <strong>Five non-negotiable arming rules</strong> are enforced in every motor command:</p>
       <ol>
-        <li><strong>Known kits — built in.</strong> PiCar-X, Freenove, Adeept, PCA9685, L298N, Waveshare. Zero config.</li>
-        <li><strong>New kits — auto-generated.</strong> Claude reads the vendor library, writes an adapter offline, safety-checks it, and registers it.</li>
-        <li><strong>Custom rigs — guided REPL.</strong> A guided REPL maps your hardware onto the standard vocabulary.</li>
+        <li>Arm-permitted flag required (<code>--arm-permitted</code>).</li>
+        <li>Pre-arm check must pass.</li>
+        <li>Sensor availability verified.</li>
+        <li>30-second inactivity auto-disarm.</li>
+        <li>Emergency stop always registered.</li>
       </ol>
-      <div class="note"><span class="m">&rsaquo;</span><p>Generated adapters that reach for tools outside the standard vocabulary fail validation and are rejected.</p></div>
+      <div class="note"><span class="m">&rsaquo;</span><p>Flight commands (takeoff, hover, land) are gated behind <code>--arm-permitted</code>. Bench-demo verified with props off.</p></div>
+    </section>
+
+    <section id="architecture">
+      <h2>Architecture</h2>
+      <div class="code">
+<pre><code>  User input (plain English)
+        │
+        ▼
+  ToolDiscovery ─────────► physical_map + robot.json genome
+        │                            │
+        │           AdapterResolver (Tier 1 → 2 → 3)
+        │                └── ~/.aether/adapters/  (persisted)
+        ▼                            │
+  LLMPlanner ◄── genome capabilities injected into context
+        │
+        ▼
+  NavigationEngine  (L1 camera / L2 GPIO / L3 MAVLink)
+        │                       │
+        ▼                       ▼
+  Hardware (servo/motor/FC)  FaultAgent (PPO, 15-dim → fault class)
+                                │
+                          detect · recover · log</code></pre>
+      </div>
+      <table>
+        <thead><tr><th>Path</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><code>app.py</code> / <code>__main__.py</code></td><td>Entry point, CLI parsing, mode dispatch</td></tr>
+          <tr><td><code>core/</code></td><td>Planner, tool registry, navigation, genome, calibration, memory, metrics, MAVLink, updater</td></tr>
+          <tr><td><code>adapters/</code></td><td>Tier 1 adapters + the auto-adapter generator/validator</td></tr>
+          <tr><td><code>agents/</code></td><td>Perception, navigation, fault, thermal, power, correction, planner, memory…</td></tr>
+          <tr><td><code>skills/</code></td><td>High-level composite behaviors</td></tr>
+          <tr><td><code>parallel/</code></td><td>Threading-based parallel execution</td></tr>
+          <tr><td><code>faults/</code></td><td>Fault detector + injector</td></tr>
+          <tr><td><code>simulation/</code></td><td>Virtual environment, scenarios, perception for sim</td></tr>
+        </tbody>
+      </table>
     </section>
 
     <section id="vocab">
@@ -112,44 +303,61 @@
       </table>
     </section>
 
-    <section id="how">
-      <h2>How it works</h2>
-      <ol>
-        <li>You type an objective, in plain English.</li>
-        <li>The planner picks tools from the registry.</li>
-        <li>Each call runs on the hardware and returns a result.</li>
-        <li>The CorrectionAgent checks it — pass advances, failure triggers a fallback chain.</li>
-        <li>On finish, the safety chain stops motors and releases every pin.</li>
-      </ol>
-    </section>
-
-    <section id="flow">
-      <h2>The flow</h2>
-      <p>A single objective, end to end:</p>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre><code>You: "drive forward and stop 10 cm before the wall"
-  <span class="c">&rarr;</span> <span class="k">LLM Planner</span>        picks drive_until_obstacle(target_cm=10)
-  <span class="c">&rarr;</span> <span class="k">ParallelExecutor</span>   spawns a motor thread + a sensor thread
-  <span class="c">&rarr;</span> shared should_stop   either thread can fire the stop
-  <span class="c">&rarr;</span> <span class="ok">stop confirmed</span>        CorrectionAgent OK &middot; result returned</code></pre>
-      </div>
-    </section>
-
     <section id="safety">
-      <h2>Safety chain</h2>
-      <p>A crashed process with live motors is dangerous. Five independent layers each catch a different failure class:</p>
+      <h2>Safety model</h2>
+      <div class="note"><span class="m">&rsaquo;</span><p><strong>Motion-cleanup invariant (v3.7.5):</strong> every LLM-callable motion tool that starts an actuator must guarantee a <code>finally</code>-block stop on every code path that starts motion.</p></div>
+      <p>A static validator (<code>check_motion_cleanup</code>) runs on user-dir generated adapters at load time, refusing any with an unbounded motion path. The 12 registered SunFounder tools each keep their own <code>try/finally</code> <code>stop()</code>. The full chain:</p>
       <table>
-        <thead><tr><th>Failure</th><th>Caught by</th></tr></thead>
+        <thead><tr><th>Version</th><th>Protection</th></tr></thead>
         <tbody>
-          <tr><td>Tool exception</td><td>1 &middot; tool <code>try/finally</code></td></tr>
-          <tr><td>Mid-thread exception</td><td>2 &middot; skill <code>try/finally</code></td></tr>
-          <tr><td>Ctrl-C</td><td>3 &middot; <code>_GLOBAL_STOP</code></td></tr>
-          <tr><td><code>os._exit()</code> / segfault</td><td>4 &middot; <code>atexit</code></td></tr>
-          <tr><td>Pins left claimed</td><td>5 &middot; GPIO cleanup</td></tr>
+          <tr><td>v3.7.5</td><td>Motion-cleanup invariant + static validator; <code>atexit</code> emergency-stop</td></tr>
+          <tr><td>v3.7.7</td><td>Bounded default durations; unconditional steering recenter in <code>finally</code></td></tr>
+          <tr><td>v3.7.9</td><td>Neutralize <code>robot_hat</code> audio <code>sudo</code> path before init</td></tr>
+          <tr><td>v3.7.10</td><td><code>_SudoBlocker</code> intercepts every shell-out and blocks <code>sudo</code></td></tr>
+          <tr><td>v3.7.11–12</td><td>Release GPIO and retry <code>Picarx()</code> on any "GPIO busy" error</td></tr>
+          <tr><td>v3.9.0</td><td><code>_GLOBAL_STOP</code> + <code>_MOTOR_LOCK</code> across parallel workers</td></tr>
         </tbody>
       </table>
-      <div class="note"><span class="m">&rsaquo;</span><p>Ready to run it? <a class="lnk" href="usage.html">Usage &amp; Quickstart</a> covers install, config, the Pi walkthrough, and the APIs.</p></div>
+      <p>The v3.9.3 continuous-motion primitives are <strong>skill-internal</strong> (never registered as tools), so the LLM can't select them and the invariant holds; their only caller wraps them in a <code>try/finally</code> that always stops the motor.</p>
+    </section>
+
+    <section id="benchmarks">
+      <h2>Benchmarks</h2>
+      <p>Real-hardware deployment: Raspberry Pi 4, GPIO servos, live camera, Anthropic API planner.</p>
+      <table>
+        <thead><tr><th>Metric</th><th>Value</th><th>Conditions</th></tr></thead>
+        <tbody>
+          <tr><td>SFRI</td><td><strong>69.99</strong></td><td>6,023 steps, real hardware</td></tr>
+          <tr><td>MTTR</td><td><strong>1.35 steps</strong></td><td>Mean time to recover from an injected fault</td></tr>
+          <tr><td>Detection rate</td><td><strong>100%</strong></td><td>0 misses, 0 false positives</td></tr>
+        </tbody>
+      </table>
+      <div class="note"><span class="m">&rsaquo;</span><p><strong>SFRI</strong> (Stability Fault Recovery Index) = 35×DR + 25×(1 − MTTR/max_steps) + 10×RR − 30×FPR. Range 0–70; higher is better.</p></div>
+    </section>
+
+    <section id="versions">
+      <h2>Version history</h2>
+      <table>
+        <thead><tr><th>Version</th><th>Change</th></tr></thead>
+        <tbody>
+          <tr><td><strong>3.9.5</strong></td><td>Universal sensor-noise fix: <code>drive_until_obstacle</code> halts on consecutive bad reads, not a lifetime count — tolerates motor-EMI bursts.</td></tr>
+          <tr><td>3.9.4</td><td>Turn default <code>1.0 → 2.0 s</code>; boot-time ultrasonic health probe + richer wiring guidance.</td></tr>
+          <tr><td>3.9.3</td><td>Continuous-motion primitives eliminate jitter; pulsed fallback for non-SunFounder adapters.</td></tr>
+          <tr><td>3.9.1</td><td>Latency skip on clean multi-step objectives; approach-speed curve.</td></tr>
+          <tr><td>3.9.0</td><td>Parallel execution layer; <code>drive_until_obstacle</code> skill.</td></tr>
+          <tr><td>3.7.x</td><td>Auto-adapter system + the SunFounder safety chain.</td></tr>
+          <tr><td>3.6.0</td><td>MAVLink quadcopter integration with five arming rules.</td></tr>
+        </tbody>
+      </table>
+      <h3>Roadmap</h3>
+      <ul>
+        <li>✓ Phase 1 — Reverse engineering: GPIO pin walk, <code>physical_map</code>, LLM control.</li>
+        <li>✓ Phase 2 — Robot Genome: versioned <code>robot.json</code>, deterministic capabilities.</li>
+        <li>✓ Phase 3 — Auto-adapter system: Tier 1/2/3; offline generation.</li>
+        <li>Phase 4 — Vision-language grounding: scene-grounded navigation <em>(in progress)</em>.</li>
+        <li>Phase 5 — Operational memory + sim-to-real action transfer.</li>
+        <li>Phase 6 — Multi-robot coordination.</li>
+      </ul>
     </section>
   </main>
 
@@ -159,12 +367,20 @@
       <h6>On this page</h6>
       <nav id="tocNav">
         <a href="#overview">Overview</a>
+        <a href="#concepts">Key concepts</a>
         <a href="#features">Features</a>
-        <a href="#tiers">Three-tier adapters</a>
+        <a href="#genome">Calibration &amp; Genome</a>
+        <a href="#adapters">Auto-adapters</a>
+        <a href="#planning">NL planning</a>
+        <a href="#skills">Skills</a>
+        <a href="#parallel">Parallel execution</a>
+        <a href="#fdir">FDIR</a>
+        <a href="#mavlink">MAVLink</a>
+        <a href="#architecture">Architecture</a>
         <a href="#vocab">Tool vocabulary</a>
-        <a href="#how">How it works</a>
-        <a href="#flow">The flow</a>
-        <a href="#safety">Safety chain</a>
+        <a href="#safety">Safety model</a>
+        <a href="#benchmarks">Benchmarks</a>
+        <a href="#versions">Version history</a>
       </nav>
     </div>
   </aside>
@@ -176,7 +392,7 @@
     <a href="index.html">Home</a>
     <a href="usage.html">Usage</a>
     <a href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">PyPI</a>
-    <a href="https://www.linkedin.com/in/chahel-paatur-88a9b4229/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="https://github.com/ChahelPaatur/AETHER" target="_blank" rel="noopener noreferrer">GitHub</a>
   </div>
 </footer>
 
