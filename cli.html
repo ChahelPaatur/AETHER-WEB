@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="index, follow" />
+<meta name="description" content="AETHER documentation — CLI reference." />
+<link rel="canonical" href="https://aether-robotics.com/cli.html" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<title>AETHER · CLI reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="aether.css?v=3.9.7" />
+</head>
+<body class="docpage">
+
+<header class="docbar">
+  <a class="docbar-brand" href="index.html" aria-label="AETHER home">
+    <img src="logo-orange.png" alt="" /><span class="wm">AETHER</span>
+  </a>
+  <nav class="doctabs">
+    <a href="index.html">Home</a>
+    <a href="docs.html">Docs</a>
+    <a href="usage.html" class="active">Usage</a>
+  </nav>
+  <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
+</header>
+
+<div class="docwrap">
+
+  <aside class="docnav">
+    <div class="docnav-sticky">
+      <div class="group">
+        <h6>Get started</h6>
+        <a href="docs.html">Overview</a>
+        <a href="requirements.html">Requirements</a>
+        <a href="usage.html">Install</a>
+        <a href="quickstart.html">Quick start</a>
+      </div>
+      <div class="group">
+        <h6>Concepts</h6>
+        <a href="concepts.html">Key concepts</a>
+        <a href="features.html">Features</a>
+        <a href="genome.html">Calibration & Genome</a>
+        <a href="adapters.html">Auto-adapters</a>
+        <a href="planning.html">NL planning</a>
+        <a href="skills.html">Skills</a>
+        <a href="parallel.html">Parallel execution</a>
+        <a href="fdir.html">FDIR</a>
+        <a href="mavlink.html">MAVLink</a>
+      </div>
+      <div class="group">
+        <h6>Reference</h6>
+        <a href="architecture.html">Architecture</a>
+        <a href="vocabulary.html">Tool vocabulary</a>
+        <a href="safety.html">Safety model</a>
+        <a href="benchmarks.html">Benchmarks</a>
+        <a href="changelog.html">Version history</a>
+      </div>
+      <div class="group">
+        <h6>Usage</h6>
+        <a href="cli.html" class="active">CLI reference</a>
+        <a href="modes.html">Operating modes</a>
+        <a href="configuration.html">Config & paths</a>
+        <a href="python-api.html">Python API</a>
+        <a href="development.html">Development</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="doccontent">
+    <div class="eyebrow">Usage</div>
+    <h1 id="cli">CLI reference</h1>
+    <p>Invoke as <code>aether ...</code> or <code>python -m aether ...</code>.</p>
+      <h3 id="modes">Modes</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--mode sim</code></td><td>Simulation with fault injection (default)</td></tr>
+          <tr><td><code>--mode agent</code></td><td>Interactive LLM-planned objectives on live hardware</td></tr>
+          <tr><td><code>--mode realworld</code></td><td>Continuous live-hardware FDIR loop — no planner</td></tr>
+          <tr><td><code>--mode server</code></td><td>HTTP API on <code>--port</code>; <code>POST /objective</code>, <code>GET /health</code></td></tr>
+        </tbody>
+      </table>
+      <h3 id="general-flags">General flags</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Default</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>--task "..."</code></td><td>navigate to target</td><td>Task description for sim</td></tr>
+          <tr><td><code>--robot</code></td><td>rover_v1</td><td><code>rover_v1</code> / <code>drone_v1</code> for sim</td></tr>
+          <tr><td><code>--faults</code></td><td>disabled</td><td><code>disabled</code>/<code>enabled</code>/<code>heavy</code> injection</td></tr>
+          <tr><td><code>--scenario</code></td><td>simple</td><td><code>obstacles</code>, <code>imu_fault</code>, <code>battery</code>, <code>compound</code>, <code>fault_heavy</code></td></tr>
+          <tr><td><code>--max-steps</code></td><td>300</td><td>Max steps per sim episode</td></tr>
+          <tr><td><code>--seed</code></td><td>42</td><td>Reproducible sim runs</td></tr>
+          <tr><td><code>--render</code></td><td>off</td><td>ASCII state render each step</td></tr>
+          <tr><td><code>--plots</code></td><td>off</td><td>SFRI / metrics plots after a run</td></tr>
+          <tr><td><code>--no-learning</code></td><td>off</td><td>Freeze PPO weights for benchmarking</td></tr>
+          <tr><td><code>--continuous</code></td><td>off</td><td>Run <code>realworld</code> until Ctrl-C</td></tr>
+          <tr><td><code>--schedule "..."</code></td><td>—</td><td><code>"every 30s: scan"</code>, <code>"until 22:00: obj"</code></td></tr>
+          <tr><td><code>--port</code></td><td>8080</td><td>Port for <code>server</code></td></tr>
+          <tr><td><code>--verbose</code></td><td>off</td><td>Debug logging</td></tr>
+        </tbody>
+      </table>
+      <h3 id="calibration-genome">Calibration &amp; genome</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td><code>--calibrate</code></td><td>First-time setup — walk pins, label actuators, load adapters</td></tr>
+          <tr><td><code>--recalibrate</code></td><td>Re-run the full pin walk (preserves <code>robot_id</code>)</td></tr>
+          <tr><td><code>--auto-calibrate</code></td><td>Headless calibration, no prompts</td></tr>
+          <tr><td><code>--genome show</code></td><td>Print the loaded genome and exit</td></tr>
+        </tbody>
+      </table>
+      <h3 id="adapters-install-mavlink">Adapters, install &amp; MAVLink</h3>
+      <table>
+        <thead><tr><th>Flag</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td><code>--generate-adapter-from PATH</code></td><td>Offline: read vendor lib, generate + validate an adapter</td></tr>
+          <tr><td><code>--save-to PATH</code></td><td>Save the generated adapter to PATH</td></tr>
+          <tr><td><code>--no-auto-adapter</code></td><td>Disable Tier 2/3 generation (Tier 1 still loads)</td></tr>
+          <tr><td><code>--auto-install</code> / <code>--no-install</code></td><td>Install missing packages without prompting / skip</td></tr>
+          <tr><td><code>--auto-update</code> / <code>--no-update</code></td><td>Pull latest without prompting / skip check</td></tr>
+          <tr><td><code>--arm-permitted</code></td><td>Enable arming + flight for MAVLink — required before any motor spins</td></tr>
+        </tbody>
+      </table>
+    <nav class="pager"><a class="prev" href="changelog.html"><span>Previous</span><b>Version history</b></a><a class="next" href="modes.html"><span>Next</span><b>Operating modes</b></a></nav>
+  </main>
+  <aside class="doctoc">
+    <div class="doctoc-sticky">
+      <h6>On this page</h6>
+      <nav id="tocNav">
+        <a href="#cli">CLI reference</a>
+        <a href="#modes">Modes</a>
+        <a href="#general-flags">General flags</a>
+        <a href="#calibration-genome">Calibration & genome</a>
+        <a href="#adapters-install-mavlink">Adapters, install & MAVLink</a>
+      </nav>
+    </div>
+  </aside>
+
+</div>
+
+<footer class="doc-foot">
+  <div>Ⓒ 2026 · Chahel Paatur · aether-robotics.com</div>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="docs.html">Docs</a>
+    <a href="usage.html">Usage</a>
+    <a href="https://github.com/ChahelPaatur/AETHER" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </div>
+</footer>
+
+<script src="docs.js?v=3.9.7" defer></script>
+</body>
+</html>

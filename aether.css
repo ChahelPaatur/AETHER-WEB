@@ -1554,3 +1554,23 @@
   .doccontent { padding: 28px 20px 90px; }
   .doctabs { display: none; }
 }
+
+/* ============================================================
+   MULTI-PAGE DOCS — prev/next pager + no-TOC layout
+   ============================================================ */
+.docwrap.no-toc { grid-template-columns: 244px minmax(0,1fr); }
+@media (max-width: 1080px) { .docwrap.no-toc { grid-template-columns: 220px minmax(0,1fr); } }
+@media (max-width: 760px)  { .docwrap.no-toc { grid-template-columns: 1fr; } }
+
+.pager { display: flex; gap: 14px; margin-top: 52px; padding-top: 28px; border-top: 1px solid var(--line); }
+.pager a {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+  border: 1px solid var(--line-2); border-radius: 10px; padding: 14px 16px;
+  transition: border-color .15s, background .15s;
+}
+.pager a:hover { border-color: var(--accent-line); background: #0d0d0d; }
+.pager a.next { text-align: right; align-items: flex-end; }
+.pager a span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-mute); }
+.pager a b { font-family: var(--sans); font-weight: 600; font-size: 15px; color: var(--ink); }
+.pager a:hover b { color: var(--accent); }
+.pager .spacer { flex: 1; }

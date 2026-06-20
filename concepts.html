@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — Overview." />
-<link rel="canonical" href="https://aether-robotics.com/docs.html" />
+<meta name="description" content="AETHER documentation — Key concepts." />
+<link rel="canonical" href="https://aether-robotics.com/concepts.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Overview</title>
+<title>AETHER · Key concepts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -34,14 +34,14 @@
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
-        <a href="docs.html" class="active">Overview</a>
+        <a href="docs.html">Overview</a>
         <a href="requirements.html">Requirements</a>
         <a href="usage.html">Install</a>
         <a href="quickstart.html">Quick start</a>
       </div>
       <div class="group">
         <h6>Concepts</h6>
-        <a href="concepts.html">Key concepts</a>
+        <a href="concepts.html" class="active">Key concepts</a>
         <a href="features.html">Features</a>
         <a href="genome.html">Calibration & Genome</a>
         <a href="adapters.html">Auto-adapters</a>
@@ -72,18 +72,21 @@
   </aside>
 
   <main class="doccontent">
-    <div class="eyebrow">Get started</div>
-    <h1 id="overview">Overview</h1>
-    <p class="intro">An autonomous operating system for robots. Connect hardware, calibrate once, and control the robot in plain English — AETHER discovers actuators, builds a portable <strong>Robot Genome</strong>, translates objectives into hardware actions via an LLM planner, and runs a PPO fault-detection network concurrently.</p>
-    <div class="code"><button class="copy-btn" data-copy="pip install aether-robotics">Copy</button><pre><code><span class="pr">$</span> pip install aether-robotics</code></pre></div>
-    <p>AETHER turns an arbitrary GPIO / HAT / MAVLink robot into a natural-language-controllable system in three steps.</p>
-      <div class="grid2">
-        <div class="gcard"><h4>1 · <b>Discover</b></h4><p>A calibration walk pulses each safe GPIO pin; you label what moved, producing a <code>physical_map</code> keyed by BCM pin. Known HAT boards are auto-detected.</p></div>
-        <div class="gcard"><h4>2 · <b>Describe</b></h4><p>The map is distilled into a versioned Robot Genome (<code>configs/robot.json</code>): locomotion class, actuators, sensors, and a deterministic capability set.</p></div>
-        <div class="gcard"><h4>3 · <b>Drive</b></h4><p>The LLM planner resolves plain-English objectives against the genome and dispatches the right tool, while a PPO fault detector runs concurrently.</p></div>
-      </div>
-      <p>Everything runs locally on a Raspberry Pi; the only network dependency is the Anthropic API, used for the planner and vision.</p>
-    <nav class="pager"><span class="spacer"></span><a class="next" href="requirements.html"><span>Next</span><b>Requirements</b></a></nav>
+    <div class="eyebrow">Concepts</div>
+    <h1 id="concepts">Key concepts</h1>
+    <table>
+        <thead><tr><th>Concept</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><code>physical_map</code></td><td>Every discovered actuator by BCM pin: pin → device type (positional / continuous servo / motor) + a human label of what it moves. Built during calibration.</td></tr>
+          <tr><td>Robot Genome</td><td>A versioned <code>robot.json</code> identity card derived from the map: locomotion class, actuators, sensors, content hash. Portable across identical hardware.</td></tr>
+          <tr><td>Capabilities</td><td>A deterministic set derived from the genome — same hardware ⇒ same capabilities. Skills declare <code>SKILL_REQUIRES</code>; AETHER rejects skills the genome can't satisfy <em>before</em> any hardware moves.</td></tr>
+          <tr><td>Tool</td><td>A callable unit of hardware action in the <code>ToolRegistry</code> (e.g. <code>move_forward</code>). The planner selects tools by name.</td></tr>
+          <tr><td>Adapter</td><td>A module that registers a HAT board's tools. Tier 1 pre-built · Tier 2 LLM-generated · Tier 3 guided wizard.</td></tr>
+          <tr><td>Skill</td><td>A higher-level composite behavior built on tools (e.g. <code>drive_until_obstacle</code>), optionally running tasks in parallel.</td></tr>
+          <tr><td>FDIR</td><td>Fault Detection, Isolation &amp; Recovery — the PPO network + recovery logic on the sensor observation vector.</td></tr>
+        </tbody>
+      </table>
+    <nav class="pager"><a class="prev" href="quickstart.html"><span>Previous</span><b>Quick start</b></a><a class="next" href="features.html"><span>Next</span><b>Features</b></a></nav>
   </main>
 
 </div>

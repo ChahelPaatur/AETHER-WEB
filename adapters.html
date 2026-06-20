@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — Install." />
-<link rel="canonical" href="https://aether-robotics.com/usage.html" />
+<meta name="description" content="AETHER documentation — Auto-adapters." />
+<link rel="canonical" href="https://aether-robotics.com/adapters.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Install</title>
+<title>AETHER · Auto-adapters</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -22,8 +22,8 @@
   </a>
   <nav class="doctabs">
     <a href="index.html">Home</a>
-    <a href="docs.html">Docs</a>
-    <a href="usage.html" class="active">Usage</a>
+    <a href="docs.html" class="active">Docs</a>
+    <a href="usage.html">Usage</a>
   </nav>
   <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
 </header>
@@ -36,7 +36,7 @@
         <h6>Get started</h6>
         <a href="docs.html">Overview</a>
         <a href="requirements.html">Requirements</a>
-        <a href="usage.html" class="active">Install</a>
+        <a href="usage.html">Install</a>
         <a href="quickstart.html">Quick start</a>
       </div>
       <div class="group">
@@ -44,7 +44,7 @@
         <a href="concepts.html">Key concepts</a>
         <a href="features.html">Features</a>
         <a href="genome.html">Calibration & Genome</a>
-        <a href="adapters.html">Auto-adapters</a>
+        <a href="adapters.html" class="active">Auto-adapters</a>
         <a href="planning.html">NL planning</a>
         <a href="skills.html">Skills</a>
         <a href="parallel.html">Parallel execution</a>
@@ -72,44 +72,42 @@
   </aside>
 
   <main class="doccontent">
-    <div class="eyebrow">Get started</div>
-    <h1 id="install">Install</h1>
-    <div class="code">
-        <button class="copy-btn" data-copy="pip install aether-robotics">Copy</button>
-        <pre><code><span class="pr">$</span> pip install aether-robotics</code></pre>
-      </div>
-      <h3 id="optional-dependency-groups">Optional dependency groups</h3>
-      <div class="code">
-        <button class="copy-btn">Copy</button>
-<pre><code><span class="pr">$</span> pip install "aether-robotics[full]"   <span class="c"># planner + vision, server, CV, plots</span>
-<span class="pr">$</span> pip install "aether-robotics[pi]"     <span class="c"># Raspberry Pi GPIO + camera</span>
-<span class="pr">$</span> pip install "aether-robotics[drone]"  <span class="c"># MAVLink flight controllers</span>
-<span class="pr">$</span> pip install "aether-robotics[ml]"     <span class="c"># YOLO detection + ML utils</span></code></pre>
-      </div>
+    <div class="eyebrow">Concepts</div>
+    <h1 id="adapters">Auto-adapter system</h1>
+    <p>When AETHER meets a board it doesn't already drive, it resolves an adapter in three tiers.</p>
+      <h3 id="tier-1-pre-built">Tier 1 — pre-built</h3>
+      <p>Hand-written, tested adapters that load automatically when their signature matches.</p>
       <table>
-        <thead><tr><th>Group</th><th>Enables</th></tr></thead>
+        <thead><tr><th>Board</th><th>Detection</th><th>Tools</th></tr></thead>
         <tbody>
-          <tr><td><code>full</code></td><td>LLM planner + vision (<code>anthropic</code>), HTTP server (<code>flask</code>), camera CV, plots</td></tr>
-          <tr><td><code>pi</code></td><td>Raspberry Pi GPIO + camera stack</td></tr>
-          <tr><td><code>drone</code></td><td>MAVLink flight-controller support</td></tr>
-          <tr><td><code>ml</code></td><td>YOLO object detection and extra ML utilities</td></tr>
+          <tr><td>SunFounder PiCar-X</td><td><code>picarx</code> or I2C <code>0x14</code></td><td>fwd · back · turn L/R · pan/tilt · distance</td></tr>
+          <tr><td>Freenove 4WD</td><td><code>Motor</code> importable</td><td>6 motion tools</td></tr>
+          <tr><td>Freenove Mecanum</td><td>I2C <code>0x40</code> + <code>Motor</code></td><td>8 tools incl. strafe</td></tr>
+          <tr><td>Adeept HAT v3</td><td><code>adeept</code> importable</td><td>6 motion tools</td></tr>
+          <tr><td>PCA9685 generic</td><td>I2C <code>0x40</code> + lib</td><td>6 motion tools</td></tr>
+          <tr><td>L298N direct GPIO</td><td>GPIO, no I2C</td><td>6 motion tools</td></tr>
+          <tr><td>Waveshare driver</td><td><code>waveshare_motor</code> or I2C <code>0x47</code></td><td>6 motion tools</td></tr>
         </tbody>
       </table>
-      <div class="note"><span class="m">&rsaquo;</span><p>On <strong>Raspberry Pi 5</strong>, substitute <code>rpi-lgpio</code> for <code>RPi.GPIO</code>.</p></div>
-      <h3 id="api-key">API key</h3>
+      <h3 id="tier-2-llm-generated">Tier 2 — LLM-generated</h3>
+      <p>For an unknown board with a vendor Python library, AETHER reads the library, calls Claude to generate an adapter, then gates it behind 6 static-validation rules, a sandboxed dry-run of <code>register()</code>, and a mandatory live hardware test. Generate offline (no hardware):</p>
       <div class="code">
-        <button class="copy-btn" data-copy="export ANTHROPIC_API_KEY=&quot;sk-ant-...&quot;">Copy</button>
-        <pre><code><span class="pr">$</span> export ANTHROPIC_API_KEY="sk-ant-..."</code></pre>
+        <button class="copy-btn" data-copy="aether --generate-adapter-from /path/to/vendor_lib --save-to ./my_adapter.py">Copy</button>
+<pre><code><span class="pr">$</span> aether --generate-adapter-from /path/to/vendor_lib \
+        --save-to ./my_adapter.py</code></pre>
       </div>
-    <nav class="pager"><a class="prev" href="requirements.html"><span>Previous</span><b>Requirements</b></a><a class="next" href="quickstart.html"><span>Next</span><b>Quick start</b></a></nav>
+      <h3 id="tier-3-guided-wizard">Tier 3 — guided wizard</h3>
+      <p>When no library is available, an interactive wizard collects control snippets and builds a guided adapter. Generated adapters persist at <code>~/.aether/adapters/</code> and load automatically. <code>--no-auto-adapter</code> disables Tier 2/3 (Tier 1 still loads).</p>
+    <nav class="pager"><a class="prev" href="genome.html"><span>Previous</span><b>Calibration & Genome</b></a><a class="next" href="planning.html"><span>Next</span><b>NL planning</b></a></nav>
   </main>
   <aside class="doctoc">
     <div class="doctoc-sticky">
       <h6>On this page</h6>
       <nav id="tocNav">
-        <a href="#install">Install</a>
-        <a href="#optional-dependency-groups">Optional dependency groups</a>
-        <a href="#api-key">API key</a>
+        <a href="#adapters">Auto-adapters</a>
+        <a href="#tier-1-pre-built">Tier 1 — pre-built</a>
+        <a href="#tier-2-llm-generated">Tier 2 — LLM-generated</a>
+        <a href="#tier-3-guided-wizard">Tier 3 — guided wizard</a>
       </nav>
     </div>
   </aside>

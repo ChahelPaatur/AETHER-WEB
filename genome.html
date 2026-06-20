@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — Overview." />
-<link rel="canonical" href="https://aether-robotics.com/docs.html" />
+<meta name="description" content="AETHER documentation — Calibration & Genome." />
+<link rel="canonical" href="https://aether-robotics.com/genome.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Overview</title>
+<title>AETHER · Calibration & Genome</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -34,7 +34,7 @@
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
-        <a href="docs.html" class="active">Overview</a>
+        <a href="docs.html">Overview</a>
         <a href="requirements.html">Requirements</a>
         <a href="usage.html">Install</a>
         <a href="quickstart.html">Quick start</a>
@@ -43,7 +43,7 @@
         <h6>Concepts</h6>
         <a href="concepts.html">Key concepts</a>
         <a href="features.html">Features</a>
-        <a href="genome.html">Calibration & Genome</a>
+        <a href="genome.html" class="active">Calibration & Genome</a>
         <a href="adapters.html">Auto-adapters</a>
         <a href="planning.html">NL planning</a>
         <a href="skills.html">Skills</a>
@@ -72,18 +72,30 @@
   </aside>
 
   <main class="doccontent">
-    <div class="eyebrow">Get started</div>
-    <h1 id="overview">Overview</h1>
-    <p class="intro">An autonomous operating system for robots. Connect hardware, calibrate once, and control the robot in plain English — AETHER discovers actuators, builds a portable <strong>Robot Genome</strong>, translates objectives into hardware actions via an LLM planner, and runs a PPO fault-detection network concurrently.</p>
-    <div class="code"><button class="copy-btn" data-copy="pip install aether-robotics">Copy</button><pre><code><span class="pr">$</span> pip install aether-robotics</code></pre></div>
-    <p>AETHER turns an arbitrary GPIO / HAT / MAVLink robot into a natural-language-controllable system in three steps.</p>
-      <div class="grid2">
-        <div class="gcard"><h4>1 · <b>Discover</b></h4><p>A calibration walk pulses each safe GPIO pin; you label what moved, producing a <code>physical_map</code> keyed by BCM pin. Known HAT boards are auto-detected.</p></div>
-        <div class="gcard"><h4>2 · <b>Describe</b></h4><p>The map is distilled into a versioned Robot Genome (<code>configs/robot.json</code>): locomotion class, actuators, sensors, and a deterministic capability set.</p></div>
-        <div class="gcard"><h4>3 · <b>Drive</b></h4><p>The LLM planner resolves plain-English objectives against the genome and dispatches the right tool, while a PPO fault detector runs concurrently.</p></div>
+    <div class="eyebrow">Concepts</div>
+    <h1 id="genome">Calibration &amp; the Robot Genome</h1>
+    <p><code>aether --calibrate</code> walks every safe GPIO pin (BCM 4–27, excluding I2C/SPI/UART), pulses each with a positional servo sweep, and prompts you to label what moved. The result is a <code>physical_map</code> saved in your profile and loaded automatically next startup.</p>
+      <ul>
+        <li><code>--recalibrate</code> re-runs the full walk (preserves <code>robot_id</code>).</li>
+        <li><code>--auto-calibrate</code> runs headless with no prompts.</li>
+        <li>If a known HAT is detected, its Tier 1 adapter loads and registers capabilities automatically.</li>
+      </ul>
+      <p>The map is distilled into a versioned <code>configs/robot.json</code>. Inspect it with:</p>
+      <div class="code">
+        <button class="copy-btn" data-copy="aether --genome show">Copy</button>
+<pre><code><span class="pr">$</span> aether --genome show
+
+Robot Genome
+  ID:         f47ac10b-...
+  Locomotion: differential_drive
+  Hash:       a3f1d92e...
+
+Capabilities (6)
+  drive_backward  drive_forward  emergency_stop
+  stop  turn_left  turn_right</code></pre>
       </div>
-      <p>Everything runs locally on a Raspberry Pi; the only network dependency is the Anthropic API, used for the planner and vision.</p>
-    <nav class="pager"><span class="spacer"></span><a class="next" href="requirements.html"><span>Next</span><b>Requirements</b></a></nav>
+      <p>Capabilities are derived <strong>deterministically</strong>, so a skill written for a <code>differential_drive</code> genome runs on every matching robot. Skills declare <code>SKILL_REQUIRES</code> and AETHER refuses to run any it can't satisfy — before any hardware moves.</p>
+    <nav class="pager"><a class="prev" href="features.html"><span>Previous</span><b>Features</b></a><a class="next" href="adapters.html"><span>Next</span><b>Auto-adapters</b></a></nav>
   </main>
 
 </div>

@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — Overview." />
-<link rel="canonical" href="https://aether-robotics.com/docs.html" />
+<meta name="description" content="AETHER documentation — Config & paths." />
+<link rel="canonical" href="https://aether-robotics.com/configuration.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Overview</title>
+<title>AETHER · Config & paths</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -22,19 +22,19 @@
   </a>
   <nav class="doctabs">
     <a href="index.html">Home</a>
-    <a href="docs.html" class="active">Docs</a>
-    <a href="usage.html">Usage</a>
+    <a href="docs.html">Docs</a>
+    <a href="usage.html" class="active">Usage</a>
   </nav>
   <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
 </header>
 
-<div class="docwrap no-toc">
+<div class="docwrap">
 
   <aside class="docnav">
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
-        <a href="docs.html" class="active">Overview</a>
+        <a href="docs.html">Overview</a>
         <a href="requirements.html">Requirements</a>
         <a href="usage.html">Install</a>
         <a href="quickstart.html">Quick start</a>
@@ -63,7 +63,7 @@
         <h6>Usage</h6>
         <a href="cli.html">CLI reference</a>
         <a href="modes.html">Operating modes</a>
-        <a href="configuration.html">Config & paths</a>
+        <a href="configuration.html" class="active">Config & paths</a>
         <a href="python-api.html">Python API</a>
         <a href="development.html">Development</a>
         <a href="troubleshooting.html">Troubleshooting</a>
@@ -72,19 +72,36 @@
   </aside>
 
   <main class="doccontent">
-    <div class="eyebrow">Get started</div>
-    <h1 id="overview">Overview</h1>
-    <p class="intro">An autonomous operating system for robots. Connect hardware, calibrate once, and control the robot in plain English — AETHER discovers actuators, builds a portable <strong>Robot Genome</strong>, translates objectives into hardware actions via an LLM planner, and runs a PPO fault-detection network concurrently.</p>
-    <div class="code"><button class="copy-btn" data-copy="pip install aether-robotics">Copy</button><pre><code><span class="pr">$</span> pip install aether-robotics</code></pre></div>
-    <p>AETHER turns an arbitrary GPIO / HAT / MAVLink robot into a natural-language-controllable system in three steps.</p>
-      <div class="grid2">
-        <div class="gcard"><h4>1 · <b>Discover</b></h4><p>A calibration walk pulses each safe GPIO pin; you label what moved, producing a <code>physical_map</code> keyed by BCM pin. Known HAT boards are auto-detected.</p></div>
-        <div class="gcard"><h4>2 · <b>Describe</b></h4><p>The map is distilled into a versioned Robot Genome (<code>configs/robot.json</code>): locomotion class, actuators, sensors, and a deterministic capability set.</p></div>
-        <div class="gcard"><h4>3 · <b>Drive</b></h4><p>The LLM planner resolves plain-English objectives against the genome and dispatches the right tool, while a PPO fault detector runs concurrently.</p></div>
-      </div>
-      <p>Everything runs locally on a Raspberry Pi; the only network dependency is the Anthropic API, used for the planner and vision.</p>
-    <nav class="pager"><span class="spacer"></span><a class="next" href="requirements.html"><span>Next</span><b>Requirements</b></a></nav>
+    <div class="eyebrow">Usage</div>
+    <h1 id="config">Configuration, files &amp; paths</h1>
+    <table>
+        <thead><tr><th>Path</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>configs/robot.json</code></td><td>The Robot Genome (v1.0) — locomotion, actuators, sensors, capabilities, hash</td></tr>
+          <tr><td><code>~/.aether/adapters/</code></td><td>Persisted Tier 2/3 adapters (auto-loaded on startup)</td></tr>
+          <tr><td><code>logs/</code></td><td>Run logs, scheduled tasks, correction traces, benchmark JSON/CSV</td></tr>
+          <tr><td><code>/opt/picar-x/</code>, <code>/opt/robot-hat/</code></td><td>robot_hat vendor config (pre-created to avoid runtime <code>sudo</code>)</td></tr>
+        </tbody>
+      </table>
+      <h3 id="environment-variables">Environment variables</h3>
+      <table>
+        <thead><tr><th>Variable</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Required for planner + vision</td></tr>
+          <tr><td><code>AETHER_PICARX_DIRECTION_INVERT</code></td><td><code>1</code> (default) inverts PiCar-X direction to <code>[-1,-1]</code> for natural fwd/back; <code>0</code> to opt out</td></tr>
+        </tbody>
+      </table>
+    <nav class="pager"><a class="prev" href="modes.html"><span>Previous</span><b>Operating modes</b></a><a class="next" href="python-api.html"><span>Next</span><b>Python API</b></a></nav>
   </main>
+  <aside class="doctoc">
+    <div class="doctoc-sticky">
+      <h6>On this page</h6>
+      <nav id="tocNav">
+        <a href="#config">Config & paths</a>
+        <a href="#environment-variables">Environment variables</a>
+      </nav>
+    </div>
+  </aside>
 
 </div>
 

@@ -22,22 +22,19 @@
     });
   });
 
-  // ----- Scrollspy: highlight the current section in nav + toc -----
-  const sections = Array.from(document.querySelectorAll("main.doccontent section[id]"));
-  const links = Array.from(document.querySelectorAll(".docnav a, .doctoc a"));
-  if (sections.length && links.length) {
-    const linksFor = (id) =>
-      links.filter((a) => (a.getAttribute("href") || "").endsWith("#" + id));
-    if ("IntersectionObserver" in window) {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            links.forEach((a) => a.classList.remove("active"));
-            linksFor(e.target.id).forEach((a) => a.classList.add("active"));
-          }
-        });
-      }, { rootMargin: "-20% 0px -72% 0px", threshold: 0 });
-      sections.forEach((s) => io.observe(s));
-    }
+  // ----- Scrollspy: highlight the current heading in the right-hand TOC -----
+  const heads = Array.from(document.querySelectorAll("main.doccontent h1[id], main.doccontent h3[id]"));
+  const tocLinks = Array.from(document.querySelectorAll(".doctoc a"));
+  if (heads.length && tocLinks.length && "IntersectionObserver" in window) {
+    const linkFor = (id) => tocLinks.filter((a) => (a.getAttribute("href") || "") === "#" + id);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          tocLinks.forEach((a) => a.classList.remove("active"));
+          linkFor(e.target.id).forEach((a) => a.classList.add("active"));
+        }
+      });
+    }, { rootMargin: "-12% 0px -78% 0px", threshold: 0 });
+    heads.forEach((h) => io.observe(h));
   }
 })();

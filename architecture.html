@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — Overview." />
-<link rel="canonical" href="https://aether-robotics.com/docs.html" />
+<meta name="description" content="AETHER documentation — Architecture." />
+<link rel="canonical" href="https://aether-robotics.com/architecture.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Overview</title>
+<title>AETHER · Architecture</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -34,7 +34,7 @@
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
-        <a href="docs.html" class="active">Overview</a>
+        <a href="docs.html">Overview</a>
         <a href="requirements.html">Requirements</a>
         <a href="usage.html">Install</a>
         <a href="quickstart.html">Quick start</a>
@@ -53,7 +53,7 @@
       </div>
       <div class="group">
         <h6>Reference</h6>
-        <a href="architecture.html">Architecture</a>
+        <a href="architecture.html" class="active">Architecture</a>
         <a href="vocabulary.html">Tool vocabulary</a>
         <a href="safety.html">Safety model</a>
         <a href="benchmarks.html">Benchmarks</a>
@@ -72,18 +72,41 @@
   </aside>
 
   <main class="doccontent">
-    <div class="eyebrow">Get started</div>
-    <h1 id="overview">Overview</h1>
-    <p class="intro">An autonomous operating system for robots. Connect hardware, calibrate once, and control the robot in plain English — AETHER discovers actuators, builds a portable <strong>Robot Genome</strong>, translates objectives into hardware actions via an LLM planner, and runs a PPO fault-detection network concurrently.</p>
-    <div class="code"><button class="copy-btn" data-copy="pip install aether-robotics">Copy</button><pre><code><span class="pr">$</span> pip install aether-robotics</code></pre></div>
-    <p>AETHER turns an arbitrary GPIO / HAT / MAVLink robot into a natural-language-controllable system in three steps.</p>
-      <div class="grid2">
-        <div class="gcard"><h4>1 · <b>Discover</b></h4><p>A calibration walk pulses each safe GPIO pin; you label what moved, producing a <code>physical_map</code> keyed by BCM pin. Known HAT boards are auto-detected.</p></div>
-        <div class="gcard"><h4>2 · <b>Describe</b></h4><p>The map is distilled into a versioned Robot Genome (<code>configs/robot.json</code>): locomotion class, actuators, sensors, and a deterministic capability set.</p></div>
-        <div class="gcard"><h4>3 · <b>Drive</b></h4><p>The LLM planner resolves plain-English objectives against the genome and dispatches the right tool, while a PPO fault detector runs concurrently.</p></div>
+    <div class="eyebrow">Reference</div>
+    <h1 id="architecture">Architecture</h1>
+    <div class="code">
+<pre><code>  User input (plain English)
+        │
+        ▼
+  ToolDiscovery ─────────► physical_map + robot.json genome
+        │                            │
+        │           AdapterResolver (Tier 1 → 2 → 3)
+        │                └── ~/.aether/adapters/  (persisted)
+        ▼                            │
+  LLMPlanner ◄── genome capabilities injected into context
+        │
+        ▼
+  NavigationEngine  (L1 camera / L2 GPIO / L3 MAVLink)
+        │                       │
+        ▼                       ▼
+  Hardware (servo/motor/FC)  FaultAgent (PPO, 15-dim → fault class)
+                                │
+                          detect · recover · log</code></pre>
       </div>
-      <p>Everything runs locally on a Raspberry Pi; the only network dependency is the Anthropic API, used for the planner and vision.</p>
-    <nav class="pager"><span class="spacer"></span><a class="next" href="requirements.html"><span>Next</span><b>Requirements</b></a></nav>
+      <table>
+        <thead><tr><th>Path</th><th>Responsibility</th></tr></thead>
+        <tbody>
+          <tr><td><code>app.py</code> / <code>__main__.py</code></td><td>Entry point, CLI parsing, mode dispatch</td></tr>
+          <tr><td><code>core/</code></td><td>Planner, tool registry, navigation, genome, calibration, memory, metrics, MAVLink, updater</td></tr>
+          <tr><td><code>adapters/</code></td><td>Tier 1 adapters + the auto-adapter generator/validator</td></tr>
+          <tr><td><code>agents/</code></td><td>Perception, navigation, fault, thermal, power, correction, planner, memory…</td></tr>
+          <tr><td><code>skills/</code></td><td>High-level composite behaviors</td></tr>
+          <tr><td><code>parallel/</code></td><td>Threading-based parallel execution</td></tr>
+          <tr><td><code>faults/</code></td><td>Fault detector + injector</td></tr>
+          <tr><td><code>simulation/</code></td><td>Virtual environment, scenarios, perception for sim</td></tr>
+        </tbody>
+      </table>
+    <nav class="pager"><a class="prev" href="mavlink.html"><span>Previous</span><b>MAVLink</b></a><a class="next" href="vocabulary.html"><span>Next</span><b>Tool vocabulary</b></a></nav>
   </main>
 
 </div>

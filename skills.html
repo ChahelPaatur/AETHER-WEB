@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="index, follow" />
+<meta name="description" content="AETHER documentation — Skills." />
+<link rel="canonical" href="https://aether-robotics.com/skills.html" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<title>AETHER · Skills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="aether.css?v=3.9.7" />
+</head>
+<body class="docpage">
+
+<header class="docbar">
+  <a class="docbar-brand" href="index.html" aria-label="AETHER home">
+    <img src="logo-orange.png" alt="" /><span class="wm">AETHER</span>
+  </a>
+  <nav class="doctabs">
+    <a href="index.html">Home</a>
+    <a href="docs.html" class="active">Docs</a>
+    <a href="usage.html">Usage</a>
+  </nav>
+  <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
+</header>
+
+<div class="docwrap">
+
+  <aside class="docnav">
+    <div class="docnav-sticky">
+      <div class="group">
+        <h6>Get started</h6>
+        <a href="docs.html">Overview</a>
+        <a href="requirements.html">Requirements</a>
+        <a href="usage.html">Install</a>
+        <a href="quickstart.html">Quick start</a>
+      </div>
+      <div class="group">
+        <h6>Concepts</h6>
+        <a href="concepts.html">Key concepts</a>
+        <a href="features.html">Features</a>
+        <a href="genome.html">Calibration & Genome</a>
+        <a href="adapters.html">Auto-adapters</a>
+        <a href="planning.html">NL planning</a>
+        <a href="skills.html" class="active">Skills</a>
+        <a href="parallel.html">Parallel execution</a>
+        <a href="fdir.html">FDIR</a>
+        <a href="mavlink.html">MAVLink</a>
+      </div>
+      <div class="group">
+        <h6>Reference</h6>
+        <a href="architecture.html">Architecture</a>
+        <a href="vocabulary.html">Tool vocabulary</a>
+        <a href="safety.html">Safety model</a>
+        <a href="benchmarks.html">Benchmarks</a>
+        <a href="changelog.html">Version history</a>
+      </div>
+      <div class="group">
+        <h6>Usage</h6>
+        <a href="cli.html">CLI reference</a>
+        <a href="modes.html">Operating modes</a>
+        <a href="configuration.html">Config & paths</a>
+        <a href="python-api.html">Python API</a>
+        <a href="development.html">Development</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="doccontent">
+    <div class="eyebrow">Concepts</div>
+    <h1 id="skills">Skills</h1>
+    <p>Skills are higher-level behaviors built on tools, registered when their prerequisites are present. The flagship is <code>drive_until_obstacle</code> — it drives forward while a second thread polls the ultrasonic sensor, stopping when an obstacle is within <code>target_cm</code>. Drive and sensing run on <strong>separate threads</strong> sharing a stop event.</p>
+      <div class="code">
+        <button class="copy-btn" data-copy="drive_until_obstacle(target_cm=5.0, max_speed=25.0, timeout_s=15.0)">Copy</button>
+<pre><code>drive_until_obstacle(target_cm=5.0, max_speed=25.0, timeout_s=15.0)</code></pre>
+      </div>
+      <table>
+        <thead><tr><th>Param</th><th>Default</th><th>Range</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>target_cm</code></td><td>5.0</td><td>2.0–100.0</td><td>Stop when an obstacle is this close</td></tr>
+          <tr><td><code>max_speed</code></td><td>25.0</td><td>10.0–60.0</td><td>Top speed; eased down on approach</td></tr>
+          <tr><td><code>timeout_s</code></td><td>15.0</td><td>0.5–30.0</td><td>Hard wall-clock cap on the run</td></tr>
+        </tbody>
+      </table>
+      <h3 id="behavior">Behavior</h3>
+      <ul>
+        <li><strong>Approach-speed curve (v3.9.1):</strong> full speed when far, ~60% between 1.5× and 3× target, ~35% below 1.5× (floored at 10). Decel starts early so overshoot stays small.</li>
+        <li><strong>Continuous motion (v3.9.3):</strong> with the live SunFounder adapter the motor runs continuously, re-issuing only when the speed band changes — no start/stop jitter. Falls back to a pulsed path otherwise.</li>
+        <li><strong>Obstacle confirmation:</strong> requires 2 consecutive sub-threshold reads, with a <code>target_cm + 2 cm</code> trigger margin.</li>
+        <li><strong>Sensor-noise tolerance (v3.9.5):</strong> halts on <strong>consecutive</strong> bad reads (<code>_MAX_CONSECUTIVE_BAD_READS = 20</code> ≈ 1.0 s), not a lifetime count — tolerating motor-EMI bursts while still catching sustained faults.</li>
+      </ul>
+      <table>
+        <thead><tr><th>Result field</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>success</code></td><td><code>True</code> unless a prerequisite tool was unavailable</td></tr>
+          <tr><td><code>stop_reason</code></td><td><code>"obstacle at X cm"</code>, <code>"sensor failing"</code>, <code>"timeout"</code>, or <code>"stopped"</code></td></tr>
+          <tr><td><code>final_distance_cm</code></td><td>Last sensor reading</td></tr>
+          <tr><td><code>stop_distance_cm</code></td><td>Distance at which the obstacle was confirmed</td></tr>
+          <tr><td><code>sensor_failures</code></td><td>Cumulative bad-read count (diagnostics)</td></tr>
+        </tbody>
+      </table>
+    <nav class="pager"><a class="prev" href="planning.html"><span>Previous</span><b>NL planning</b></a><a class="next" href="parallel.html"><span>Next</span><b>Parallel execution</b></a></nav>
+  </main>
+  <aside class="doctoc">
+    <div class="doctoc-sticky">
+      <h6>On this page</h6>
+      <nav id="tocNav">
+        <a href="#skills">Skills</a>
+        <a href="#behavior">Behavior</a>
+      </nav>
+    </div>
+  </aside>
+
+</div>
+
+<footer class="doc-foot">
+  <div>Ⓒ 2026 · Chahel Paatur · aether-robotics.com</div>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="docs.html">Docs</a>
+    <a href="usage.html">Usage</a>
+    <a href="https://github.com/ChahelPaatur/AETHER" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </div>
+</footer>
+
+<script src="docs.js?v=3.9.7" defer></script>
+</body>
+</html>

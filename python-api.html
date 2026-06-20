@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — Overview." />
-<link rel="canonical" href="https://aether-robotics.com/docs.html" />
+<meta name="description" content="AETHER documentation — Python API." />
+<link rel="canonical" href="https://aether-robotics.com/python-api.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Overview</title>
+<title>AETHER · Python API</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -22,8 +22,8 @@
   </a>
   <nav class="doctabs">
     <a href="index.html">Home</a>
-    <a href="docs.html" class="active">Docs</a>
-    <a href="usage.html">Usage</a>
+    <a href="docs.html">Docs</a>
+    <a href="usage.html" class="active">Usage</a>
   </nav>
   <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
 </header>
@@ -34,7 +34,7 @@
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
-        <a href="docs.html" class="active">Overview</a>
+        <a href="docs.html">Overview</a>
         <a href="requirements.html">Requirements</a>
         <a href="usage.html">Install</a>
         <a href="quickstart.html">Quick start</a>
@@ -64,7 +64,7 @@
         <a href="cli.html">CLI reference</a>
         <a href="modes.html">Operating modes</a>
         <a href="configuration.html">Config & paths</a>
-        <a href="python-api.html">Python API</a>
+        <a href="python-api.html" class="active">Python API</a>
         <a href="development.html">Development</a>
         <a href="troubleshooting.html">Troubleshooting</a>
       </div>
@@ -72,18 +72,36 @@
   </aside>
 
   <main class="doccontent">
-    <div class="eyebrow">Get started</div>
-    <h1 id="overview">Overview</h1>
-    <p class="intro">An autonomous operating system for robots. Connect hardware, calibrate once, and control the robot in plain English — AETHER discovers actuators, builds a portable <strong>Robot Genome</strong>, translates objectives into hardware actions via an LLM planner, and runs a PPO fault-detection network concurrently.</p>
-    <div class="code"><button class="copy-btn" data-copy="pip install aether-robotics">Copy</button><pre><code><span class="pr">$</span> pip install aether-robotics</code></pre></div>
-    <p>AETHER turns an arbitrary GPIO / HAT / MAVLink robot into a natural-language-controllable system in three steps.</p>
-      <div class="grid2">
-        <div class="gcard"><h4>1 · <b>Discover</b></h4><p>A calibration walk pulses each safe GPIO pin; you label what moved, producing a <code>physical_map</code> keyed by BCM pin. Known HAT boards are auto-detected.</p></div>
-        <div class="gcard"><h4>2 · <b>Describe</b></h4><p>The map is distilled into a versioned Robot Genome (<code>configs/robot.json</code>): locomotion class, actuators, sensors, and a deterministic capability set.</p></div>
-        <div class="gcard"><h4>3 · <b>Drive</b></h4><p>The LLM planner resolves plain-English objectives against the genome and dispatches the right tool, while a PPO fault detector runs concurrently.</p></div>
+    <div class="eyebrow">Usage</div>
+    <h1 id="python">Python API</h1>
+    <p>AETHER is primarily a CLI, but components are importable. Run a skill against a registry directly:</p>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre><code><span class="k">from</span> aether.skills.drive_until_obstacle <span class="k">import</span> drive_until_obstacle
+
+<span class="c"># `registry` exposes move_forward + get_distance</span>
+result = drive_until_obstacle(
+    target_cm=5.0, max_speed=25.0, timeout_s=15.0, registry=registry,
+)
+print(result[<span class="s">"stop_reason"</span>], result[<span class="s">"final_distance_cm"</span>])</code></pre>
       </div>
-      <p>Everything runs locally on a Raspberry Pi; the only network dependency is the Anthropic API, used for the planner and vision.</p>
-    <nav class="pager"><span class="spacer"></span><a class="next" href="requirements.html"><span>Next</span><b>Requirements</b></a></nav>
+      <p>Register skills (auto-checks prerequisites) and use the parallel primitives:</p>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre><code><span class="k">from</span> aether.skills <span class="k">import</span> register_skills
+registered = register_skills(registry)   <span class="c"># -> ["drive_until_obstacle"]</span>
+
+<span class="k">from</span> aether.parallel.executor <span class="k">import</span> ParallelExecutor
+ex = ParallelExecutor(name=<span class="s">"my_skill"</span>, timeout_s=10.0)
+ex.add_task(<span class="s">"motor"</span>, motor_task)
+ex.add_task(<span class="s">"sensor"</span>, sensor_task)
+result = ex.run()
+
+<span class="k">import</span> aether
+print(aether.__version__)   <span class="c"># "3.9.5"</span></code></pre>
+      </div>
+      <div class="note"><span class="m">&rsaquo;</span><p><code>aether/skills/__init__.py</code> re-exports the <code>drive_until_obstacle</code> <em>function</em>. To reach module-level constants use <code>importlib.import_module("aether.skills.drive_until_obstacle")</code>.</p></div>
+    <nav class="pager"><a class="prev" href="configuration.html"><span>Previous</span><b>Config & paths</b></a><a class="next" href="development.html"><span>Next</span><b>Development</b></a></nav>
   </main>
 
 </div>

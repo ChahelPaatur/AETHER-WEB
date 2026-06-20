@@ -4,11 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER documentation — Overview." />
-<link rel="canonical" href="https://aether-robotics.com/docs.html" />
+<meta name="description" content="AETHER documentation — Operating modes." />
+<link rel="canonical" href="https://aether-robotics.com/modes.html" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<title>AETHER · Overview</title>
+<title>AETHER · Operating modes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
@@ -22,19 +22,19 @@
   </a>
   <nav class="doctabs">
     <a href="index.html">Home</a>
-    <a href="docs.html" class="active">Docs</a>
-    <a href="usage.html">Usage</a>
+    <a href="docs.html">Docs</a>
+    <a href="usage.html" class="active">Usage</a>
   </nav>
   <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
 </header>
 
-<div class="docwrap no-toc">
+<div class="docwrap">
 
   <aside class="docnav">
     <div class="docnav-sticky">
       <div class="group">
         <h6>Get started</h6>
-        <a href="docs.html" class="active">Overview</a>
+        <a href="docs.html">Overview</a>
         <a href="requirements.html">Requirements</a>
         <a href="usage.html">Install</a>
         <a href="quickstart.html">Quick start</a>
@@ -62,7 +62,7 @@
       <div class="group">
         <h6>Usage</h6>
         <a href="cli.html">CLI reference</a>
-        <a href="modes.html">Operating modes</a>
+        <a href="modes.html" class="active">Operating modes</a>
         <a href="configuration.html">Config & paths</a>
         <a href="python-api.html">Python API</a>
         <a href="development.html">Development</a>
@@ -72,19 +72,36 @@
   </aside>
 
   <main class="doccontent">
-    <div class="eyebrow">Get started</div>
-    <h1 id="overview">Overview</h1>
-    <p class="intro">An autonomous operating system for robots. Connect hardware, calibrate once, and control the robot in plain English — AETHER discovers actuators, builds a portable <strong>Robot Genome</strong>, translates objectives into hardware actions via an LLM planner, and runs a PPO fault-detection network concurrently.</p>
-    <div class="code"><button class="copy-btn" data-copy="pip install aether-robotics">Copy</button><pre><code><span class="pr">$</span> pip install aether-robotics</code></pre></div>
-    <p>AETHER turns an arbitrary GPIO / HAT / MAVLink robot into a natural-language-controllable system in three steps.</p>
-      <div class="grid2">
-        <div class="gcard"><h4>1 · <b>Discover</b></h4><p>A calibration walk pulses each safe GPIO pin; you label what moved, producing a <code>physical_map</code> keyed by BCM pin. Known HAT boards are auto-detected.</p></div>
-        <div class="gcard"><h4>2 · <b>Describe</b></h4><p>The map is distilled into a versioned Robot Genome (<code>configs/robot.json</code>): locomotion class, actuators, sensors, and a deterministic capability set.</p></div>
-        <div class="gcard"><h4>3 · <b>Drive</b></h4><p>The LLM planner resolves plain-English objectives against the genome and dispatches the right tool, while a PPO fault detector runs concurrently.</p></div>
+    <div class="eyebrow">Usage</div>
+    <h1 id="modes">Operating modes</h1>
+    <h3 id="sim-default">sim <span style="color:var(--ink-mute);font-weight:400">(default)</span></h3>
+      <p>FDIR loop against a simulated robot with optional fault injection. No hardware or API key. Use <code>--scenario</code>, <code>--faults</code>, <code>--render</code>, <code>--plots</code>, <code>--no-learning</code>. Good for benchmarking.</p>
+      <h3 id="agent">agent</h3>
+      <p>Interactive REPL on live hardware. You type objectives; the planner resolves them against the genome and dispatches tools. Requires a calibrated robot and <code>ANTHROPIC_API_KEY</code>.</p>
+      <h3 id="realworld">realworld</h3>
+      <p>Continuous FDIR loop on live hardware using camera + system sensors — no planner. Pair with <code>--continuous</code> and <code>--faults</code> for soak tests.</p>
+      <h3 id="server">server</h3>
+      <div class="code">
+        <button class="copy-btn">Copy</button>
+<pre><code><span class="pr">$</span> aether --mode server --port 8080
+<span class="pr">$</span> curl -X POST localhost:8080/objective -H 'content-type: application/json' \
+       -d '{"objective": "move forward for 2 seconds"}'
+<span class="pr">$</span> curl localhost:8080/health</code></pre>
       </div>
-      <p>Everything runs locally on a Raspberry Pi; the only network dependency is the Anthropic API, used for the planner and vision.</p>
-    <nav class="pager"><span class="spacer"></span><a class="next" href="requirements.html"><span>Next</span><b>Requirements</b></a></nav>
+    <nav class="pager"><a class="prev" href="cli.html"><span>Previous</span><b>CLI reference</b></a><a class="next" href="configuration.html"><span>Next</span><b>Config & paths</b></a></nav>
   </main>
+  <aside class="doctoc">
+    <div class="doctoc-sticky">
+      <h6>On this page</h6>
+      <nav id="tocNav">
+        <a href="#modes">Operating modes</a>
+        <a href="#sim-default">sim (default)</a>
+        <a href="#agent">agent</a>
+        <a href="#realworld">realworld</a>
+        <a href="#server">server</a>
+      </nav>
+    </div>
+  </aside>
 
 </div>
 
