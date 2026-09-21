@@ -501,37 +501,6 @@
     margin-right: 0;
   }
   /* Built By forced to light bg, NO tower column */
-  section.builtby-section { background: var(--paper); color: var(--paper-ink); }
-  section.builtby-section.light > * { max-width: none !important; margin-left: 0 !important; margin-right: 0 !important; }
-  section.builtby-section .section-num { color: var(--paper-dim); }
-  section.builtby-section .section-title { color: var(--paper-ink); }
-  /* override the dark-card tokens inside builtby when on light bg */
-  section.builtby-section .builtby-name-rail .vname { color: var(--paper-ink); }
-  section.builtby-section .builtby-name-rail .vrole { color: var(--paper-dim); }
-  section.builtby-section .builtby-photo img { filter: grayscale(1) contrast(1) brightness(0.98); }
-  section.builtby-section .builtby-photo.colored img { filter: grayscale(0) contrast(1) brightness(1); }
-  section.builtby-section .builtby-photo .photo-hint {
-    background: rgba(246,243,236,0.85);
-    color: var(--paper-ink);
-    border-color: rgba(20,17,11,0.18);
-  }
-  section.builtby-section .builtby-photo-meta { border-top-color: var(--paper-line); }
-  section.builtby-section .builtby-photo-meta div { color: var(--paper-dim); }
-  section.builtby-section .builtby-photo-meta div b { color: var(--paper-ink); }
-  section.builtby-section .builtby-socials a {
-    border-color: rgba(20,17,11,0.2);
-    color: var(--paper-dim);
-  }
-  section.builtby-section .builtby-socials a:hover {
-    border-color: var(--accent);
-    color: var(--paper-ink);
-    background: rgba(255, 77, 28, 0.06);
-  }
-  section.builtby-section .builtby-bio .lede { color: var(--paper-ink); }
-  section.builtby-section .builtby-bio .fact-list { border-top-color: rgba(20,17,11,0.15); }
-  section.builtby-section .builtby-bio .fact-list li { border-bottom-color: rgba(20,17,11,0.10); }
-  section.builtby-section .builtby-bio .fact-list .k { color: var(--paper-dim); }
-  section.builtby-section .builtby-bio .fact-list .v { color: var(--paper-ink); }
 
   @media (max-width: 980px) {
     .light-bg { width: 100%; opacity: 0.18; }
@@ -1099,193 +1068,12 @@
   section.block { position: relative; }
 
   /* ---------------- 07 BUILT BY (minimal: photo + vertical name + bio) ---------------- */
-  .builtby-wrap {
-    display: grid;
-    grid-template-columns: 64px 1fr 1.4fr;
-    gap: 40px;
-    align-items: stretch;
-  }
-  .builtby-name-rail {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: space-between;
-    padding: 12px 0;
-  }
-  .builtby-name-rail .vname {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: clamp(36px, 4vw, 56px);
-    line-height: 0.95;
-    letter-spacing: -0.01em;
-    color: var(--ink);
-    white-space: nowrap;
-  }
-  .builtby-name-rail .vname .ital { font-style: italic; color: var(--accent); }
-  .builtby-name-rail .vrole {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    font-family: var(--mono);
-    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
-    color: var(--ink-mute);
-  }
-  .builtby-name-rail .vtick {
-    width: 18px; height: 1px; background: var(--accent);
-    margin: 18px 0;
-  }
 
-  .builtby-photo {
-    width: 100%;
-    aspect-ratio: 4/5;
-    position: relative;
-    overflow: hidden;
-    border-radius: 2px;
-    cursor: pointer;
-  }
-  .builtby-photo img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    display: block;
-    filter: grayscale(1) contrast(1.05) brightness(0.95);
-    transition: filter 0.5s var(--ease);
-  }
-  .builtby-photo.colored img {
-    filter: grayscale(0) contrast(1.05) brightness(1);
-  }
-  .builtby-photo::after {
-    content: ""; position: absolute; inset: 0;
-    pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
-  }
-  .builtby-photo .photo-hint {
-    position: absolute; bottom: 10px; right: 10px;
-    font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: rgba(255,255,255,0.7);
-    background: rgba(0,0,0,0.5);
-    padding: 5px 9px;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 99px;
-    pointer-events: none;
-    transition: opacity 0.3s var(--ease);
-  }
-  .builtby-photo.colored .photo-hint { opacity: 0; }
 
-  .builtby-socials {
-    display: flex; gap: 10px; flex-wrap: wrap;
-    margin-top: 20px;
-  }
-  .builtby-socials a {
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    height: 52px;
-    padding: 0 20px;
-    border: 1px solid var(--line-2);
-    border-radius: 999px;
-    font-family: var(--mono);
-    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--ink-dim);
-    transition: all 0.2s var(--ease);
-  }
-  .builtby-socials a:hover {
-    border-color: var(--accent);
-    color: var(--ink);
-    background: rgba(255, 77, 28, 0.08);
-  }
-  .builtby-socials a svg { width: 22px; height: 22px; fill: currentColor; }
-  .builtby-socials a.uw {
-    padding: 0 16px;
-  }
-  .builtby-socials a.uw img {
-    width: 28px; height: 28px;
-    object-fit: contain;
-  }
-  .builtby-photo-meta {
-    margin-top: 16px;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 0;
-    border-top: 1px solid var(--line-2);
-  }
-  .builtby-photo-meta div {
-    padding: 14px 0 0;
-    font-family: var(--mono);
-    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--ink-mute);
-  }
-  .builtby-photo-meta div + div {
-    text-align: right;
-  }
-  .builtby-photo-meta div b {
-    display: block;
-    font-family: var(--mono);
-    color: var(--ink);
-    font-weight: 500;
-    font-size: 12px;
-    letter-spacing: 0.16em;
-    margin-bottom: 4px;
-  }
 
-  .builtby-bio {
-    display: flex; flex-direction: column;
-    justify-content: center;
-    gap: 28px;
-  }
-  .builtby-bio .lede {
-    font-family: var(--serif);
-    font-weight: 400;
-    font-size: clamp(28px, 2.8vw, 40px);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    margin: 0;
-    max-width: 22ch;
-  }
-  .builtby-bio .lede em { font-style: italic; color: var(--accent); }
-  .builtby-bio .fact-list {
-    list-style: none;
-    padding: 0; margin: 0;
-    border-top: 1px solid var(--line-2);
-  }
-  .builtby-bio .fact-list li {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 24px;
-    padding: 18px 0;
-    border-bottom: 1px solid var(--line-2);
-    align-items: baseline;
-  }
-  .builtby-bio .fact-list .k {
-    font-family: var(--mono);
-    font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase;
-    color: var(--ink-mute);
-  }
-  .builtby-bio .fact-list .v {
-    color: var(--ink);
-    font-size: 16px;
-    line-height: 1.5;
-  }
-  .builtby-bio .fact-list .v a {
-    color: var(--accent);
-    border-bottom: 1px solid currentColor;
-  }
-  .builtby-bio .fact-list .v .tag {
-    display: inline-block;
-    margin-left: 8px;
-    padding: 2px 8px;
-    font-family: var(--mono);
-    font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 999px;
-    vertical-align: 2px;
-  }
   @media (max-width: 980px) {
-    .builtby-wrap { grid-template-columns: 56px 1fr; }
-    .builtby-bio { grid-column: 1 / -1; }
   }
   @media (max-width: 640px) {
-    .builtby-wrap { grid-template-columns: 1fr; }
-    .builtby-name-rail { flex-direction: row; gap: 18px; padding: 14px 0; border-top: 1px solid var(--line-2); border-bottom: 1px solid var(--line-2); }
-    .builtby-name-rail .vname, .builtby-name-rail .vrole { writing-mode: horizontal-tb; transform: none; }
-    .builtby-name-rail .vtick { margin: 0; }
   }
 
   /* ---------------- FOOTER ---------------- */
@@ -1373,8 +1161,6 @@
     .foot-mega { font-size: clamp(48px, 14vw, 100px); }
     .foot-bar { flex-direction: column; gap: 10px; text-align: center; }
     .integ-card { padding: 20px; }
-    .builtby-wrap { gap: 16px; }
-    .builtby-photo { max-width: 200px; }
   }
   @media (max-width: 360px) {
     .taskbar { width: 260px; }

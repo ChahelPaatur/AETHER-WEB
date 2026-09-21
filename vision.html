@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="index, follow" />
+<meta name="description" content="AETHER documentation — Vision &amp; perception: camera, VLM, YOLO, MediaPipe hands and SAM 3." />
+<link rel="canonical" href="https://aether-robotics.com/vision.html" />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<title>AETHER · Vision &amp; perception</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="aether.css?v=5.10.1" />
+</head>
+<body class="docpage">
+
+<header class="docbar">
+  <a class="docbar-brand" href="index.html" aria-label="AETHER home">
+    <img src="logo-orange.png" alt="" /><span class="wm">AETHER</span>
+  </a>
+  <nav class="doctabs">
+    <a href="index.html">Home</a>
+    <a href="docs.html" class="active">Docs</a>
+    <a href="usage.html">Usage</a>
+  </nav>
+  <a class="docbar-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">pip install aether-robotics</a>
+</header>
+
+<div class="docwrap">
+
+  <aside class="docnav">
+    <div class="docnav-sticky">
+      <div class="group">
+        <h6>Get started</h6>
+        <a href="docs.html">Overview</a>
+        <a href="requirements.html">Requirements</a>
+        <a href="usage.html">Install</a>
+        <a href="quickstart.html">Quick start</a>
+      </div>
+      <div class="group">
+        <h6>Concepts</h6>
+        <a href="concepts.html">Key concepts</a>
+        <a href="features.html">Features</a>
+        <a href="genome.html">Calibration &amp; Genome</a>
+        <a href="adapters.html">Auto-adapters</a>
+        <a href="planning.html">NL planning</a>
+        <a href="skills.html">Skills</a>
+        <a href="vision.html" class="active">Vision &amp; perception</a>
+        <a href="parallel.html">Parallel execution</a>
+        <a href="fdir.html">FDIR</a>
+        <a href="mavlink.html">MAVLink</a>
+      </div>
+      <div class="group">
+        <h6>Reference</h6>
+        <a href="architecture.html">Architecture</a>
+        <a href="vocabulary.html">Tool vocabulary</a>
+        <a href="safety.html">Safety model</a>
+        <a href="benchmarks.html">Benchmarks</a>
+        <a href="changelog.html">Version history</a>
+      </div>
+      <div class="group">
+        <h6>Usage</h6>
+        <a href="cli.html">CLI reference</a>
+        <a href="modes.html">Operating modes</a>
+        <a href="configuration.html">Config &amp; paths</a>
+        <a href="python-api.html">Python API</a>
+        <a href="development.html">Development</a>
+        <a href="troubleshooting.html">Troubleshooting</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="doccontent">
+    <div class="eyebrow">Concepts</div>
+    <h1 id="vision">Vision &amp; perception</h1>
+    <p>AETHER sees through four tiers. They are not fallbacks for one another — they answer different questions, at different costs, on different hardware. A question goes to the tier that can actually answer it, and when no tier can, AETHER says so instead of guessing.</p>
+
+      <table>
+        <thead><tr><th>Tier</th><th>Answers</th><th>Runs</th><th>Install</th><th>Measured</th></tr></thead>
+        <tbody>
+          <tr><td>Camera + VLM</td><td>Open-ended description — “what do you see?”</td><td>Your vision provider</td><td><code>[vision]</code></td><td>One provider round trip</td></tr>
+          <tr><td>YOLO</td><td>Fixed 80-class boxes</td><td>Locally, on the robot</td><td><code>[yolo]</code></td><td>~300 ms on a Raspberry Pi class host</td></tr>
+          <tr><td>MediaPipe hands</td><td>21 landmarks, finger counts, gestures</td><td>Locally, CPU only</td><td><code>[hands]</code></td><td>8.5–10 Hz continuous</td></tr>
+          <tr><td>SAM 3</td><td>Open-vocabulary concepts, pixel masks, tracking</td><td>Hosted GPU endpoint</td><td>Endpoint URL + key</td><td>2330 ms warm on an NVIDIA T4</td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="camera">The camera</h3>
+      <p>One capture path, three backends: <code>picamera2</code> on a Raspberry Pi, OpenCV on a laptop or desktop, and <code>rpicam</code> where neither fits. The device is probed, not assumed — the vision tools only appear in the tool registry when a camera is genuinely accessible, so a model is never offered a capability the hardware cannot deliver.</p>
+      <p>Frames are held <strong>in memory</strong>. Nothing on the detection path writes an image to disk; the single exception is <code>capture_image</code>, where a photograph is the thing the user asked for. <code>aether doctor</code> reports the camera by taking one real picture and the tiers by running real inference — never by checking that a package imports.</p>
+
+      <h3 id="hands">Local geometry — MediaPipe hands</h3>
+      <p>A deterministic tier: 21 hand landmarks, from which finger extension and a small gesture vocabulary are derived by geometry. The same hand in the same pose returns the same integer every time, which is the difference between this and asking a language model to look at a photograph.</p>
+      <div class="code">
+        <button class="copy-btn" data-copy="pip install 'aether-robotics[hands]'">Copy</button>
+<pre><code><span class="pr">$</span> pip install 'aether-robotics[hands]'</code></pre>
+      </div>
+      <p>The extra pins <code>mediapipe&lt;1.0</code> deliberately. MediaPipe 1.x aborts the process on macOS the first time it opens a Metal graph, so the tier declines to load it and names the version and the remedy rather than crashing. Both the older <code>solutions</code> API and the newer Tasks API are supported, because 0.10.22 and later ship only the latter.</p>
+
+      <h3 id="watching">Watching — continuous local sensing</h3>
+      <p>When a goal is a condition a local sense can decide — “wait until I hold up four fingers” — AETHER does not iterate through a language model. It blocks on the sense at roughly 10 Hz and returns within one poll interval of the condition becoming true. A loop that asked an LLM to re-judge the same boolean would spend seconds per round on work the geometry already answered in milliseconds.</p>
+      <p>Two properties matter more than the speed. A watcher <strong>refuses to start</strong> when the detector cannot run, rather than examining a hundred frames with a broken one. And “I looked and saw nothing” is reported differently from “I could not look” — a detector failure is never rendered as a negative detection.</p>
+
+      <h3 id="yolo">Local detection — YOLO</h3>
+      <p>The fast, free path. A local detector over a fixed 80-class vocabulary, returning boxes, with no network call and no per-request cost. It stays the default for the classes it knows; SAM 3 is for the ones it does not.</p>
+
+      <h3 id="sam3">Open-vocabulary detection — SAM 3</h3>
+      <p>A hosted GPU endpoint running Meta's SAM 3. It takes a noun phrase rather than a class id — “the red mug”, “a chicken” — and returns a pixel mask, a bounding box, a centroid and a bearing per instance, plus identity across consecutive frames. Navigation needs a bearing to steer by and grasping needs a mask, neither of which a box provides.</p>
+      <p>It is bring-your-own-endpoint: set the URL and key and AETHER routes concept queries to it. <code>deploy/sam3/</code> in the repository deploys one to Azure Container Apps on a serverless T4 that scales to zero, with the weights baked into the image so a cold start is an image pull and not a call to a model hub.</p>
+
+      <h4 id="sam3-speed">What it actually costs</h4>
+      <p>Measured, on the deployment described above:</p>
+      <table>
+        <thead><tr><th>Measurement</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Warm inference, NVIDIA T4, fp32</td><td>2330 ms</td></tr>
+          <tr><td>Model load, once per replica</td><td>9.7 s</td></tr>
+          <tr><td>Image pulled per cold node</td><td>6.42 GB</td></tr>
+          <tr><td>Idle cost at min-replicas 0</td><td>Nothing</td></tr>
+        </tbody>
+      </table>
+      <p>Meta publishes ~30 ms per image for SAM 3, on an H200. That is a card roughly forty times the price of a T4, and the difference between fp32 on a 2018 inference card and half precision on a 2023 flagship accounts for the gap; there is no missing optimisation behind it. An fp16 measurement on the T4 is in progress and this figure will be updated with it.</p>
+      <p>So SAM 3 is not the fast tier and is not sold as one. It is the tier that answers questions the others cannot: an open vocabulary, a real mask, and identity that persists. Latency-sensitive work belongs on the local tiers.</p>
+
+      <h4 id="sam3-licence">Licence</h4>
+      <p>SAM 3 is used under Meta's SAM License, which permits commercial hosted inference and <strong>prohibits military and weapons use</strong>. Because the deployment bakes the weights into the image, that image is a copy of SAM Materials and must stay in a private registry — never a public one, and never handed to a third party.</p>
+
+      <h3 id="honesty">How a tier is chosen, and what is never claimed</h3>
+      <p>Routing is by capability, not by preference. A tier is offered only when a real probe says it can run, so a question that no available tier can answer is refused with the reason — a missing camera, an unreachable endpoint, a detector that will not load — rather than answered approximately by something else.</p>
+      <p>Nothing about what the camera saw reaches analytics. A concept travels as a SHA-256 hash and nothing else, so the counter can answer “was the same thing looked for twice?” without recording what it was; labels, boxes, masks and centroids are never written to an event.</p>
+    <nav class="pager"><a class="prev" href="skills.html"><span>Previous</span><b>Skills</b></a><a class="next" href="parallel.html"><span>Next</span><b>Parallel execution</b></a></nav>
+  </main>
+  <aside class="doctoc">
+    <div class="doctoc-sticky">
+      <h6>On this page</h6>
+      <nav id="tocNav">
+        <a href="#vision">Vision &amp; perception</a>
+        <a href="#camera">The camera</a>
+        <a href="#hands">Local geometry</a>
+        <a href="#watching">Watching</a>
+        <a href="#yolo">Local detection — YOLO</a>
+        <a href="#sam3">Open-vocabulary — SAM 3</a>
+        <a href="#sam3-speed">What it actually costs</a>
+        <a href="#sam3-licence">Licence</a>
+        <a href="#honesty">How a tier is chosen</a>
+      </nav>
+    </div>
+  </aside>
+
+</div>
+
+<footer class="doc-foot">
+  <div>Ⓒ 2026 · Chahel Paatur · aether-robotics.com</div>
+  <div class="links">
+    <a href="index.html">Home</a>
+    <a href="docs.html">Docs</a>
+    <a href="usage.html">Usage</a>
+    <a href="https://github.com/ChahelPaatur/AETHER" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </div>
+</footer>
+
+<script src="docs.js?v=5.10.1" defer></script>
+</body>
+</html>

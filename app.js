@@ -31,7 +31,7 @@
   // ----- Taskbar progress: dashes light up based on which section is in view -----
   const tbProgress = document.getElementById("tbProgress");
   const dashes = tbProgress.querySelectorAll("i");
-  const trackedIds = ["home","overview","pipeline","features","arch","bench","install","integrations","builtby"];
+  const trackedIds = ["home","overview","pipeline","features","arch","bench","install","integrations"];
   function updateProgress() {
     let activeIdx = 0;
     const y = window.scrollY + window.innerHeight * 0.4;
@@ -101,14 +101,6 @@
         if (e.isIntersecting) { sfri.style.width = sfri.dataset.pct + "%"; }
       });
     }, { threshold: 0.4 }).observe(sfri);
-  }
-
-  // ----- Built By: click photo to colorize -----
-  const builtbyPhoto = document.getElementById("builtbyPhoto");
-  if (builtbyPhoto) {
-    builtbyPhoto.addEventListener("click", () => {
-      builtbyPhoto.classList.toggle("colored");
-    });
   }
   function tick() {
     const d = new Date();

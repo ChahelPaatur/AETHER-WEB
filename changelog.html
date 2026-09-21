@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="aether.css?v=3.9.7" />
+<link rel="stylesheet" href="aether.css?v=5.10.1" />
 </head>
 <body class="docpage">
 
@@ -47,6 +47,7 @@
         <a href="adapters.html">Auto-adapters</a>
         <a href="planning.html">NL planning</a>
         <a href="skills.html">Skills</a>
+        <a href="vision.html">Vision &amp; perception</a>
         <a href="parallel.html">Parallel execution</a>
         <a href="fdir.html">FDIR</a>
         <a href="mavlink.html">MAVLink</a>
@@ -77,7 +78,24 @@
     <table>
         <thead><tr><th>Version</th><th>Change</th></tr></thead>
         <tbody>
-          <tr><td><strong>3.9.5</strong></td><td>Universal sensor-noise fix: <code>drive_until_obstacle</code> halts on consecutive bad reads, not a lifetime count — tolerates motor-EMI bursts.</td></tr>
+          <tr><td><strong>5.10.1</strong></td><td>A detector that cannot run raises instead of returning “nothing seen”; a watcher refuses to start rather than examine a hundred frames with a broken one. MediaPipe Tasks API supported alongside <code>solutions</code>.</td></tr>
+          <tr><td>5.10.0</td><td>Continuous local sensing: conditions a local sense can decide are watched at ~10 Hz instead of iterated through an LLM.</td></tr>
+          <tr><td>5.9.1 – 5.9.5</td><td>MediaPipe hands as a local geometric tier — 21 landmarks, finger counts, gestures — plus the routing fix that made it actually get called, and deterministic verdicts used directly rather than handed to a model to judge.</td></tr>
+          <tr><td>5.9.0</td><td>Vision-driven pursuit: a goal can watch until it sees something.</td></tr>
+          <tr><td>5.8.1 – 5.8.6</td><td>Capability gating (tools register only when the hardware answers a real probe), a <code>[vision]</code> extra that announces itself, the camera path on every platform, and <code>describe_scene</code> no longer reported as a fault when it succeeded.</td></tr>
+          <tr><td>5.8.0</td><td>SAM 3 open-vocabulary detection via a hosted GPU endpoint: pixel masks, centroids, bearings and cross-frame identity.</td></tr>
+          <tr><td>5.7.0</td><td>Vision through the existing provider abstraction — <code>describe_scene</code> on any vision-capable provider.</td></tr>
+          <tr><td>5.6.x</td><td>Turn provenance, drive-rate calibration, proactive avoidance; stall detection that does not kill diagnosis.</td></tr>
+          <tr><td>5.5.0</td><td>Obstacle recovery, position held through failure, sensor power-sag diagnosis.</td></tr>
+          <tr><td>5.4.x</td><td>Closed-loop goal pursuit for autonomous mode; <code>AETHER_HOME</code> for every store.</td></tr>
+          <tr><td>5.3.0</td><td>Angle-accurate turning, continuous operation, sensor-sweep rendering.</td></tr>
+          <tr><td>5.0 – 5.2</td><td>Multi-provider LLM abstraction with free tiers; capability gating, security hardening and the plan cache.</td></tr>
+          <tr><td>4.5.x</td><td>Parallel autonomous execution with hard safety guards; reactive and observational sensing.</td></tr>
+          <tr><td>4.3.0</td><td>Vector retrieval over persistent memory, behind the <code>[rag]</code> extra.</td></tr>
+          <tr><td>4.2.0</td><td>Full-screen Textual TUI.</td></tr>
+          <tr><td>4.1.x</td><td>Local analytics with opt-in telemetry, behind a consent gate on every entrypoint.</td></tr>
+          <tr><td>4.0.0</td><td>Autonomous mode: LLM goal decomposition and the execution loop.</td></tr>
+          <tr><td>3.9.5</td><td>Universal sensor-noise fix: <code>drive_until_obstacle</code> halts on consecutive bad reads, not a lifetime count — tolerates motor-EMI bursts.</td></tr>
           <tr><td>3.9.4</td><td>Turn default <code>1.0 → 2.0 s</code>; boot-time ultrasonic health probe + richer wiring guidance.</td></tr>
           <tr><td>3.9.3</td><td>Continuous-motion primitives eliminate jitter; pulsed fallback for non-SunFounder adapters.</td></tr>
           <tr><td>3.9.1</td><td>Latency skip on clean multi-step objectives; approach-speed curve.</td></tr>
@@ -91,7 +109,7 @@
         <li>✓ Phase 1 — Reverse engineering: GPIO pin walk, <code>physical_map</code>, LLM control.</li>
         <li>✓ Phase 2 — Robot Genome: versioned <code>robot.json</code>, deterministic capabilities.</li>
         <li>✓ Phase 3 — Auto-adapter system: Tier 1/2/3; offline generation.</li>
-        <li>Phase 4 — Vision-language grounding: scene-grounded navigation <em>(in progress)</em>.</li>
+        <li>✓ Phase 4 — Vision-language grounding: four perception tiers (<a href="vision.html">camera/VLM, YOLO, MediaPipe hands, SAM 3</a>) and continuous local sensing.</li>
         <li>Phase 5 — Operational memory + sim-to-real action transfer.</li>
         <li>Phase 6 — Multi-robot coordination.</li>
       </ul>
@@ -119,6 +137,6 @@
   </div>
 </footer>
 
-<script src="docs.js?v=3.9.7" defer></script>
+<script src="docs.js?v=5.10.1" defer></script>
 </body>
 </html>
