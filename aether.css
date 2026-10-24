@@ -776,6 +776,11 @@
     align-items: center;
   }
   .install-copy { grid-column: 2; align-self: end; display: flex; flex-direction: column; gap: 24px; }
+  .install-logo {
+    position: absolute; top: clamp(28px, 3.4vw, 56px); left: var(--pad-x);
+    width: clamp(170px, 15vw, 260px); height: auto;
+    color: #0a0a0a;
+  }
   .install-copy p { font-size: var(--t-body); line-height: 1.55; max-width: 30em; }
   .install-actions { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 4px; }
   .install .text-link:hover { color: inherit; text-decoration-thickness: 2px; }
