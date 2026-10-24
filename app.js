@@ -1,66 +1,83 @@
-  // ----- Reveal on scroll -----
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+// ===== AETHER landing — page behaviour =====
+(function () {
+  "use strict";
+  document.documentElement.classList.add("js");
 
-  // ----- Taskbar interactions -----
+  // ----- Reveal on scroll: whatever arrives together rises in sequence -----
+  // Checked against position rather than IntersectionObserver, so content a
+  // fast scroll or an anchor jump skips over is never left hidden.
+  let pending = Array.from(document.querySelectorAll(".reveal"));
+  let revealQueued = false;
+  function revealArrived() {
+    revealQueued = false;
+    const line = window.innerHeight * 0.92;
+    const batch = [];
+    pending = pending.filter((el) => {
+      if (el.getBoundingClientRect().top < line) { batch.push(el); return false; }
+      return true;
+    });
+    batch.forEach((el, i) => {
+      el.style.setProperty("--d", Math.min(i, 5) * 80 + "ms");
+      el.classList.add("in");
+    });
+    if (!pending.length) window.removeEventListener("scroll", queueReveal);
+  }
+  function queueReveal() {
+    if (!revealQueued) { revealQueued = true; requestAnimationFrame(revealArrived); }
+  }
+  window.addEventListener("scroll", queueReveal, { passive: true });
+  window.addEventListener("resize", queueReveal);
+  revealArrived();
+
+  // ----- Taskbar: home + menu -----
   const taskbar = document.getElementById("taskbar");
   const menuBtn = document.getElementById("tb-menu");
   const homeBtn = document.getElementById("tb-home");
   const menuSheet = document.getElementById("menuSheet");
   let menuOpen = false;
+  function setMenu(open) {
+    menuOpen = open;
+    menuSheet.classList.toggle("open", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+  }
   menuBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    menuOpen = !menuOpen;
-    menuSheet.classList.toggle("open", menuOpen);
+    setMenu(!menuOpen);
+    if (menuOpen) menuSheet.querySelector("a").focus({ preventScroll: true });
   });
   homeBtn.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if (menuOpen) { menuOpen = false; menuSheet.classList.remove("open"); }
+    setMenu(false);
   });
   document.addEventListener("click", (e) => {
-    if (menuOpen && !menuSheet.contains(e.target) && e.target !== menuBtn) {
-      menuOpen = false; menuSheet.classList.remove("open");
-    }
+    if (menuOpen && !menuSheet.contains(e.target) && e.target !== menuBtn) setMenu(false);
   });
-  menuSheet.querySelectorAll("a").forEach((a) => {
-    a.addEventListener("click", () => { menuOpen = false; menuSheet.classList.remove("open"); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menuOpen) { setMenu(false); menuBtn.focus(); }
   });
+  menuSheet.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
 
   // ----- Taskbar progress: dashes light up based on which section is in view -----
-  const tbProgress = document.getElementById("tbProgress");
-  const dashes = tbProgress.querySelectorAll("i");
-  const trackedIds = ["home","overview","pipeline","features","arch","bench","install","integrations"];
+  const dashes = document.querySelectorAll("#tbProgress i");
+  const trackedIds = ["home", "overview", "how", "safety", "arch", "bench", "integrations", "install", "contact"];
+  const tracked = trackedIds.map((id) => document.getElementById(id)).filter(Boolean);
   function updateProgress() {
     let activeIdx = 0;
     const y = window.scrollY + window.innerHeight * 0.4;
-    trackedIds.forEach((id, i) => {
-      const el = document.getElementById(id);
-      if (el && el.offsetTop <= y) activeIdx = i;
-    });
+    tracked.forEach((el, i) => { if (el.getBoundingClientRect().top + window.scrollY <= y) activeIdx = i; });
     dashes.forEach((d, i) => d.classList.toggle("on", i <= activeIdx));
   }
   window.addEventListener("scroll", updateProgress, { passive: true });
   updateProgress();
 
-  // ----- Taskbar hide on scroll-down, show on scroll-up -----
+  // ----- Taskbar hides on scroll-down, returns on scroll-up -----
   let lastY = 0;
   window.addEventListener("scroll", () => {
     const y = window.scrollY;
-    if (y > 200 && y > lastY + 6) taskbar.classList.add("hidden");
+    if (y > 200 && y > lastY + 6 && !menuOpen) taskbar.classList.add("hidden");
     else if (y < lastY - 6) taskbar.classList.remove("hidden");
     lastY = y;
   }, { passive: true });
-
-  // ----- Feature card cursor-tracking radial -----
-  document.querySelectorAll(".feat").forEach((card) => {
-    card.addEventListener("mousemove", (e) => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100) + "%");
-      card.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100) + "%");
-    });
-  });
 
   // ----- Hero mask-hover: sharp text follows cursor, blurred elsewhere -----
   const heroTitle = document.getElementById("heroTitle");
@@ -93,34 +110,17 @@
     });
   }
 
-  // ----- SFRI bar animate -----
-  const sfri = document.getElementById("sfri-fill");
-  if (sfri) {
-    new IntersectionObserver((es) => {
-      es.forEach((e) => {
-        if (e.isIntersecting) { sfri.style.width = sfri.dataset.pct + "%"; }
-      });
-    }, { threshold: 0.4 }).observe(sfri);
-  }
-  function tick() {
-    const d = new Date();
-    const pad = (n) => String(n).padStart(2, "0");
-    document.getElementById("clock").textContent =
-      pad(d.getHours()) + " : " + pad(d.getMinutes()) + " : " + pad(d.getSeconds()) + " · UTC" + (-d.getTimezoneOffset()/60);
-  }
-  tick(); setInterval(tick, 1000);
-
-  // ----- Hide placeholders once user mounts three.js -----
-  const heroSlot = document.getElementById("three-hero");
-  const archSlot = document.getElementById("three-scene");
-  const archPlaceholder = document.getElementById("three-placeholder");
-  const heroGrid = document.querySelector(".hero-dither");
-  new MutationObserver(() => {
-    if (heroSlot && heroSlot.childNodes.length > 0 && heroGrid) {
-      heroGrid.style.opacity = "0";
-    }
-    if (archSlot && archSlot.childNodes.length > 0 && archPlaceholder) {
-      archPlaceholder.style.opacity = "0";
-      archPlaceholder.style.pointerEvents = "none";
-    }
-  }).observe(document.body, { childList: true, subtree: true });
+  // ----- Copy buttons -----
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const label = btn.textContent;
+      const done = (ok) => {
+        btn.textContent = ok ? "Copied" : "Couldn't copy";
+        setTimeout(() => { btn.textContent = label; }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(btn.dataset.copy).then(() => done(true), () => done(false));
+      } else { done(false); }
+    });
+  });
+})();

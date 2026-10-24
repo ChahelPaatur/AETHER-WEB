@@ -4,70 +4,79 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="index, follow" />
-<meta name="description" content="AETHER — Adaptive Embodied Task Hierarchy for Executable Robotics. A modular framework for intelligent robotic task planning and execution." />
+<meta name="description" content="AETHER — Adaptive Embodied Task Hierarchy for Executable Robotics. An operating system for robots: it finds every motor and sensor, turns plain English into hardware actions, and recovers from faults on its own." />
 <link rel="canonical" href="https://aether-robotics.com/" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <title>AETHER · Adaptive Embodied Task Hierarchy for Executable Robotics</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<!-- Wordmark = Geist Bold (heavy grotesk, closest free match to Dragonfly's custom display).
-     Body/labels = Geist Mono. Italic flourishes = Instrument Serif. -->
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="aether.css?v=5.10.1" />
+<!-- Archivo Expanded for headlines; Geist for text; Doto (dot matrix) only for numbers and small
+     readouts; Geist Mono for terminal output and code; Instrument Serif for the hero corner letters. -->
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif&family=Doto:wght@900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="aether.css?v=6.6.1" />
+<script src="loader.js?v=6.6.1"></script>
 </head>
-<body>
+<body class="landing">
 
-<!-- ====== TASKBAR (exact dragonfly chrome: scope · progress · menu) ====== -->
+<!-- ====== LOADER · the AR mark pops, then the wordmark slides out of it (shown once per visit; see loader.js) ====== -->
+<div class="loader" id="loader" aria-hidden="true">
+  <svg class="loader-logo" viewBox="193 383 4485 1140">
+    <defs><clipPath id="loader-clip"><rect x="1740" y="380" width="3000" height="1160"/></clipPath></defs>
+    <g clip-path="url(#loader-clip)"><path class="loader-word" fill="#fff" d="M2220.11713061376 826.5608642350214H2063.9384800530866L2038.9022078258033 900.4774774774774H1932.2L2083.6098368030953 482.0140702500252H2201.637977303146L2353.047814106241 900.4774774774774H2245.1534028410433ZM2193.8886549470817 747.8754372349877 2142.027805333423 594.6772952728008 2090.763057439462 747.8754372349877ZM2716.6698631215486 758.6052681895378H2485.9784975987222Q2488.362904477511 789.6025576137935 2505.9479052085794 805.9953549054671Q2523.5329059396477 822.3881521971408 2549.165279886628 822.3881521971408Q2587.315789947251 822.3881521971408 2602.218332939681 790.1986593334907H2710.708845924576Q2702.363421848815 822.984253916838 2680.6057090798663 849.212729583516Q2658.8479963109176 875.4412052501939 2626.0624017275704 890.3437482426245Q2593.276807144223 905.2462912350552 2552.7418902048116 905.2462912350552Q2503.861549189639 905.2462912350552 2465.7110391290166 884.3827310456522Q2427.5605290683943 863.5191708562494 2406.1008671592945 824.7725590759297Q2384.641205250194 786.0259472956101 2384.641205250194 734.1650976819515Q2384.641205250194 682.304248068293 2405.8028162994456 643.5576362879733Q2426.964427348697 604.8110245076537 2465.1149374093193 583.9474643182507Q2503.265447469942 563.0839041288478 2552.7418902048116 563.0839041288478Q2601.026129500287 563.0839041288478 2638.5805378412124 583.3513625985536Q2676.1349461821374 603.6188210682592 2697.2965572313888 641.1732294091844Q2718.45816828064 678.7276377501096 2718.45816828064 728.8001822046765Q2718.45816828064 743.1066234774099 2716.6698631215486 758.6052681895378ZM2614.140367333626 701.9756048183013Q2614.140367333626 675.7471291516234 2596.2573157427087 660.2484844394955Q2578.374264151792 644.7498397273678 2551.549686765417 644.7498397273678Q2525.9173128184366 644.7498397273678 2508.3323120873683 659.6523827197984Q2490.7473113563 674.554925712229 2486.5745993184196 701.9756048183013ZM2963.4559750761996 814.0427281213797V900.4774774774774H2911.595125462541Q2856.157665530699 900.4774774774774 2825.1603761064434 873.3548492312536Q2794.163086682188 846.2322209850298 2794.163086682188 784.8337438562156V652.4991620834317H2753.6281697427767V567.8527178864256H2794.163086682188V486.782884007603H2896.0964807504133V567.8527178864256H2962.8598733565027V652.4991620834317H2896.0964807504133V786.0259472956101Q2896.0964807504133 800.9284902880407 2903.24970138678 807.4856092047103Q2910.402922023147 814.0427281213797 2927.093770174669 814.0427281213797ZM3356.883110076368 706.148316856182V900.4774774774774H3255.54581772784V719.8586564092182Q3255.54581772784 686.4769601061735 3238.258867856621 667.9978067955594Q3220.971917985401 649.5186534849455 3191.762933720237 649.5186534849455Q3162.553949455073 649.5186534849455 3145.2669995838532 667.9978067955594Q3127.980049712634 686.4769601061735 3127.980049712634 719.8586564092182V900.4774774774774H3026.0466556444085V459.3622049015307H3127.980049712634V612.5603468637175Q3143.4786944247617 590.5045832349202 3170.303271811137 577.3903454015813Q3197.127849197512 564.2761075682423 3230.5095455005567 564.2761075682423Q3287.7353105914904 564.2761075682423 3322.3092103339295 602.1285667690161Q3356.883110076368 639.9810259697899 3356.883110076368 706.148316856182ZM3745.5414313189594 758.6052681895378H3514.850065796133Q3517.234472674922 789.6025576137935 3534.8194734059903 805.9953549054671Q3552.4044741370585 822.3881521971408 3578.036848084039 822.3881521971408Q3616.1873581446616 822.3881521971408 3631.089901137092 790.1986593334907H3739.580414121987Q3731.234990046226 822.984253916838 3709.477277277277 849.212729583516Q3687.7195645083284 875.4412052501939 3654.9339699249813 890.3437482426245Q3622.1483753416337 905.2462912350552 3581.6134584022225 905.2462912350552Q3532.73311738705 905.2462912350552 3494.5826073264275 884.3827310456522Q3456.432097265805 863.5191708562494 3434.9724353567053 824.7725590759297Q3413.512773447605 786.0259472956101 3413.512773447605 734.1650976819515Q3413.512773447605 682.304248068293 3434.6743844968564 643.5576362879733Q3455.835995546108 604.8110245076537 3493.98650560673 583.9474643182507Q3532.137015667353 563.0839041288478 3581.6134584022225 563.0839041288478Q3629.897697697698 563.0839041288478 3667.4521060386232 583.3513625985536Q3705.006514379548 603.6188210682592 3726.1681254287996 641.1732294091844Q3747.329736478051 678.7276377501096 3747.329736478051 728.8001822046765Q3747.329736478051 743.1066234774099 3745.5414313189594 758.6052681895378ZM3643.0119355310367 701.9756048183013Q3643.0119355310367 675.7471291516234 3625.1288839401195 660.2484844394955Q3607.245832349203 644.7498397273678 3580.421254962828 644.7498397273678Q3554.7888810158474 644.7498397273678 3537.203880284779 659.6523827197984Q3519.618879553711 674.554925712229 3515.4461675158304 701.9756048183013ZM4013.1911034630134 564.2761075682423V672.17051883344H3985.1743226372437Q3947.0238125766214 672.17051883344 3927.9485575463104 688.5633161251137Q3908.873302515999 704.9561134167875 3908.873302515999 746.0871320758961V900.4774774774774H3806.9399084477736V567.8527178864256H3908.873302515999V623.2901778182677Q3926.7563541069158 595.8694987121953 3953.580931493291 580.0728031402189Q3980.405508879666 564.2761075682423 4013.1911034630134 564.2761075682423ZM2173.0250947576787 1483.0 2085.994243681884 1325.0330442802353H2061.5540731742976V1483.0H1959.6206791060724V1064.536592772548H2130.701872659176Q2180.1783153940455 1064.536592772548 2215.050265996333 1081.8235426437675Q2249.922216598621 1099.110492514987 2267.2091664698405 1129.2136293596968Q2284.49611634106 1159.3167662044066 2284.49611634106 1196.2750728256347Q2284.49611634106 1238.0021932044403 2260.9500984130195 1270.7877877877877Q2237.404080484979 1303.5733823711353 2191.504248068293 1317.2837219241715L2288.0727266592435 1483.0ZM2061.5540731742976 1252.904736196871H2124.740855462204Q2152.757636287973 1252.904736196871 2166.7660267008578 1239.1943966438348Q2180.774417113743 1225.4840570907986 2180.774417113743 1200.4477848635152Q2180.774417113743 1176.6037160756262 2166.7660267008578 1162.8933765225902Q2152.757636287973 1149.183036969554 2124.740855462204 1149.183036969554H2061.5540731742976ZM2333.97255907593 1316.6876202044741Q2333.97255907593 1265.4228723105127 2356.6244244244244 1226.3782096703444Q2379.276289772919 1187.3335470301763 2418.6190032729355 1166.4699868407733Q2457.9617167729525 1145.6064266513704 2506.842057788125 1145.6064266513704Q2555.7223988032974 1145.6064266513704 2595.0651123033144 1166.4699868407733Q2634.4078258033314 1187.3335470301763 2657.059691151826 1226.3782096703444Q2679.7115565003205 1265.4228723105127 2679.7115565003205 1316.6876202044741Q2679.7115565003205 1367.9523680984355 2656.7616402919775 1406.9970307386038Q2633.811724083634 1446.041693378772 2594.1709597237686 1466.9052535681749Q2554.530195363903 1487.7688137575778 2505.6498543487305 1487.7688137575778Q2456.7695133335583 1487.7688137575778 2417.72485069339 1466.9052535681749Q2378.6801880532216 1446.041693378772 2356.326373564576 1407.2950815984523Q2333.97255907593 1368.5484698181328 2333.97255907593 1316.6876202044741ZM2575.989857273003 1316.6876202044741Q2575.989857273003 1276.74880498476 2556.020449663146 1255.28914307566Q2536.051042053289 1233.8294811665598 2506.842057788125 1233.8294811665598Q2477.036971803264 1233.8294811665598 2457.365615053255 1254.9910922158115Q2437.694258303247 1276.1527032650629 2437.694258303247 1316.6876202044741Q2437.694258303247 1356.6264354241882 2457.0675641934067 1378.0860973332883Q2476.4408700835666 1399.5457592423884 2505.6498543487305 1399.5457592423884Q2534.8588386138945 1399.5457592423884 2555.424347943449 1378.0860973332883Q2575.989857273003 1356.6264354241882 2575.989857273003 1316.6876202044741ZM2944.380720045888 1145.6064266513704Q2985.511738704997 1145.6064266513704 3018.8934350080413 1166.4699868407733Q3052.2751313110857 1187.3335470301763 3071.6484372012455 1226.080158810496Q3091.0217430914054 1264.8267705908156 3091.0217430914054 1316.091518484777Q3091.0217430914054 1367.3562663787384 3071.6484372012455 1406.4009290189065Q3052.2751313110857 1445.4455916590748 3018.8934350080413 1466.6072027083264Q2985.511738704997 1487.7688137575778 2944.380720045888 1487.7688137575778Q2909.2107185837517 1487.7688137575778 2882.9822429170736 1473.760423344693Q2856.753767250396 1459.7520329318081 2841.8512242579654 1436.5040658636165V1483.0H2739.91783018974V1041.8847274240534H2841.8512242579654V1197.467276265029Q2856.157665530699 1174.2193091968375 2882.982242917074 1159.912867924104Q2909.806820303449 1145.6064266513704 2944.380720045888 1145.6064266513704ZM2913.9795323413296 1234.425582886257Q2883.5783446367714 1234.425582886257 2862.41673358752 1256.4813465150544Q2841.255122538268 1278.5371101438518 2841.255122538268 1316.6876202044741Q2841.255122538268 1354.8381302650967 2862.41673358752 1376.893893893894Q2883.5783446367714 1398.9496575226913 2913.9795323413296 1398.9496575226913Q2944.380720045888 1398.9496575226913 2965.8403819549885 1376.5958430340452Q2987.3000438640884 1354.2420285453993 2987.3000438640884 1316.091518484777Q2987.3000438640884 1277.9410084241545 2966.138432814837 1256.1832956552057Q2944.9768217655856 1234.425582886257 2913.9795323413296 1234.425582886257ZM3130.364456591423 1316.6876202044741Q3130.364456591423 1265.4228723105127 3153.0163219399174 1226.3782096703444Q3175.668187288412 1187.3335470301763 3215.0109007884284 1166.4699868407733Q3254.3536142884454 1145.6064266513704 3303.233955303618 1145.6064266513704Q3352.1142963187904 1145.6064266513704 3391.4570098188074 1166.4699868407733Q3430.7997233188244 1187.3335470301763 3453.451588667319 1226.3782096703444Q3476.1034540158134 1265.4228723105127 3476.1034540158134 1316.6876202044741Q3476.1034540158134 1367.9523680984355 3453.1535378074705 1406.9970307386038Q3430.203621599127 1446.041693378772 3390.5628572392616 1466.9052535681749Q3350.922092879396 1487.7688137575778 3302.0417518642234 1487.7688137575778Q3253.161410849051 1487.7688137575778 3214.116748208883 1466.9052535681749Q3175.0720855687146 1446.041693378772 3152.718271080069 1407.2950815984523Q3130.364456591423 1368.5484698181328 3130.364456591423 1316.6876202044741ZM3372.381754788496 1316.6876202044741Q3372.381754788496 1276.74880498476 3352.412347178639 1255.28914307566Q3332.442939568782 1233.8294811665598 3303.233955303618 1233.8294811665598Q3273.428869318757 1233.8294811665598 3253.757512568748 1254.9910922158115Q3234.08615581874 1276.1527032650629 3234.08615581874 1316.6876202044741Q3234.08615581874 1356.6264354241882 3253.4594617088997 1378.0860973332883Q3272.8327675990595 1399.5457592423884 3302.0417518642234 1399.5457592423884Q3331.2507361293874 1399.5457592423884 3351.816245458942 1378.0860973332883Q3372.381754788496 1356.6264354241882 3372.381754788496 1316.6876202044741ZM3721.6973625310698 1396.5652506439023V1483.0H3669.8365129174113Q3614.399052985569 1483.0 3583.4017635613136 1455.8773717537763Q3552.404474137058 1428.7547435075526 3552.404474137058 1367.3562663787384V1235.0216846059543H3511.869557197647V1150.3752404089482H3552.404474137058V1069.3054065301258H3654.3378682052835V1150.3752404089482H3721.101260811373V1235.0216846059543H3654.3378682052835V1368.5484698181328Q3654.3378682052835 1383.4510128105635 3661.4910888416503 1390.008131727233Q3668.644309478017 1396.5652506439023 3685.335157629539 1396.5652506439023ZM3774.7504155841234 1060.9599824543645Q3774.7504155841234 1037.1159136664755 3791.7393145954943 1021.3192180944991Q3808.728213606865 1005.5225225225226 3835.5527909932403 1005.5225225225226Q3861.7812666599184 1005.5225225225226 3878.7701656712893 1021.3192180944991Q3895.75906468266 1037.1159136664755 3895.75906468266 1060.9599824543645Q3895.75906468266 1084.2079495225562 3878.7701656712893 1100.0046450945329Q3861.7812666599184 1115.8013406665093 3835.5527909932403 1115.8013406665093Q3808.728213606865 1115.8013406665093 3791.7393145954943 1100.0046450945329Q3774.7504155841234 1084.2079495225562 3774.7504155841234 1060.9599824543645ZM3886.2214371675045 1150.3752404089482V1483.0H3784.288043099279V1150.3752404089482ZM4112.74009065245 1145.6064266513704Q4175.330771220658 1145.6064266513704 4217.355942459312 1178.392021234718Q4259.381113697967 1211.1776158180653 4272.495351531306 1270.7877877877877H4164.004838546411Q4150.294498993375 1232.6372777271654 4110.951785493358 1232.6372777271654Q4082.935004667588 1232.6372777271654 4066.244156516066 1254.3949904961141Q4049.5533083645437 1276.1527032650629 4049.5533083645437 1316.6876202044741Q4049.5533083645437 1357.2225371438856 4066.244156516066 1378.980249912834Q4082.935004667588 1400.7379626817828 4110.951785493358 1400.7379626817828Q4150.294498993375 1400.7379626817828 4164.004838546411 1362.5874526211605H4272.495351531306Q4259.381113697967 1421.0054211514885 4217.057891599464 1454.3871174545332Q4174.734669500961 1487.7688137575778 4112.74009065245 1487.7688137575778Q4063.859749637277 1487.7688137575778 4026.0072904365034 1466.9052535681749Q3988.1548312357295 1446.041693378772 3966.993220186478 1407.2950815984523Q3945.8316091372267 1368.5484698181328 3945.8316091372267 1316.6876202044741Q3945.8316091372267 1264.8267705908156 3966.993220186478 1226.080158810496Q3988.1548312357295 1187.3335470301763 4026.0072904365034 1166.4699868407733Q4063.859749637277 1145.6064266513704 4112.74009065245 1145.6064266513704ZM4314.818573629809 1373.9133852954078H4415.55976425864Q4417.3480694177315 1391.2003351666274 4431.654510690465 1401.9301661211775Q4445.960951963199 1412.6599970757275 4466.8245121526015 1412.6599970757275Q4485.899767182913 1412.6599970757275 4496.331547277614 1405.2087255795122Q4506.763327372316 1397.7574540832968 4506.763327372316 1385.8354196893522Q4506.763327372316 1371.5289784166189 4491.860784379885 1364.6738086401008Q4476.958241387454 1357.8186388635827 4443.57654508441 1349.4732147878215Q4407.810441902576 1341.1277907120605 4383.966373114687 1331.8882140567534Q4360.122304326798 1322.6486374014464 4342.835354455578 1302.6792297915895Q4325.548404584359 1282.7098221817323 4325.548404584359 1248.7320241589905Q4325.548404584359 1220.1191416135237 4341.345100156335 1196.573123685483Q4357.141795728312 1173.0271057574428 4387.841034292719 1159.3167662044066Q4418.540272857126 1145.6064266513704 4460.863494955629 1145.6064266513704Q4523.454175523838 1145.6064266513704 4559.518329565521 1176.6037160756262Q4595.582483607202 1207.601005499882 4600.947399084477 1258.8657533938433H4506.763327372316Q4504.3789204935265 1241.5788035226237 4491.562733520036 1231.445074287771Q4478.746546546546 1221.311345052918 4457.882986357143 1221.311345052918Q4439.999934766226 1221.311345052918 4430.462307251071 1228.1665148294362Q4420.924679735916 1235.0216846059543 4420.924679735916 1246.943718999899Q4420.924679735916 1261.2501602726322 4436.125273588194 1268.4033809089988Q4451.325867440473 1275.5566015453655 4483.5153603041235 1282.7098221817323Q4520.473666925352 1292.247449696888 4543.721633993544 1301.4870263521948Q4566.969601061735 1310.7266030075018 4584.554601792804 1331.292112337056Q4602.139602523872 1351.8576216666104 4602.735704243569 1386.4315214090495Q4602.735704243569 1415.6405056742135 4586.342906951895 1438.5904218825567Q4569.950109660222 1461.5403380909 4539.250871095815 1474.654575924239Q4508.551632531407 1487.7688137575778 4468.016715591996 1487.7688137575778Q4424.501290054099 1487.7688137575778 4390.523492031357 1472.8662707651472Q4356.545694008615 1457.9637277727165 4336.874337258607 1432.0333029658873Q4317.202980508598 1406.102878159058 4314.818573629809 1373.9133852954078Z"/></g>
+    <path class="loader-mark" fill="#fff" fill-rule="evenodd" stroke="#000" stroke-width="90" stroke-linejoin="round" paint-order="stroke" d="M233 1483 L454 1483 L582 1243 L922 1243 L923 1483 L1133 1483 L1134 1252 L1141 1254 L1431 1483 L1699 1483 L1528 1326 L1210 1076 L1211 1071 L1616 1070 L1632 1061 L1284 423 L928 426 L921 423 L787 423 Z M922 623 L923 1066 L677 1067 L676 1062 L907 624 Z M1134 599 L1142 604 L1299 890 L1301 901 L1134 900 Z"/>
+  </svg>
+  <i class="loader-bar"></i>
+</div>
+
+<!-- ====== TASKBAR (scope · progress · menu) ====== -->
 <div class="tb-ticks l"><span>+</span></div>
 <div class="tb-ticks r"><span>+</span></div>
-<nav class="taskbar" id="taskbar">
-  <div class="tb-cell" id="tb-home" title="Home">
-    <span class="tb-scope"><span>&gt;</span><span>|</span><span>&lt;</span></span>
-  </div>
-  <div class="tb-cell" id="tb-progress" title="Section">
+<nav class="taskbar" id="taskbar" aria-label="Main">
+  <button type="button" class="tb-cell" id="tb-home" title="Back to top" aria-label="Back to top">
+    <span class="tb-scope" aria-hidden="true"><span>&gt;</span><span>|</span><span>&lt;</span></span>
+  </button>
+  <div class="tb-cell" id="tb-progress" aria-hidden="true">
     <span class="tb-progress" id="tbProgress">
       <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
     </span>
   </div>
-  <div class="tb-cell tb-menu" id="tb-menu" title="Menu">MENU</div>
+  <button type="button" class="tb-cell tb-menu" id="tb-menu" aria-expanded="false" aria-controls="menuSheet">MENU</button>
 </nav>
 <div class="menu-sheet" id="menuSheet">
-  <a href="#home"><span>Home</span><span class="idx">00</span></a>
-  <a href="#overview"><span>Overview</span><span class="idx">01</span></a>
-  <a href="#pipeline"><span>Pipeline</span><span class="idx">02</span></a>
-  <a href="#features"><span>Features</span><span class="idx">03</span></a>
-  <a href="#arch"><span>Architecture</span><span class="idx">04</span></a>
-  <a href="#bench"><span>Benchmarks</span><span class="idx">05</span></a>
-  <a href="#install"><span>Install</span><span class="idx">06</span></a>
-  <a href="#integrations"><span>Integrations</span><span class="idx">07</span></a>
+  <a href="#overview">Overview</a>
+  <a href="#how">How it works</a>
+  <a href="#safety">Fault recovery</a>
+  <a href="#arch">Architecture</a>
+  <a href="#bench">Benchmarks</a>
+  <a href="#integrations">Models</a>
+  <a href="#install">Install</a>
   <div class="menu-div"></div>
-  <a href="docs.html" class="menu-doc"><span>Docs</span><span class="idx">↗</span></a>
-  <a href="usage.html" class="menu-doc"><span>Usage</span><span class="idx">↗</span></a>
+  <a href="docs.html" class="menu-doc">Documentation <span aria-hidden="true">↗</span></a>
+  <a href="usage.html" class="menu-doc">Usage <span aria-hidden="true">↗</span></a>
 </div>
 
-<!-- ====== HERO · Dragonfly-exact: orange wordmark, black bg, corner letters ====== -->
+<!-- ====== HERO ====== -->
 <header class="hero" id="home" data-screen-label="01 Home">
-  <!-- THREE.JS MOUNT · replace dither below with your scene -->
   <div id="three-hero"></div>
   <div class="hero-dither" aria-hidden="true"></div>
 
-  <!-- Corner letters: A E E R (matches dragonfly's D F L Y motif) -->
-  <span class="corner tl">A</span>
-  <span class="corner tr">E</span>
-  <span class="corner bl">E</span>
-  <span class="corner br">R</span>
+  <!-- Corner letters: A E E R -->
+  <span class="corner tl" aria-hidden="true">A</span>
+  <span class="corner tr" aria-hidden="true">E</span>
+  <span class="corner bl" aria-hidden="true">E</span>
+  <span class="corner br" aria-hidden="true">R</span>
 
-  <!-- Registration `+` marks scattered (very faint, like film registration) -->
-  <span class="reg" style="top: 28%; left: 18%;">+</span>
-  <span class="reg" style="top: 22%; right: 22%;">+</span>
-  <span class="reg" style="bottom: 30%; left: 24%;">+</span>
-  <span class="reg" style="bottom: 24%; right: 18%;">+</span>
-  <span class="reg" style="top: 50%; left: 8%;">+</span>
-  <span class="reg" style="top: 50%; right: 8%;">+</span>
+  <!-- Registration `+` marks -->
+  <span class="reg" aria-hidden="true" style="top: 28%; left: 18%;">+</span>
+  <span class="reg" aria-hidden="true" style="top: 22%; right: 22%;">+</span>
+  <span class="reg" aria-hidden="true" style="bottom: 30%; left: 24%;">+</span>
+  <span class="reg" aria-hidden="true" style="bottom: 24%; right: 18%;">+</span>
+  <span class="reg" aria-hidden="true" style="top: 50%; left: 8%;">+</span>
+  <span class="reg" aria-hidden="true" style="top: 50%; right: 8%;">+</span>
 
   <!-- Live system pill -->
-  <div class="live-pill" id="livePill">
+  <div class="live-pill" id="livePill" aria-hidden="true">
     <span class="live-dot"></span>
     <span>FDIR LOOP</span>
     <span class="live-sep">|</span>
@@ -76,376 +85,283 @@
     <span>v5.10.1</span>
   </div>
 
-  <div class="hero-title" id="heroTitle">
+  <h1 class="hero-title" id="heroTitle">
+    <span class="sr-only">AETHER, an operating system for robots</span>
     <span class="layer layer-spacer" aria-hidden="true">AETHER</span>
     <span class="mask-blur" aria-hidden="true">
       <span class="layer">AETHER</span>
     </span>
-    <span class="mask-sharp" aria-label="AETHER">
+    <span class="mask-sharp" aria-hidden="true">
       <span class="layer" id="heroSharp">
         <span class="char" style="animation-delay:0.00s">A</span><span class="char" style="animation-delay:0.06s">E</span><span class="char" style="animation-delay:0.12s">T</span><span class="char" style="animation-delay:0.18s">H</span><span class="char" style="animation-delay:0.24s">E</span><span class="char" style="animation-delay:0.30s">R</span>
       </span>
     </span>
-  </div>
+  </h1>
 
   <a class="hero-cta" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener">Install now</a>
 </header>
 
-<!-- ====== 01 OVERVIEW (LIGHT) ====== -->
-<section class="block light tower-right" id="overview" data-screen-label="02 Overview">
-  <div class="section-logo"><img src="logo-white.png" alt="Aether" /></div>
-  <div class="light-bg" id="lightBg-overview"><div class="light-bg-sticky"></div></div>
-  <div class="section-head reveal">
-    <div class="section-num">01 &nbsp;·&nbsp; Overview</div>
-    <h2 class="section-title">A robotics stack <span class="ital">that heals itself.</span></h2>
+<main>
+
+<!-- ====== PLUG IT IN (light · your controller or the AETHER board) ====== -->
+<section class="block light plain" id="overview" data-screen-label="02 Overview">
+  <div class="feature-head reveal">
+    <h2 class="feat-title">Plug it in. Tell it what to do. <span>Run AETHER on the microcontroller you already have, like a Raspberry Pi 4, or on the AETHER board. Either way it maps every motor and sensor on first run.</span></h2>
+    <a class="feat-link" href="docs.html">Read the overview <span aria-hidden="true">→</span></a>
   </div>
 
-  <div class="overview-grid">
-    <div class="reveal">
-      <p class="overview-lede">Plug in your robot. Type what you want. AETHER <em>finds every sensor and motor,</em> writes the code to drive them, and the FDIR layer keeps it safe.</p>
-    </div>
-    <div class="reveal overview-body" style="transition-delay:0.1s">
-      <p>AETHER is a prompt-driven robotics framework. The discovery layer auto-detects every connected device · cameras, GPIO motors, flight controllers, I²C sensors. The Claude API turns your prompt into a working program against the real hardware manifest.</p>
-      <p>The PPO-based FDIR layer is the safety net: it watches every loop in real time and recovers from faults the moment they appear · drift, stuck motors, sensor failure. The net learns, the rules backstop.</p>
-      <div class="pill-row">
-        <span class="pill accent">Prompt-driven</span>
-        <span class="pill">Auto-discovery</span>
-        <span class="pill">Claude-powered</span>
-        <span class="pill">FDIR-safe</span>
+  <div class="duo">
+    <div class="cli reveal" data-cli data-ui>
+      <div class="cli-bar" aria-hidden="true"><i></i><i></i><i></i><span>~ — aether</span></div>
+      <div class="cli-body">
+        <p class="cl"><span class="cl-p">~ %</span> <span class="cmd">aether --mode agent</span></p>
+        <svg class="cli-logo" viewBox="48 104 472 442" role="img" aria-label="AETHER robot logo"><rect x="77" y="108" width="439" height="22" fill="#4c5b6b"/><rect x="63" y="137" width="14" height="23" fill="#4c5b6b"/><rect x="77" y="137" width="411" height="23" fill="#df6f59"/><rect x="488" y="137" width="14" height="23" fill="#4c5b6b"/><rect x="50" y="166.0" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="166.0" width="55" height="24" fill="#df6f59"/><rect x="405" y="166.0" width="56" height="24" fill="#df6f59"/><rect x="461" y="166.0" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="195.4" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="195.4" width="55" height="24" fill="#df6f59"/><rect x="405" y="195.4" width="56" height="24" fill="#df6f59"/><rect x="461" y="195.4" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="224.8" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="224.8" width="55" height="24" fill="#df6f59"/><rect x="392" y="224.8" width="55" height="24" fill="#df6f59"/><rect x="447" y="224.8" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="254.2" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="254.2" width="55" height="24" fill="#df6f59"/><rect x="365" y="254.2" width="55" height="24" fill="#df6f59"/><rect x="420" y="254.2" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="283.6" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="283.6" width="55" height="24" fill="#df6f59"/><rect x="365" y="283.6" width="55" height="24" fill="#df6f59"/><rect x="420" y="283.6" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="313.0" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="313.0" width="55" height="24" fill="#df6f59"/><rect x="405" y="313.0" width="56" height="24" fill="#df6f59"/><rect x="461" y="313.0" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="342.4" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="342.4" width="55" height="24" fill="#df6f59"/><rect x="405" y="342.4" width="56" height="24" fill="#df6f59"/><rect x="461" y="342.4" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="371.8" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="371.8" width="55" height="24" fill="#df6f59"/><rect x="405" y="371.8" width="56" height="24" fill="#df6f59"/><rect x="461" y="371.8" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="401.2" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="401.2" width="55" height="24" fill="#df6f59"/><rect x="392" y="401.2" width="55" height="24" fill="#df6f59"/><rect x="447" y="401.2" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="430.6" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="430.6" width="55" height="24" fill="#df6f59"/><rect x="405" y="430.6" width="56" height="24" fill="#df6f59"/><rect x="461" y="430.6" width="14" height="24" fill="#4c5b6b"/><rect x="50" y="460.0" width="13" height="24" fill="#4c5b6b"/><rect x="63" y="460.0" width="55" height="24" fill="#df6f59"/><rect x="405" y="460.0" width="56" height="24" fill="#df6f59"/><rect x="461" y="460.0" width="14" height="24" fill="#4c5b6b"/><rect x="122" y="175" width="280" height="298" fill="none" stroke="#e9eef3" stroke-width="2.5"/><rect x="128" y="181" width="268" height="286" fill="none" stroke="#e9eef3" stroke-width="1.5"/><path d="M383 222V470M389 222V470" stroke="#e9eef3" stroke-width="2"/><rect x="175" y="195" width="50" height="10" fill="#df6f59"/><rect x="158" y="205" width="84" height="13" fill="#df6f59"/><rect x="300" y="195" width="50" height="10" fill="#df6f59"/><rect x="283" y="205" width="84" height="13" fill="#df6f59"/><rect x="145" y="226" width="221" height="22" fill="#df6f59"/><rect x="145" y="253" width="27" height="25" fill="#e9eef3"/><rect x="172" y="253" width="138" height="25" fill="#df6f59"/><rect x="310" y="253" width="28" height="25" fill="#e9eef3"/><rect x="145" y="283" width="15" height="25" fill="#e9eef3"/><rect x="160" y="283" width="26" height="25" fill="#4c5b6b"/><rect x="186" y="283" width="110" height="25" fill="#e9eef3"/><rect x="296" y="283" width="27" height="25" fill="#4c5b6b"/><rect x="323" y="283" width="15" height="25" fill="#e9eef3"/><rect x="158" y="313" width="84" height="13" fill="#df6f59"/><rect x="175" y="326" width="50" height="10" fill="#df6f59"/><rect x="283" y="313" width="84" height="13" fill="#df6f59"/><rect x="300" y="326" width="50" height="10" fill="#df6f59"/><rect x="131" y="354" width="262" height="10" fill="#4c5b6b"/><rect x="156" y="380" width="212" height="5" fill="#e9eef3"/><rect x="158" y="400" width="8" height="24" fill="#df6f59"/><rect x="344" y="400" width="8" height="24" fill="#df6f59"/><text x="255" y="420" text-anchor="middle" font-family="Geist, sans-serif" font-weight="700" font-size="21" fill="#df6f59">AETHER</text><rect x="156" y="438" width="212" height="5" fill="#e9eef3"/><rect x="63" y="490" width="14" height="23" fill="#4c5b6b"/><rect x="77" y="490" width="411" height="23" fill="#df6f59"/><rect x="488" y="490" width="14" height="23" fill="#4c5b6b"/><rect x="77" y="519" width="439" height="22" fill="#4c5b6b"/></svg>
+        <div class="cli-box"><span class="cli-legend">AETHER v5.12.1</span>
+          <p>Adaptive Embodied Task Hierarchy for Executable Robotics</p>
+          <p class="dim">DRL-First Hybrid FDIR · Multi-Agent · Self-Correcting</p>
+        </div>
+        <p class="cl dim" data-slow>Initializing autonomous systems <span class="cli-dots" aria-hidden="true"><i></i><i></i><i></i></span> <b class="hi">READY</b></p>
+        <p class="cl">[AutoUpdater] AETHER v5.12.1 — up to date</p>
+        <p class="cl in">[DISCOVERY] Using cached hardware profile (fingerprint match)</p>
+        <p class="cl in">[ToolRegistry] Registered 28 tools from ToolBuilder</p>
+        <p class="cl in">[MANIFEST] withheld from the planner [agent]: count_objects, yolo_detect — ultralytics is not installed, so no local object detection is possible</p>
+        <div class="cli-box cli-box--teal" data-slow><span class="cli-legend">AETHER v5.12.1</span>
+          <p>generic hardware · 39 tools · Capability 44/100</p>
+          <p>Provider: anthropic</p>
+          <p>Camera present (cv2, unverified — run `aether doctor` to take a real frame)</p>
+          <p>OLED unavailable · IMU unavailable</p>
+        </div>
+        <p class="cl"><span class="cl-p">objective&gt;</span> <span class="cursor" aria-hidden="true"></span></p>
       </div>
     </div>
+
+    <div class="panel panel-board reveal">
+      <!-- Your own picture: add <img class="shot-bg" src="your-picture.jpg" alt=""> as the first child of this div. -->
+      <div class="shot-scene" id="board-scene" aria-hidden="true"></div>
+      <div class="panel-label">
+        <b>Or use the AETHER board</b>
+        <span>Optional. Any microcontroller works.</span>
+      </div>
+      <p class="panel-note">Concept render · drag to turn</p>
+    </div>
   </div>
 
-  <div class="num-row reveal">
-    <div class="num-cell">
-      <div class="lbl">PPO Topology</div>
-      <div class="val">15→64→64→8</div>
-    </div>
-    <div class="num-cell">
-      <div class="lbl">Fault Classes</div>
-      <div class="val">8<sup>+</sup></div>
-    </div>
-    <div class="num-cell">
-      <div class="lbl">Detection Rate</div>
-      <div class="val">100<sup>%</sup></div>
-    </div>
-    <div class="num-cell">
-      <div class="lbl">SFRI Score</div>
-      <div class="val">62.4<sup>/70</sup></div>
+  <div class="ov-stats reveal">
+    <div class="ov-stat"><b>15</b><span>sensor channels read on every step</span></div>
+    <div class="ov-stat"><b>100%</b><span>of injected faults caught, 0 false positives</span></div>
+    <div class="ov-stat"><b>1.35</b><span>steps, mean time to recover</span></div>
+    <div class="ov-stat"><b>Pi 4</b><span>is all it needs. No GPU.</span></div>
+  </div>
+</section>
+
+<!-- ====== HOW IT WORKS (one robot, four boxed steps) ====== -->
+<section class="block how" id="how" data-screen-label="03 How it works">
+  <h2 class="h-display reveal">How it <em>works.</em></h2>
+  <p class="statement reveal">Four steps from plugging in to running safely. Same rover, one step further each time.</p>
+
+  <div class="how-wrap">
+  <div class="how-track" aria-hidden="true"><i></i></div>
+  <ol class="how-grid">
+    <li class="how-card reveal">
+      <div class="how-top"><span class="how-num" aria-hidden="true">01</span><span class="how-label">Discover</span></div>
+      <h3>It finds the hardware.</h3>
+      <p>Pulses every safe GPIO pin and asks what moved.</p>
+      <div class="ticket" data-ui>
+        <div class="ticket-head"><span>rover</span><span class="chip">calibrating</span></div>
+<pre><span class="m">$ aether --calibrate</span>
+<span class="m">walking BCM 4–27 …</span>
+pin 17  servo  steering
+pin 18  motor  left wheel
+pin 22  motor  right wheel
+pin 23  <span class="m">nothing moved</span>
+camera  picamera2</pre>
+      </div>
+    </li>
+    <li class="how-card reveal">
+      <div class="how-top"><span class="how-num" aria-hidden="true">02</span><span class="how-label">Describe</span></div>
+      <h3>It writes the genome.</h3>
+      <p>Your answers become a portable <code>robot.json</code>.</p>
+      <div class="ticket" data-ui>
+        <div class="ticket-head"><span>rover</span><span class="chip">calibrated</span></div>
+<pre><span class="m">Robot Genome</span>
+ID          f47ac10b…
+Locomotion  differential_drive
+Hash        a3f1d92e…
+<span class="m">Capabilities (6)</span>
+drive_forward  drive_backward
+turn_left      turn_right
+stop           emergency_stop</pre>
+      </div>
+    </li>
+    <li class="how-card reveal">
+      <div class="how-top"><span class="how-num" aria-hidden="true">03</span><span class="how-label">Plan</span></div>
+      <h3>It plans in plain English.</h3>
+      <p>The planner only sees what this robot can do.</p>
+      <div class="ticket" data-ui>
+        <div class="ticket-head"><span>rover</span><span class="chip">planning</span></div>
+<pre><span class="m">objective&gt;</span>
+move forward and stop about
+5 cm before the wall
+
+<span class="m">[PLAN] [LLM]</span>
+drive_until_obstacle
+  target_cm=5
+  max_speed=25</pre>
+      </div>
+    </li>
+    <li class="how-card reveal">
+      <div class="how-top"><span class="how-num" aria-hidden="true">04</span><span class="how-label">Run</span></div>
+      <h3>It runs, and keeps watch.</h3>
+      <p>Tools dispatch while the fault detector watches.</p>
+      <div class="ticket" data-ui>
+        <div class="ticket-head"><span>rover</span><span class="chip done">success</span></div>
+<pre><span class="m">[EXEC]</span> drive_until_obstacle
+<span class="m">[OK]</span>   success=True
+
+stop_reason
+"obstacle at 5.2 cm"
+stop_distance_cm  5.2</pre>
+      </div>
+    </li>
+  </ol>
+  </div>
+</section>
+
+<!-- ====== FAULT RECOVERY (light · tower on the left) ====== -->
+<section class="block light tower-left" id="safety" data-screen-label="04 Fault recovery">
+  <div class="light-bg" id="lightBg-safety" aria-hidden="true"><div class="light-bg-sticky"></div></div>
+
+  <div class="col">
+    <h2 class="h-display reveal">It catches its <em>own faults.</em></h2>
+    <p class="statement reveal">A PPO network reads a 15-channel sensor vector on every step and names the fault as it happens. Recovery puts the robot back in a safe state.</p>
+
+    <figure class="demo reveal">
+      <div class="console" id="fdirDemo" data-ui>
+        <div class="console-head">
+          <span class="console-title">aether <span class="dim">--mode realworld</span></span>
+          <span class="status" data-status role="status">nominal</span>
+        </div>
+        <canvas width="800" height="220" aria-label="Live sensor traces: wheel speed, yaw rate, battery voltage and range" role="img"></canvas>
+        <div class="console-controls">
+          <span class="controls-label" id="injectLabel">Inject a fault</span>
+          <div class="fault-btns" role="group" aria-labelledby="injectLabel">
+            <button type="button" class="fault-btn" data-fault="motor_stall" aria-pressed="false">Motor stall</button>
+            <button type="button" class="fault-btn" data-fault="imu_fault" aria-pressed="false">IMU drift</button>
+            <button type="button" class="fault-btn" data-fault="power_sag" aria-pressed="false">Battery sag</button>
+            <button type="button" class="fault-btn" data-fault="sensor_dropout" aria-pressed="false">Sensor dropout</button>
+          </div>
+        </div>
+<pre class="console-log" data-log aria-live="polite"><span class="t">step 4096</span>  FDIR online, 15-dim observation
+<span class="t">step 4097</span>  nominal
+<span class="t">step 4098</span>  nominal</pre>
+      </div>
+      <figcaption>Simulated in your browser. In sim mode, <code>--faults enabled</code> injects faults like these into the real loop.</figcaption>
+    </figure>
+
+    <div class="guards">
+      <h3 class="h-small reveal">Guards that don't learn</h3>
+      <dl class="guard-list">
+        <div class="reveal">
+          <dt>Motion always ends in a stop.</dt>
+          <dd>Every motion tool stops in a <code>finally</code> block; unbounded adapters are refused.</dd>
+        </div>
+        <div class="reveal">
+          <dt>One stop reaches every thread.</dt>
+          <dd>A global stop and a motor lock span every worker.</dd>
+        </div>
+        <div class="reveal">
+          <dt>Nothing runs as root.</dt>
+          <dd>A sudo blocker refuses every shell-out.</dd>
+        </div>
+        <div class="reveal">
+          <dt>Drones need five yeses.</dt>
+          <dd>Arm permission, pre-arm check, live sensors, 30 s idle disarm, e-stop.</dd>
+        </div>
+      </dl>
     </div>
   </div>
 </section>
 
-<!-- ====== 02 PIPELINE ====== -->
-<section class="block" id="pipeline" data-screen-label="03 Pipeline">
-  <div class="section-logo"><img src="logo-orange.png" alt="Aether" /></div>
-  <div class="section-head reveal">
-    <div class="section-num">02 &nbsp;·&nbsp; Pipeline</div>
-    <h2 class="section-title">Discover, build, plan, <span class="ital">execute.</span></h2>
+<!-- ====== FROM SENTENCE TO SERVO (a CLI session beside the live scene) ====== -->
+<section class="block arch" id="arch" data-screen-label="05 Architecture">
+  <div class="feature-head reveal">
+    <h2 class="feat-title">From sentence to servo. <span>Type an objective. The planner picks a tool the genome allows, the engine drives the right pins, and the fault agent watches every step.</span></h2>
+    <a class="feat-link" href="architecture.html">Read the architecture <span aria-hidden="true">→</span></a>
   </div>
 
-  <div class="pipeline reveal">
-    <div class="stage">
-      <span class="stage-num">01 / Discover</span>
-      <div class="stage-glyph">
-        <span class="badge">RADAR · SCAN</span>
-        <span class="readout">7 DEV</span>
-        <div class="stage-canvas" id="stage-c1"></div>
-        <span class="br"></span>
-      </div>
-      <h3>Auto-discovery <span class="ital">at startup.</span></h3>
-      <p>ToolDiscovery probes for cameras, GPIO pins, flight controllers, I²C sensors, network interfaces and AI models. No config files required.</p>
-      <div class="stage-tags">
-        <span class="stage-tag">OpenCV</span>
-        <span class="stage-tag">RPi.GPIO</span>
-        <span class="stage-tag">MAVLink</span>
-        <span class="stage-tag">YOLOv8</span>
-      </div>
-    </div>
-
-    <div class="stage">
-      <span class="stage-num">02 / Build</span>
-      <div class="stage-glyph">
-        <span class="badge">ASSEMBLE · STACK</span>
-        <span class="readout">6/6 OK</span>
-        <div class="stage-canvas" id="stage-c2"></div>
-        <span class="br"></span>
-      </div>
-      <h3>Capability <span class="ital">manifest.</span></h3>
-      <p>ToolBuilder constructs only the tools that will actually work on the present hardware. Everything downstream is gated on this manifest.</p>
-      <div class="stage-tags">
-        <span class="stage-tag">Manifest</span>
-        <span class="stage-tag">Static checks</span>
-        <span class="stage-tag">Capability gates</span>
+  <div class="duo">
+    <div class="cli reveal" data-agent data-ui>
+      <div class="cli-bar" aria-hidden="true"><i></i><i></i><i></i><span>~ — aether --mode agent</span></div>
+      <div class="cli-body">
+        <div class="cli-box cli-box--teal cli-box--top"><span class="cli-legend">AETHER v5.12.1</span>
+          <p>rover · differential_drive · 6 capabilities</p>
+          <p>Provider: anthropic</p>
+        </div>
+        <p class="cl" data-step="prompt"><span class="cl-p">objective&gt;</span> <span data-prompt>move forward and stop about 5 cm before the wall</span></p>
+        <p class="cl" data-step="plan"><span class="tag tag-plan">[PLAN]</span>  <span class="tag tag-plan">[LLM]</span>  drive_until_obstacle</p>
+        <p class="cl" data-step="exec"><span class="tag tag-exec">[EXEC]</span>  drive_until_obstacle(target_cm=5, max_speed=25)</p>
+        <p class="cl" data-step="route"><span class="tag tag-dim">[NAV]</span>   L2 GPIO · BCM 18, 22</p>
+        <div class="cl cl-run" data-step="run"><span class="tag tag-dim">[SENSE]</span> get_distance <b data-run-cm>5.2</b> cm <i class="cli-bar-meter"><i data-run-bar></i></i></div>
+        <div data-fault-lines></div>
+        <p class="cl" data-step="fdir"><span class="tag tag-dim">[FDIR]</span>  <span data-fdir>nominal · 0 faults</span></p>
+        <p class="cl" data-step="ok"><span class="tag tag-ok">[OK]</span>    success=True  stop_reason=<span data-done>"obstacle at 5.2 cm"</span></p>
+        <p class="cl" data-step="next"><span class="cl-p">objective&gt;</span> <span class="cursor" aria-hidden="true"></span></p>
       </div>
     </div>
 
-    <div class="stage">
-      <span class="stage-num">03 / Plan</span>
-      <div class="stage-glyph">
-        <span class="badge">GRAPH · ROUTE</span>
-        <span class="readout">3-LAYER</span>
-        <div class="stage-canvas" id="stage-c3"></div>
-        <span class="br"></span>
-      </div>
-      <h3>LLM planner, <span class="ital">grounded.</span></h3>
-      <p>NavigationEngine picks the right autonomy level; the planner avoids ever planning with unavailable hardware. Hierarchical task expansion.</p>
-      <div class="stage-tags">
-        <span class="stage-tag">LLMPlanner</span>
-        <span class="stage-tag">Hierarchical</span>
-        <span class="stage-tag">Claude API</span>
-      </div>
-    </div>
-
-    <div class="stage">
-      <span class="stage-num">04 / Execute</span>
-      <div class="stage-glyph">
-        <span class="badge">FDIR · LOOP</span>
-        <span class="readout">1,280 Hz</span>
-        <div class="stage-canvas" id="stage-c4"></div>
-        <span class="br"></span>
-      </div>
-      <h3>FDIR loop, <span class="ital">always on.</span></h3>
-      <p>Execution is wrapped in continuous fault-detection-identification-recovery. PPO detects, temporal validator confirms, planner issues recovery.</p>
-      <div class="stage-tags">
-        <span class="stage-tag">FDIR</span>
-        <span class="stage-tag">PPO</span>
-        <span class="stage-tag">Safety latches</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== 03 FEATURES (LIGHT) ====== -->
-<section class="block light tower-left" id="features" data-screen-label="04 Features">
-  <div class="section-logo"><img src="logo-white.png" alt="Aether" /></div>
-  <div class="light-bg" id="lightBg-features"><div class="light-bg-sticky"></div></div>
-  <div class="section-head reveal">
-    <div class="section-num">03 &nbsp;·&nbsp; Features</div>
-    <h2 class="section-title">Built for hardware <span class="ital">that doesn't lie.</span></h2>
-  </div>
-
-  <div class="features reveal">
-    <div class="feat w-7">
-      <div class="num"><span>F.01</span><span>Detection</span></div>
-      <h4>A PPO net that learns the <span class="ital">shape of failure.</span></h4>
-      <p>15-dimensional observation in → 64 → 64 hidden → 8 fault classes out. Trained on real telemetry, not idealised simulation noise. Outperforms threshold rules under genuine sensor drift.</p>
-      <div class="vis">
-        <pre><span class="m">$ aether --status</span>
-<span class="c">●</span> PPO detector       <span class="m">nominal</span>    <span class="c">15→64→64→8</span>
-<span class="c">●</span> Temporal validator <span class="m">nominal</span>    <span class="c">w=8 frames</span>
-<span class="c">●</span> Safety backup      <span class="m">armed  </span>    <span class="c">5 rules</span>
-<span class="c">●</span> Recovery planner   <span class="m">idle   </span>    <span class="c">last: 0</span></pre>
-      </div>
-    </div>
-
-    <div class="feat w-5">
-      <div class="num"><span>F.02</span><span>Auto-config</span></div>
-      <h3>Plug in, <span class="ital">prompt it.</span></h3>
-      <p>Tell AETHER what your robot should do. It probes USB, I²C, GPIO, MAVLink, and on-device models, builds a capability manifest, then asks the Claude API to write code against exactly what's connected.</p>
-      <div class="vis">
-        <pre><span class="m">manifest@boot</span>
-<span class="c">+</span> webcam:usb-0  <span class="m">(opencv)</span>
-<span class="c">+</span> motors:gpio   <span class="m">(rpi.gpio)</span>
-<span class="c">+</span> fc:mavlink    <span class="m">(/dev/ttyACM0)</span>
-<span class="c">+</span> imu:i2c-0x68  <span class="m">(mpu6050)</span>
-<span class="c">+</span> ai:yolov8n    <span class="m">(local)</span></pre>
-      </div>
-    </div>
-
-    <div class="feat w-4">
-      <div class="num"><span>F.03</span><span>Multi-Agent</span></div>
-      <h4>Six agents, <span class="ital">one bus.</span></h4>
-      <p>Detection, validation, planning, execution, safety and recovery agents share state over a deterministic message bus.</p>
-      <div class="vis">
-        <pre><span class="c">DET</span> ─► <span class="c">VAL</span> ─► <span class="c">PLN</span>
- │       │       │
- ▼       ▼       ▼
-<span class="c">SAF</span> ◄─ <span class="c">EXE</span> ◄─ <span class="c">REC</span></pre>
-      </div>
-    </div>
-
-    <div class="feat w-4">
-      <div class="num"><span>F.04</span><span>Temporal</span></div>
-      <h4>Validate <span class="ital">across frames.</span></h4>
-      <p>A rolling 8-frame window discards transient PPO spikes. Recovery only triggers on durable, validated detections · false positives stay low.</p>
-      <div class="vis">
-        <pre><span class="m">window  t-7 ... t</span>
-class:  0 0 3 3 3 0 3 3   <span class="c">→ ▲ MOTOR</span>
-class:  0 5 0 0 0 0 0 0   <span class="m">→ ─ idle</span>
-class:  3 3 3 3 3 3 3 3   <span class="c">→ ▲ MOTOR</span></pre>
-      </div>
-    </div>
-
-    <div class="feat w-4">
-      <div class="num"><span>F.05</span><span>Hardware</span></div>
-      <h4>Real bots, <span class="ital">not just sim.</span></h4>
-      <p>Verified across thousands of operational steps on quadrotor, ground rover and arm. Real hardware outperforms simulation · genuine noise teaches the net.</p>
-      <div class="vis">
-        <pre><span class="c">Quadrotor</span>   2,140 steps  <span class="m">DR 100%</span>
-<span class="c">Rover</span>       3,802 steps  <span class="m">DR 100%</span>
-<span class="c">Arm</span>         1,160 steps  <span class="m">DR 100%</span>
-<span class="c">Sim</span>         baseline     <span class="m">DR  94%</span></pre>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== 04 ARCHITECTURE · THREE.JS MOUNT ====== -->
-<section class="block" id="arch" data-screen-label="05 Architecture">
-  <div class="section-logo"><img src="logo-orange.png" alt="Aether" /></div>
-  <div class="section-head reveal">
-    <div class="section-num">04 &nbsp;·&nbsp; Architecture</div>
-    <h2 class="section-title">Anatomy <span class="ital">of an agent stack.</span></h2>
-  </div>
-
-  <div class="arch reveal">
-    <!-- THREE.JS SCENE LIVES HERE · id="three-scene" -->
-    <div class="three-frame" id="three-frame">
-      <div id="three-scene"></div>
-      <div class="three-placeholder" id="three-placeholder">
-        <div class="three-readout">▲ AGENT.STACK / LIVE ▼</div>
-        <div class="corner tl"></div><div class="corner tr"></div>
-        <div class="corner bl"></div><div class="corner br2"></div>
-        <div class="crosshair"></div>
-        <div class="ping"></div>
-        <div class="three-foot">Initialising scene…</div>
-      </div>
-      <div class="three-grab-hint"><b>DRAG</b> · ROTATE</div>
-    </div>
-
-    <div class="arch-body">
-      <h3>From observation, <span class="ital">to action,</span> back through validation.</h3>
-      <p>Six cooperating agents read off the shared state bus. The DRL detector is the only ML-trained component · everything else is deterministic, auditable, and fails closed. Latency from sensor frame to recovery command is bounded.</p>
-      <div class="arch-spec">
-        <div>OBSERVATION<b>15 channels</b></div>
-        <div>HIDDEN<b>2 × 64 units</b></div>
-        <div>OUTPUT CLASSES<b>8 faults</b></div>
-        <div>WINDOW<b>8-frame temporal</b></div>
-        <div>SAFETY RULES<b>5 deterministic</b></div>
-        <div>LATENCY (P99)<b>< 80 ms</b></div>
+    <div class="panel panel-range reveal">
+      <!-- Your own picture: add <img class="shot-bg" src="your-picture.jpg" alt=""> as the first child of this div. -->
+      <canvas class="shot-scene" data-range aria-hidden="true"></canvas>
+      <div class="panel-label panel-label--dark">
+        <b>The rover, live</b>
+        <span>Ultrasonic range, read every step</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ====== 05 BENCHMARKS (LIGHT) ====== -->
+<!-- ====== BENCHMARKS (light · tower on the right) ====== -->
 <section class="block light tower-right" id="bench" data-screen-label="06 Benchmarks">
-  <div class="section-logo"><img src="logo-white.png" alt="Aether" /></div>
-  <div class="light-bg" id="lightBg-bench"><div class="light-bg-sticky"></div></div>
-  <div class="section-head reveal">
-    <div class="section-num">05 &nbsp;·&nbsp; Benchmarks</div>
-    <h2 class="section-title">Numbers from <span class="ital">real hardware.</span></h2>
-  </div>
+  <div class="light-bg" id="lightBg-bench" aria-hidden="true"><div class="light-bg-sticky"></div></div>
 
-  <div class="bench-grid">
-    <div class="reveal">
-      <p class="bench-lede">Real hardware <em>outperforms</em> simulation · the physical system encounters genuine sensor noise that the PPO net learns to distinguish from actual faults.</p>
+  <div class="col">
+    <h2 class="h-display reveal">Measured on <em>real hardware.</em></h2>
 
-      <div class="bench-table" style="margin-top:50px;">
-        <div class="bench-row">
-          <div class="label">Detection Rate</div>
-          <div class="val accent"><b>100%</b>DR</div>
-          <div class="val"><b>94%</b>SIM</div>
+    <div class="score reveal">
+      <div class="score-top">
+        <p class="figure">69.99<span>/70</span></p>
+        <div class="meter-wrap">
+          <div class="meter" data-meter="69.99" data-max="70" aria-hidden="true"></div>
+          <span class="meter-note">one dot per point</span>
         </div>
-        <div class="bench-row">
-          <div class="label">Recovery Rate</div>
-          <div class="val accent"><b>98.4%</b>RR</div>
-          <div class="val"><b>91%</b>SIM</div>
-        </div>
-        <div class="bench-row">
-          <div class="label">MTTR (steps)</div>
-          <div class="val accent"><b>3.2</b>MTTR</div>
-          <div class="val"><b>5.8</b>SIM</div>
-        </div>
-        <div class="bench-row">
-          <div class="label">False Positive Rate</div>
-          <div class="val accent"><b>0.4%</b>FPR</div>
-          <div class="val"><b>2.1%</b>SIM</div>
-        </div>
-        <div class="bench-row">
-          <div class="label">Operational steps logged</div>
-          <div class="val accent"><b>7.1k+</b>steps</div>
-          <div class="val"><b>3 rigs</b>real</div>
-        </div>
+      </div>
+      <div class="score-claim">
+        <p class="statement">Stability Fault Recovery Index.</p>
+        <p>6,023 steps on a Raspberry Pi 4 with GPIO servos, a live camera and the Anthropic planner.</p>
       </div>
     </div>
 
-    <div class="sfri reveal" style="transition-delay:0.15s">
-      <div class="lbl">SFRI · Stability Fault Recovery Index</div>
-      <div class="formula">SFRI = <b>35×DR</b> + <b>25×(1 − MTTR/max)</b> + <b>10×RR</b> − <b>30×FPR</b></div>
-      <div>
-        <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px;">Aether v3.9.5 · real hardware avg.</div>
-        <div style="font-family:var(--serif);font-weight: 400;font-size:clamp(72px,9vw,140px);line-height:0.9;letter-spacing: -0.02em;color:var(--accent);">62.4<span style="color:var(--ink-mute);font-size:0.32em;letter-spacing:0.05em;">/70</span></div>
-      </div>
-      <div>
-        <div class="bar"><div class="fill" id="sfri-fill" data-pct="89"></div></div>
-        <div class="bar-foot"><span>0</span><span><b>62.4</b> · top-decile</span><span>70</span></div>
-      </div>
+    <table class="metrics reveal">
+      <thead>
+        <tr><th scope="col">Metric</th><th scope="col">Value</th><th scope="col">Conditions</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>SFRI</td><td class="v">69.99</td><td>6,023 steps, real hardware</td></tr>
+        <tr><td>Mean time to recover</td><td class="v">1.35 steps</td><td>From an injected fault</td></tr>
+        <tr><td>Detection rate</td><td class="v">100%</td><td>0 misses, 0 false positives</td></tr>
+      </tbody>
+    </table>
+
+    <div class="formula reveal">
+      <pre><code>SFRI = 35×DR + 25×(1 − MTTR/max_steps) + 10×RR − 30×FPR</code></pre>
+      <p>DR is detection rate, RR recovery rate, FPR false-positive rate. The range is 0 to 70; higher is better. <a class="text-link" href="benchmarks.html">How it's measured <span aria-hidden="true">→</span></a></p>
     </div>
   </div>
 </section>
 
-<!-- ====== 06 INSTALL ====== -->
-<section class="block" id="install" data-screen-label="07 Install">
-  <div class="section-logo"><img src="logo-orange.png" alt="Aether" /></div>
-  <div class="section-head reveal">
-    <div class="section-num">06 &nbsp;·&nbsp; Install</div>
-    <h2 class="section-title">Up in <span class="ital">three commands.</span></h2>
-  </div>
-
-  <div class="install reveal">
-    <div class="install-body">
-      <h3>Pip-installable, <span class="ital">zero config.</span></h3>
-      <p>Wheels for Python 3.10–3.14, Linux / macOS / Raspberry Pi OS. Calibration writes a hardware manifest to <code style="font-family:var(--mono);color:var(--accent);font-size:0.95em;">~/.aether/manifest.json</code>. Agent mode runs the full FDIR loop.</p>
-      <div class="install-cta">
-        <a class="btn" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener">
-          pip install aether-robotics
-          <svg viewBox="0 0 16 16" fill="none"><path d="M4 12 L12 4 M5 4 H12 V11" stroke="currentColor" stroke-width="1.6"/></svg>
-        </a>
-        <a class="btn ghost" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener">
-          Docs · v5.10.1
-          <svg viewBox="0 0 16 16" fill="none"><path d="M4 12 L12 4 M5 4 H12 V11" stroke="currentColor" stroke-width="1.6"/></svg>
-        </a>
-      </div>
-    </div>
-
-    <div class="terminal">
-      <div class="term-bar">
-        <div class="lights"><span></span><span></span><span></span></div>
-        <div class="ttl">~ / aether · bash</div>
-      </div>
-      <div class="term-body" id="terminal-body">
-        <span class="ln"><span class="pr">$</span> <span class="cm">pip install aether-robotics</span></span>
-        <span class="ln mu">  collecting aether-robotics-5.10.1 ...</span>
-        <span class="ln mu">  installed 1 package in 1.2s</span>
-        <span class="ln"><span class="ok">✓ ready</span></span>
-        <span class="ln">&nbsp;</span>
-        <span class="ln"><span class="pr">$</span> <span class="cm">aether --calibrate</span></span>
-        <span class="ln mu">  probing usb / i²c / mavlink / gpio ...</span>
-        <span class="ln"><span class="ac">+</span> webcam        <span class="mu">/dev/video0</span></span>
-        <span class="ln"><span class="ac">+</span> motors (gpio) <span class="mu">pins 17, 18, 22, 23</span></span>
-        <span class="ln"><span class="ac">+</span> flight ctl    <span class="mu">/dev/ttyACM0 · mavlink2</span></span>
-        <span class="ln"><span class="ac">+</span> imu (mpu6050) <span class="mu">i²c 0x68</span></span>
-        <span class="ln"><span class="ok">  manifest written → ~/.aether/manifest.json</span></span>
-        <span class="ln">&nbsp;</span>
-        <span class="ln"><span class="pr">$</span> <span class="cm">aether --mode agent</span></span>
-        <span class="ln mu">  loading PPO weights ... 15→64→64→8</span>
-        <span class="ln mu">  arming safety latches (5 rules) ...</span>
-        <span class="ln"><span class="ok">  FDIR loop online · 1280 Hz</span></span>
-        <span class="ln"><span class="pr">$</span><span class="cursor"></span></span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ====== 07 INTEGRATIONS ====== -->
-<section class="block" id="integrations" data-screen-label="08 Integrations">
-  <div class="section-logo"><img src="logo-orange.png" alt="Aether" /></div>
-  <div class="section-head reveal">
-    <div class="section-num">07 &nbsp;·&nbsp; Integrations</div>
-    <h2 class="section-title">Bring your own <span class="ital">model.</span></h2>
-  </div>
+<!-- ====== INTEGRATIONS ====== -->
+<section class="block" id="integrations" data-screen-label="07 Models">
+  <h2 class="h-display reveal">Bring your own <em>model.</em></h2>
 
   <p class="integ-lede reveal">Aether is provider-agnostic. Drop in an API key, the framework discovers your sensors and motors, and the model writes the code <em>against the live capability manifest.</em> Claude is the default; OpenAI, Gemini, DeepSeek, and Kimi all plug in through the same provider block.</p>
 
@@ -461,7 +377,7 @@ class:  3 3 3 3 3 3 3 3   <span class="c">→ ▲ MOTOR</span></pre>
       <div class="integ-snippet">
 <pre><span class="c"># ~/.aether/config.toml</span>
 <span class="k">provider</span> = <span class="s">"anthropic"</span>
-<span class="k">model</span>    = <span class="s">"claude-sonnet-4-5"</span>
+<span class="k">model</span>    = <span class="s">"claude-sonnet-4-6"</span>
 <span class="k">api_key</span>  = <span class="s">"$ANTHROPIC_API_KEY"</span>
 <span class="k">max_tokens</span> = 8192</pre>
       </div>
@@ -551,73 +467,82 @@ class:  3 3 3 3 3 3 3 3   <span class="c">→ ▲ MOTOR</span></pre>
   </div>
 </section>
 
-<!-- ====== FOOTER ====== -->
-<footer class="foot" id="contact" data-screen-label="08 Contact">
-  <h2 class="foot-mega">Get in <span class="ital">touch.</span></h2>
+<!-- ====== INSTALL (accent field, terminal already open) ====== -->
+<section class="block install" id="install" data-screen-label="08 Install">
+  <div class="install-grid">
+    <div class="install-copy">
+      <h2 class="h-display reveal">Up in three <em>commands.</em></h2>
+      <p class="reveal">Python 3.9 or newer on Linux, macOS or Raspberry Pi OS. Sim mode needs no robot and no API key.</p>
+      <div class="install-actions reveal">
+        <a class="btn-ink" href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener">View on PyPI</a>
+        <a class="text-link" href="quickstart.html">Quick start <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
 
-  <div class="foot-grid">
-    <div class="foot-col">
-      <h6>About</h6>
-      <p>AETHER · <em style="color:var(--ink);font-style:italic;">Adaptive Embodied Task Hierarchy for Executable Robotics</em>. DRL-first hybrid FDIR with multi-agent auto-configuration.</p>
-      <pre class="cite"><span class="k">@software</span>{aether2026,
+    <div class="terminal reveal" data-ui>
+      <div class="term-bar">
+        <span class="ttl">~ — zsh</span>
+        <button type="button" class="copy" data-copy="pip install aether-robotics">Copy install</button>
+      </div>
+<pre class="term-body"><span class="pr">$</span> pip install aether-robotics
+<span class="pr">$</span> aether --calibrate   <span class="mu"># walk GPIO pins, label actuators</span>
+<span class="pr">$</span> aether --mode agent  <span class="mu"># plain-English control, live hardware</span>
+
+<span class="mu"># no robot yet? the simulator runs the same FDIR loop</span>
+<span class="pr">$</span> aether --mode sim --scenario obstacles --render<span class="cursor" aria-hidden="true"></span></pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ====== FOOTER (tiles) ====== -->
+<footer class="tiles" id="contact" data-screen-label="09 Contact">
+  <div class="tile t-about">
+    <p class="statement">AETHER stands for Adaptive Embodied Task Hierarchy for Executable Robotics.</p>
+    <p class="legal">© 2026 Chahel Paatur. All rights reserved.</p>
+  </div>
+
+  <nav class="tile t-nav" aria-label="Footer">
+    <ul>
+      <li><a href="docs.html">Documentation</a></li>
+      <li><a href="quickstart.html">Quick start</a></li>
+      <li><a href="cli.html">CLI reference</a></li>
+      <li><a href="changelog.html">Version history</a></li>
+      <li><a href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">PyPI</a></li>
+      <li><a href="https://www.linkedin.com/in/chahel-paatur-88a9b4229/" target="_blank" rel="noopener">LinkedIn</a></li>
+    </ul>
+  </nav>
+
+  <div class="tile t-cite">
+    <h2 class="h-small">Cite it</h2>
+<pre class="cite"><span class="k">@software</span>{aether2026,
   title   = "AETHER",
   author  = "Paatur, Chahel",
   year    = 2026,
   version = "5.10.1",
   url     = "pypi.org/project/aether-robotics"
 }</pre>
-    </div>
-    <div class="foot-col">
-      <h6>Sections</h6>
-      <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#overview">Overview</a></li>
-        <li><a href="#pipeline">Pipeline</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#arch">Architecture</a></li>
-        <li><a href="#bench">Benchmarks</a></li>
-        <li><a href="#install">Install</a></li>
-      </ul>
-    </div>
-    <div class="foot-col">
-      <h6>Resources</h6>
-      <ul>
-        <li><a href="docs.html">Documentation</a></li>
-        <li><a href="usage.html">Usage &amp; Quick start</a></li>
-        <li><a href="https://pypi.org/project/aether-robotics/" target="_blank" rel="noopener noreferrer">PyPI · aether-robotics</a></li>
-        <li><a href="https://pypi.org/project/aether-robotics/#history" target="_blank" rel="noopener noreferrer">Changelog · v5.10.1</a></li>
-        <li><a href="#contact">Citation (.bib)</a></li>
-      </ul>
-    </div>
-    <div class="foot-col">
-      <h6>Contact</h6>
-      <ul>
-        <li><a href="https://www.linkedin.com/in/chahel-paatur-88a9b4229/" target="_blank" rel="noopener">LinkedIn</a></li>
-        <li><a href="mailto:chahelpaatur@gmail.com">Email</a></li>
-      </ul>
-    </div>
   </div>
 
-  <div class="foot-bar">
-    <div>Ⓒ 2026 · Chahel Paatur · All rights reserved</div>
-    <div class="clock" id="clock"> ·  : · :  · </div>
-  </div>
+  <div class="tile t-mark" aria-hidden="true">AETHER</div>
+
+  <a class="tile t-contact" href="mailto:chahelpaatur@gmail.com">
+    <span class="statement">Get in touch</span>
+    <span class="contact-mail">chahelpaatur@gmail.com</span>
+    <svg class="arrow" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M12 36 L36 12 M16 12 H36 V32" stroke="currentColor" stroke-width="4"/></svg>
+  </a>
 </footer>
 
-<!-- ====== THREE.JS MOUNT POINTS ======
-     Two empty containers are ready for your three.js code:
-       #three-hero   · full-bleed hero background (fixed to hero section)
-       #three-scene  · architecture panel (section 04)
-     Drop a <script type="module"> below this comment that imports three
-     and renders into those elements. Their placeholders will sit behind
-     your canvases until you appendChild your renderer.domElement.
--->
+<script src="app.js?v=6.6.1" defer></script>
+<script src="fdir-demo.js?v=6.6.1" defer></script>
+<script src="diagrams.js?v=6.6.1" defer></script>
+<script src="demos.js?v=6.6.1" defer></script>
 
-<script src="app.js?v=5.10.1" defer></script>
-
-<!-- ====== THREE.JS · dotted 3D scenes ====== -->
+<!-- ====== THREE.JS · hero knot, tower build, arm ====== -->
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js" integrity="sha384-qOkzR5Ke/XkQxuGVJ9hpFEpDlcoLtWwVYhnJf06cLIZa2vaIptSqaubivErzmD5O" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="hero-three.js?v=5.10.1" defer></script>
+<script src="hero-three.js?v=6.6.1" defer></script>
+<script src="board-three.js?v=6.6.1" defer></script>
 
 </body>
 </html>
