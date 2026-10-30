@@ -154,11 +154,11 @@
     LANES.forEach((l, i) => {
       const top = i * laneH;
       if (i > 0) {
-        ctx.fillStyle = "#1c1c1c";
+        ctx.fillStyle = "rgba(148,196,230,0.10)";
         ctx.fillRect(0, Math.round(top), W, 1);
       }
       const hot = active && active.fault.lane === i && tick - active.start < T_CLEAR;
-      ctx.strokeStyle = hot ? "#ff4d1c" : "#d4d4d4";
+      ctx.strokeStyle = hot ? "#FC734D" : "#3DB5F2";
       ctx.lineWidth = hot ? 2 : 1.5;
       ctx.lineJoin = "round";
       ctx.beginPath();
@@ -172,9 +172,9 @@
 
       const label = l.label;
       const tw = ctx.measureText(label).width;
-      ctx.fillStyle = "rgba(10,10,10,0.85)";
+      ctx.fillStyle = "rgba(4,12,18,0.88)";
       ctx.fillRect(10, top + 7, tw + 12, 20);
-      ctx.fillStyle = hot ? "#ff4d1c" : "#a3a3a3";
+      ctx.fillStyle = hot ? "#FC734D" : "#A6B7C4";
       ctx.fillText(label, 16, top + 11);
     });
   }

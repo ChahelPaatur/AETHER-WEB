@@ -21,9 +21,39 @@
     });
   }
   const show = (el, on = true) => el.toggleAttribute("hidden", !on);   // works for SVG too
+  // the pixel robot draws itself in, top to bottom, a row of pixels at a time
+  function buildLogo(svg) {
+    const top = 104, height = 442;
+    svg.querySelectorAll("rect, path, text").forEach((el) => {
+      const y = parseFloat(el.getAttribute("y")) || top + 120;
+      el.style.setProperty("--pd", Math.round(((y - top) / height) * 700 + Math.random() * 90) + "ms");
+    });
+    svg.classList.remove("is-building");
+    void svg.getBoundingClientRect();   // restart the animation on every run
+    svg.classList.add("is-building");
+  }
   async function type(el, text, ms) {
     for (let i = 1; i <= text.length; i++) { el.textContent = text.slice(0, i); await wait(ms); }
   }
+
+  /* ───────────────────────── i2c bus map ───────────────────────── */
+  // 0x00–0x7f laid out as i2cdetect prints it; a sweep runs over the empty
+  // addresses (CSS), the ones a board answered on stay lit
+  document.querySelectorAll("[data-i2c]").forEach((grid) => {
+    const hits = new Set(grid.dataset.i2c.split(/\s+/).map((a) => parseInt(a, 16)));
+    const frag = document.createDocumentFragment();
+    const cell = (tag, cls, text) => { const el = document.createElement(tag); if (cls) el.className = cls; if (text) el.textContent = text; frag.appendChild(el); return el; };
+    cell("span");
+    for (let col = 0; col < 16; col++) cell("span", "col", col.toString(16));
+    for (let row = 0; row < 8; row++) {
+      cell("span", "", (row * 16).toString(16).padStart(2, "0"));
+      for (let col = 0; col < 16; col++) {
+        const addr = row * 16 + col;
+        cell("i", hits.has(addr) ? "hit" : "").style.setProperty("--k", addr);
+      }
+    }
+    grid.appendChild(frag);
+  });
 
   /* ───────────────────────── start-up terminal ───────────────────────── */
   document.querySelectorAll("[data-cli]").forEach((cli) => {
@@ -49,8 +79,11 @@
           await wait(1400);
           show(ready);
           await wait(300);
+        } else if (line.tagName === "svg") {
+          buildLogo(line);
+          await wait(950);
         } else {
-          await wait(line.hasAttribute("data-slow") ? 600 : line.tagName === "svg" ? 500 : 260);
+          await wait(line.hasAttribute("data-slow") ? 600 : 260);
         }
       }
     })();
@@ -97,11 +130,11 @@
       const left = nose - roverW;
       const top = floorY - ROVER.length * s;
 
-      for (let x = s; x < W - s; x += s * 1.6) dot(x, floorY + s * 0.9, 1.3, "#333");
-      for (let y = floorY - H * 0.3; y <= floorY; y += s) for (let x = wallX; x < Math.min(W - s, wallX + s * 6); x += s) dot(x, y, s * 0.28, "#5c5c5c");
+      for (let x = s; x < W - s; x += s * 1.6) dot(x, floorY + s * 0.9, 1.3, "#1d3445");
+      for (let y = floorY - H * 0.3; y <= floorY; y += s) for (let x = wallX; x < Math.min(W - s, wallX + s * 6); x += s) dot(x, y, s * 0.28, "#2b5573");
       ROVER.forEach((row, j) => [...row].forEach((ch, i) => {
         if (ch === ".") return;
-        const c = ch === "S" ? "#ff4d1c" : ch === "O" ? "#7a7a7a" : "#e9e9e9";
+        const c = ch === "S" ? "#FC734D" : ch === "O" ? "#5d7a8f" : "#EDF3F7";
         dot(left + i * s + s / 2, top + j * s + s / 2, s * 0.32, c);
       }));
       const sensorX = nose, sensorY = top + s / 2;
@@ -111,13 +144,13 @@
         const rad = age * (wallX - sensorX + 40) * 1.6;
         if (rad > wallX - sensorX + 4 || age > 1.5) { pings.splice(i, 1); continue; }
         const alpha = Math.max(0, 1 - age * 1.4);
-        for (let a = -0.5; a <= 0.5; a += 0.12) dot(sensorX + Math.cos(a) * rad, sensorY + Math.sin(a) * rad, 1.6, `rgba(255,77,28,${alpha})`);
+        for (let a = -0.5; a <= 0.5; a += 0.12) dot(sensorX + Math.cos(a) * rad, sensorY + Math.sin(a) * rad, 1.6, `rgba(61,181,242,${alpha})`);
       }
       const gapY = top - s * 1.6;
-      for (let x = nose + s; x < wallX - s * 0.5; x += s * 0.9) dot(x, gapY, 1.2, "#555");
-      ctx.font = `900 ${Math.round(Math.max(18, Math.min(34, H * 0.06)))}px "Doto", monospace`;
+      for (let x = nose + s; x < wallX - s * 0.5; x += s * 0.9) dot(x, gapY, 1.2, "#2c4456");
+      ctx.font = `900 ${Math.round(Math.max(18, Math.min(34, H * 0.06)))}px "Doto", "Geist Mono", monospace`;
       ctx.textAlign = "center"; ctx.textBaseline = "bottom";
-      ctx.fillStyle = range.stalled ? "#ff4d1c" : "#f2f2f2";
+      ctx.fillStyle = range.stalled ? "#FC734D" : "#EDF3F7";
       const label = range.cm.toFixed(1) + " cm";
       const half = ctx.measureText(label).width / 2 + 8;
       ctx.fillText(label, Math.max(half, Math.min((nose + wallX) / 2, wallX - half)), gapY - 10);
@@ -145,6 +178,8 @@
     const bar = agent.querySelector("[data-run-bar]");
     const fdir = agent.querySelector("[data-fdir]");
     const faults = agent.querySelector("[data-fault-lines]");
+    const status = agent.querySelector("[data-status-fdir]");
+    const setStatus = (text, fault) => { if (status) { status.textContent = text; status.classList.toggle("is-fault", fault); } };
     const setCm = (cm) => {
       range.cm = cm;
       runCm.textContent = cm.toFixed(1);
@@ -181,8 +216,10 @@
           stalledOnce = true;
           range.stalled = true;
           say('<span class="tag tag-fault">[FDIR]</span>  motor_stall  p=0.97 → stop motor, hold position');
+          setStatus("FDIR motor_stall", true);
           await wait(1500);
           say('<span class="tag tag-ok">[FDIR]</span>  recovered in 1 step · resuming');
+          setStatus("FDIR nominal", false);
           range.stalled = false;
           last = performance.now();
         }
