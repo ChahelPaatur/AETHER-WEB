@@ -1026,6 +1026,14 @@
     white-space: pre; overflow-x: auto;
   }
   .cite .k { color: var(--accent); }
+  .foot-badges {
+    max-width: calc(var(--max) + 2 * var(--pad-x)); margin: clamp(56px, 6vw, 88px) auto 0;
+    padding: 0 var(--pad-x);
+    display: flex; align-items: center; gap: clamp(20px, 2.4vw, 36px);
+  }
+  .foot-badges p { margin: 0; font: 400 12px/1 var(--mono); color: var(--ink-3); white-space: nowrap; }
+  .foot-badges::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
+  .badge-nvidia { width: clamp(150px, 13vw, 196px); height: auto; }
 
   /* ---------------- CORTEX · coming soon, the last thing on the page ---------------- */
   .cortex {
