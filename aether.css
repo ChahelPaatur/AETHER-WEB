@@ -1028,7 +1028,9 @@
   .badge-nvidia { width: clamp(150px, 13vw, 196px); height: auto; }
   .badge-yc, .badge-ms { width: auto; padding-left: clamp(20px, 2.4vw, 36px); border-left: 1px solid var(--line-2); box-sizing: content-box; }
   .badge-yc { height: clamp(26px, 2.3vw, 34px); }
-  .badge-ms { height: clamp(20px, 1.8vw, 27px); padding-block: clamp(3px, 0.25vw, 3.5px); }   /* same separator height as the YC logo */
+  .badge-ms { display: inline-flex; align-items: center; gap: clamp(8px, 0.7vw, 11px); height: clamp(26px, 2.3vw, 34px); }   /* same separator height as the YC logo */
+  .badge-ms svg { flex: none; width: auto; height: clamp(18px, 1.65vw, 25px); }
+  .badge-ms img { width: auto; height: clamp(20px, 1.8vw, 27px); }
 
   /* ---------------- CORTEX · coming soon, the last thing on the page ---------------- */
   .cortex {
@@ -1201,7 +1203,9 @@
     .badge-nvidia { width: 132px; }
     .badge-yc, .badge-ms { padding-left: 0; border-left: 0; }
     .badge-yc { height: 22px; }
-    .badge-ms { height: 19px; padding-block: 0; }
+    .badge-ms { height: auto; gap: 7px; }
+    .badge-ms svg { height: 16px; }
+    .badge-ms img { height: 19px; }
     .cortex-legal { flex-direction: column; align-items: center; text-align: center; bottom: 28px; }
   }
 
