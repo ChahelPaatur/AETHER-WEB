@@ -1006,7 +1006,7 @@
   .foot-grid {
     max-width: calc(var(--max) + 2 * var(--pad-x)); margin: 0 auto;
     padding: clamp(64px, 7vw, 104px) var(--pad-x) 0;
-    display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr) minmax(0, 0.8fr) minmax(0, 1.7fr);
+    display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
     gap: clamp(32px, 4vw, 64px);
   }
   .foot-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
@@ -1018,14 +1018,6 @@
   .foot-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
   .foot-col a { font-size: 15px; color: var(--ink-2); transition: color 0.15s var(--ease); }
   .foot-col a:hover { color: var(--ink); }
-  .foot-cite { min-width: 0; }
-  .cite {
-    margin: 0; padding: 16px 18px;
-    font: 12.5px/1.7 var(--mono); color: var(--ink-2);
-    background: var(--surface); border: 1px solid var(--line-2); border-radius: 12px;
-    white-space: pre; overflow-x: auto;
-  }
-  .cite .k { color: var(--accent); }
   .foot-badges {
     max-width: calc(var(--max) + 2 * var(--pad-x)); margin: clamp(56px, 6vw, 88px) auto 0;
     padding: 0 var(--pad-x);
@@ -1034,7 +1026,9 @@
   .foot-badges p { margin: 0; font: 400 12px/1 var(--mono); color: var(--ink-3); white-space: nowrap; }
   .foot-badges::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
   .badge-nvidia { width: clamp(150px, 13vw, 196px); height: auto; }
-  .badge-yc { width: auto; height: clamp(26px, 2.3vw, 34px); padding-left: clamp(20px, 2.4vw, 36px); border-left: 1px solid var(--line-2); box-sizing: content-box; }
+  .badge-yc, .badge-ms { width: auto; padding-left: clamp(20px, 2.4vw, 36px); border-left: 1px solid var(--line-2); box-sizing: content-box; }
+  .badge-yc { height: clamp(26px, 2.3vw, 34px); }
+  .badge-ms { height: clamp(20px, 1.8vw, 27px); padding-block: clamp(3px, 0.25vw, 3.5px); }   /* same separator height as the YC logo */
 
   /* ---------------- CORTEX · coming soon, the last thing on the page ---------------- */
   .cortex {
@@ -1135,7 +1129,7 @@
     .install-copy { grid-column: 2; grid-row: 1; align-self: start; }
     .terminal { grid-column: 2; grid-row: 2; justify-self: start; }
     .foot-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-    .foot-brand, .foot-cite { grid-column: 1 / -1; }
+    .foot-brand { grid-column: 1 / -1; }
   }
 
   @media (max-width: 980px) {
@@ -1200,13 +1194,14 @@
     .term-body { font-size: 13px; padding: 16px; }
 
     .foot-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px 24px; }
-    .cite { white-space: pre-wrap; overflow-wrap: anywhere; }
     .cortex { padding-bottom: 120px; }
-    .foot-badges { flex-wrap: wrap; row-gap: 18px; }
+    .foot-badges { flex-wrap: wrap; gap: 18px 26px; }
     .foot-badges p { flex-basis: 100%; }
     .foot-badges::after { display: none; }
     .badge-nvidia { width: 132px; }
+    .badge-yc, .badge-ms { padding-left: 0; border-left: 0; }
     .badge-yc { height: 22px; }
+    .badge-ms { height: 19px; padding-block: 0; }
     .cortex-legal { flex-direction: column; align-items: center; text-align: center; bottom: 28px; }
   }
 
